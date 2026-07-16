@@ -11,3 +11,4 @@ wheels/
 
 #Other stuff
 logger.py
+game_events.jsonl
