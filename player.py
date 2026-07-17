@@ -8,6 +8,8 @@ class Player(CircleShape):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.shot_cooldown = 0
+        self.lives = PLAYER_STARTING_LIVES
+        self.invulnerability_timer = 0
     
 
     def draw(self, screen):
@@ -51,6 +53,7 @@ class Player(CircleShape):
             self.shoot()
 
         self.shot_cooldown -= dt
+        self.invulnerability_timer -= dt
 
 
     # in the Player class

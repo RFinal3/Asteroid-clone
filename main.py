@@ -6,6 +6,7 @@ from logger import log_state
 from logger import log_event
 from asteroidfield import *
 from shot import *
+from player import *
 
 
 def main():
@@ -42,8 +43,15 @@ def main():
         updatable.update(dt)
         
         for obj in asteroids:
-            if obj.collides_with(player):
+            if player.invulnerability_timer <= 0 and obj.collides_with(player):
                 log_event("player_hit")
+                player.lives -= 1
+                player.position = pygame.Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+                player.velocity = pygame.Vector2(0, 0)
+                player.invulnerability_timer = 1
+
+
+            if player.lives == 0:
                 print("Game over!")
                 sys.exit()
 
