@@ -29,6 +29,7 @@ def main():
     Shot.containers = (shots, drawable, updatable)
     asteroid_field = AsteroidField()
     game = Game()
+    font = pygame.font.Font(None, 36)
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
@@ -68,6 +69,11 @@ def main():
 
         for obj in drawable:
             obj.draw(screen)
+            score_text = font.render(f"Score: {game.score}", True, "white")
+            lives_text = font.render(f"Lives: {player.lives}", True, "white")
+
+            screen.blit(score_text, (20, 20))
+            screen.blit(lives_text, (20, 60))
 
 
         pygame.display.flip()
