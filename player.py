@@ -39,7 +39,7 @@ class Player(CircleShape):
         rotated_vector = unit_vector.rotate(self.rotation)
         acceleration = rotated_vector * PLAYER_ACCELERATION * dt
         self.velocity += acceleration
-        self.velocity.clamp_magnitude_ip(PLAYER_MAX_SPEED)
+        self.velocity.clamp_magnitude_ip(self.max_speed)
 
     def decelerate(self, dt):
         self.velocity.move_towards_ip(pygame.Vector2(0, 0), PLAYER_DECELERATION * dt)
