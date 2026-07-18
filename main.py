@@ -7,6 +7,8 @@ from asteroidfield import *
 from shot import *
 from player import *
 from game import *
+from explosionparticle import *
+import random
 
 
 def main():
@@ -23,10 +25,12 @@ def main():
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
     shots = pygame.sprite.Group()
+    explosionparticles = pygame.sprite.Group()
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable,)
     Shot.containers = (shots, drawable, updatable)
+    ExplosionParticle.containers = (explosionparticles, updatable, drawable)
     asteroid_field = AsteroidField()
     game = Game()
     font = pygame.font.Font(None, 36)
@@ -63,8 +67,15 @@ def main():
                 if asteroid.collides_with(shot):
                     game.score += 1
                     log_event("asteroid_shot")
+                    particle_number = random.randint(6, 24)
+                    
+                    for _ in range(particle_number):
+                        ExplosionParticle(asteroid.position.x, asteroid.position.y)
+
                     asteroid.split()
                     shot.kill()
+                    
+                        
 
 
         for obj in drawable:
