@@ -48,6 +48,7 @@ def main():
                 return
 
         screen.fill("black")
+        starfield.update(dt)
         updatable.update(dt)
         
         for obj in asteroids:

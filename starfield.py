@@ -18,3 +18,8 @@ class StarField:
     def draw(self, screen):
         for star in self.stars:
             star.draw(screen, self.star_font)
+
+    
+    def update(self, dt):
+        for star in self.stars:
+            star.update(dt)
