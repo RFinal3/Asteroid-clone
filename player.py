@@ -5,9 +5,11 @@ from constants import (
     PLAYER_MAX_SPEED, 
     LINE_WIDTH, 
     PLAYER_TURN_SPEED, 
-    PLAYER_ACCELERATION, 
+    PLAYER_ACCELERATION,
+    PLAYER_DECELERATION, 
     PLAYER_SHOOT_COOLDOWN_SECONDS, 
-    PLAYER_SHOOT_SPEED)
+    PLAYER_SHOOT_SPEED
+    )
 from circleshape import CircleShape
 from shot import Shot
 from utils import wrap_position
@@ -39,6 +41,10 @@ class Player(CircleShape):
         self.velocity += acceleration
         self.velocity.clamp_magnitude_ip(PLAYER_MAX_SPEED)
 
+    def decelerate(self, dt):
+        self.velocity.move_towards_ip(pygame.Vector2(0, 0), PLAYER_DECELERATION * dt)
+        
+
     def shoot(self):
         if self.shot_cooldown > 0:
             return
@@ -65,6 +71,8 @@ class Player(CircleShape):
             self.move(-dt)
         if keys[pygame.K_SPACE]:
             self.shoot()
+        if not keys[pygame.K_w] and not keys[pygame.K_s]:
+            self.decelerate(dt)
 
         self.position += self.velocity * dt
 
