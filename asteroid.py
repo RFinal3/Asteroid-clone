@@ -1,6 +1,7 @@
 from circleshape import *
 from constants import *
 from logger import *
+from utils import *
 import random
 
 class Asteroid(CircleShape):
@@ -9,11 +10,13 @@ class Asteroid(CircleShape):
 
 
     def draw(self, screen):
+        pygame.draw.circle(screen, "black", self.position, self.radius, 0)
         pygame.draw.circle(screen, "white", self.position, self.radius, LINE_WIDTH)
 
 
     def update(self, dt):
         self.position += self.velocity * dt
+        wrap_position(self.position, self.radius)
 
     
     def split(self):

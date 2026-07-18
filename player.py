@@ -2,6 +2,7 @@ import pygame
 from constants import *
 from circleshape import *
 from shot import *
+from utils import *
 
 class Player(CircleShape):
     def __init__(self, x, y):
@@ -14,7 +15,9 @@ class Player(CircleShape):
     
 
     def draw(self, screen):
-        pygame.draw.polygon(screen, "white", self.triangle(), LINE_WIDTH)
+        points = self.triangle()
+        pygame.draw.polygon(screen, "black", points, 0)
+        pygame.draw.polygon(screen, "white", points, LINE_WIDTH)
 
     
     def rotate(self, dt):
@@ -57,6 +60,8 @@ class Player(CircleShape):
 
         self.shot_cooldown -= dt
         self.invulnerability_timer -= dt
+
+        wrap_position(self.position, self.radius)
 
 
     # in the Player class

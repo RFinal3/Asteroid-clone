@@ -1,14 +1,15 @@
 import pygame
 import sys
+import random
 from constants import *
 from player import *
 from logger import *
 from asteroidfield import *
 from shot import *
-from player import *
 from game import *
 from explosionparticle import *
-import random
+from starfield import *
+from asteroid import *
 
 
 def main():
@@ -33,9 +34,10 @@ def main():
     ExplosionParticle.containers = (explosionparticles, updatable, drawable)
     asteroid_field = AsteroidField()
     game = Game()
-    font = pygame.font.Font(None, 36)
+    text_font = pygame.font.Font(None, 36)
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    starfield = StarField(SCREEN_WIDTH, SCREEN_HEIGHT, MIN_STAR_COUNT, MAX_STAR_COUNT)
 
 
     while True:
@@ -74,17 +76,19 @@ def main():
 
                     asteroid.split()
                     shot.kill()
-                    
-                        
 
+
+        starfield.draw(screen)
+                    
 
         for obj in drawable:
             obj.draw(screen)
-            score_text = font.render(f"Score: {game.score}", True, "white")
-            lives_text = font.render(f"Lives: {player.lives}", True, "white")
+        
+        score_text = text_font.render(f"Score: {game.score}", True, "white")
+        lives_text = text_font.render(f"Lives: {player.lives}", True, "white")
 
-            screen.blit(score_text, (20, 20))
-            screen.blit(lives_text, (20, 60))
+        screen.blit(score_text, (20, 20))
+        screen.blit(lives_text, (20, 60))
 
 
         pygame.display.flip()
