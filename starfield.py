@@ -1,6 +1,6 @@
 import random
 import pygame
-from star import *
+from star import Star
 
 class StarField:
     def __init__(self, width, height, min_star_count, max_star_count):

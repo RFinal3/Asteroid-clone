@@ -1,15 +1,15 @@
 import pygame
 import sys
 import random
-from constants import *
-from player import *
-from logger import *
-from asteroidfield import *
-from shot import *
-from game import *
-from explosionparticle import *
-from starfield import *
-from asteroid import *
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT, MIN_STAR_COUNT, MAX_STAR_COUNT
+from player import Player
+from logger import log_state, log_event
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
+from shot import Shot
+from game import Game
+from explosionparticle import ExplosionParticle
+from starfield import StarField
 
 
 def main():

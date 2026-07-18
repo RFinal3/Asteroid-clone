@@ -1,4 +1,4 @@
-from constants import *
+from constants import STARTING_SCORE
 
 class Game:
     def __init__(self):

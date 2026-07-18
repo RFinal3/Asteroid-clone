@@ -1,6 +1,6 @@
 import pygame
 import random
-from constants import *
+from constants import STAR_SYMBOLS
 
 class Star():
     def __init__(self, x, y):

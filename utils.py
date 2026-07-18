@@ -1,4 +1,4 @@
-from constants import *
+from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 
 def wrap_position(position, radius):
     if position.x > SCREEN_WIDTH + radius:

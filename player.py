@@ -1,8 +1,16 @@
 import pygame
-from constants import *
-from circleshape import *
-from shot import *
-from utils import *
+from constants import (
+    PLAYER_RADIUS, 
+    PLAYER_STARTING_LIVES, 
+    PLAYER_MAX_SPEED, 
+    LINE_WIDTH, 
+    PLAYER_TURN_SPEED, 
+    PLAYER_ACCELERATION, 
+    PLAYER_SHOOT_COOLDOWN_SECONDS, 
+    PLAYER_SHOOT_SPEED)
+from circleshape import CircleShape
+from shot import Shot
+from utils import wrap_position
 
 class Player(CircleShape):
     def __init__(self, x, y):
@@ -12,6 +20,7 @@ class Player(CircleShape):
         self.lives = PLAYER_STARTING_LIVES
         self.invulnerability_timer = 0
         self.velocity = pygame.Vector2(0, 0)
+        self.max_speed = PLAYER_MAX_SPEED
     
 
     def draw(self, screen):
@@ -28,6 +37,7 @@ class Player(CircleShape):
         rotated_vector = unit_vector.rotate(self.rotation)
         acceleration = rotated_vector * PLAYER_ACCELERATION * dt
         self.velocity += acceleration
+        self.velocity.clamp_magnitude_ip(PLAYER_MAX_SPEED)
 
     def shoot(self):
         if self.shot_cooldown > 0:

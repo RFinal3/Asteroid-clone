@@ -1,6 +1,7 @@
-from circleshape import *
-from constants import *
 import random
+import pygame
+from circleshape import CircleShape
+from constants import EXPLOSION_RADIUS, EXPLOSION_TIMER, LINE_WIDTH
 
 class ExplosionParticle(CircleShape):
     def __init__(self, x, y):
