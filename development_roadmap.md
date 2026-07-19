@@ -18,28 +18,28 @@
 - [x] Render asteroids as irregular polygons
 - [x] Give the ship a triangular hitbox
 - [x] Make asteroid hitboxes match their visible shapes
+- [ ] Make the ship break apart on collision with asteroid or UFO bullet
 
 ### Background System
 
 - [x] Add a static starfield
 - [x] Add star twinkling
-- [ ] Make the ship break apart on collision with asteroid or UFO bullet
 
 ### Architecture
 
 - [x] Separate starfield ownership from gameplay sprites
 - [x] Formalize rendering layers
 - [x] Centralize player damage handling
-- [ ] Add reusable pickup handling
+- [x] Add reusable pickup handling
 
 ### Classic Features
 
-- [ ] Add a shield power-up
+- [x] Add a shield power-up
 - [ ] Add a speed power-up
 - [ ] Add bombs
 - [ ] Add UFOs
-- [ ] Add high-score tracking
 - [ ] Add scaling difficulty
+- [ ] Add high-score tracking
 - [ ] Add a pause menu
 - [ ] Add resume, restart, high-scores, and quit options
 

@@ -27,6 +27,7 @@ class Player(CircleShape):
         self.velocity = pygame.Vector2(0, 0)
         self.max_speed = PLAYER_MAX_SPEED
         self.spawn_position: pygame.Vector2 = pygame.Vector2(x, y)
+        self.shield_count = 0
     
 
     def draw(self, screen):
@@ -99,6 +100,11 @@ class Player(CircleShape):
     def take_damage(self):
         if self.invulnerability_timer > 0:
             return False
+
+        if self.shield_count > 0:
+            self.shield_count -= 1
+            self.invulnerability_timer = PLAYER_INVULNERABILITY_SECONDS
+            return True
 
         self.lives -= 1
 

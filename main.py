@@ -11,6 +11,8 @@ from game import Game
 from explosionparticle import ExplosionParticle
 from starfield import StarField
 from utils import circle_collides_with_polygon, polygons_collide
+from pickup import Pickup
+from shieldpickup import ShieldPickup
 
 
 def main():
@@ -28,17 +30,27 @@ def main():
     asteroids = pygame.sprite.Group()
     shots = pygame.sprite.Group()
     explosionparticles = pygame.sprite.Group()
+    pickups = pygame.sprite.Group()
+
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable,)
     Shot.containers = (shots, drawable, updatable)
     ExplosionParticle.containers = (explosionparticles, updatable, drawable)
+    Pickup.containers = (pickups, drawable)
+
     asteroid_field = AsteroidField()
+
     game = Game()
     text_font = pygame.font.Font(None, 36)
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     starfield = StarField(SCREEN_WIDTH, SCREEN_HEIGHT, MIN_STAR_COUNT, MAX_STAR_COUNT)
+
+    shield_pickup = ShieldPickup(
+        SCREEN_WIDTH * 0.75,
+        SCREEN_HEIGHT / 2,
+    )
 
 
     while True:
@@ -51,6 +63,11 @@ def main():
         screen.fill("black")
         starfield.update(dt)
         updatable.update(dt)
+
+        for pickup in pickups:
+            if circle_collides_with_polygon(pickup.position, pickup.radius, player.triangle()):
+                pickup.collect(player)
+
         
         for asteroid in asteroids:
             if polygons_collide(player.triangle(), asteroid.world_vertices()):
