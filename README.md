@@ -23,12 +23,17 @@ Rather than stopping at the tutorial requirements, I plan to develop it through 
 
 ## Controls
 
-- Add your movement controls here
-- Add your shooting control here
+| Input | Action |
+|---|---|
+| `W` | Thrust forward |
+| `S` | Thrust backward |
+| `A` | Rotate left |
+| `D` | Rotate right |
+| `Space` | Fire |
 
 ## Current Development
 
-The current goal is to make asteroid hitboxes match their irregular shapes.
+The current goal is to centralize player damage handling in preparation for shields, UFOs, and hostile projectiles.
 
 See `development_roadmap.md` for the full development roadmap.
 
