@@ -17,13 +17,12 @@
 - [x] Add momentum bleed-off
 - [x] Render asteroids as irregular polygons
 - [x] Give the ship a triangular hitbox
-- [ ] Make asteroid hitboxes match their visible shapes
+- [x] Make asteroid hitboxes match their visible shapes
 
 ### Background System
 
 - [x] Add a static starfield
 - [x] Add star twinkling
-- [ ] Add level-specific background artwork
 - [ ] Formalize rendering layers
 
 ### Classic Features
@@ -43,6 +42,7 @@
 Ideas under consideration:
 
 - [ ] Add multiple levels
+- [ ] Add level-specific background artwork
 - [ ] Give levels different backgrounds
 - [ ] Increase difficulty across levels
 - [ ] Add a story or campaign

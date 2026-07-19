@@ -22,15 +22,17 @@ class Asteroid(CircleShape):
             rotation = vertex.rotate(angle)
             self.vertices.append(rotation)
 
-
-
-    def draw(self, screen):
+    
+    def world_vertices(self):
         points = []
-
         for vertex in self.vertices:
             point = self.position + vertex
             points.append(point)
+        return points
 
+
+    def draw(self, screen):
+        points = self.world_vertices()
         pygame.draw.polygon(screen, "black", points, 0)
         pygame.draw.polygon(screen, "white", points, LINE_WIDTH)
 
