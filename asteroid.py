@@ -8,11 +8,31 @@ from utils import wrap_position
 class Asteroid(CircleShape):
     def __init__(self, x: float, y: float, radius: float) -> None:
         super().__init__(x, y, radius)
+        self.vertices = []
+        vertex_count = 10
+        angle_step = 360 / vertex_count
+
+        for index in range(vertex_count):
+            angle = index * angle_step
+
+            radius_scale = random.uniform(0.60, 1.00)
+            vertex_radius = self.radius * radius_scale
+            vertex = pygame.Vector2(0, vertex_radius)
+
+            rotation = vertex.rotate(angle)
+            self.vertices.append(rotation)
+
 
 
     def draw(self, screen):
-        pygame.draw.circle(screen, "black", self.position, self.radius, 0)
-        pygame.draw.circle(screen, "white", self.position, self.radius, LINE_WIDTH)
+        points = []
+
+        for vertex in self.vertices:
+            point = self.position + vertex
+            points.append(point)
+
+        pygame.draw.polygon(screen, "black", points, 0)
+        pygame.draw.polygon(screen, "white", points, LINE_WIDTH)
 
 
     def update(self, dt):
