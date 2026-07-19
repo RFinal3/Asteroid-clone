@@ -19,4 +19,3 @@ class Star():
         if self.twinkle_timer <= 0:
             self.symbol = random.choice(STAR_SYMBOLS)
             self.twinkle_timer = self.twinkle_interval
-        

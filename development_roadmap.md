@@ -23,7 +23,13 @@
 
 - [x] Add a static starfield
 - [x] Add star twinkling
-- [ ] Formalize rendering layers
+
+### Architecture
+
+- [x] Separate starfield ownership from gameplay sprites
+- [x] Formalize rendering layers
+- [ ] Centralize player damage handling
+- [ ] Add reusable pickup handling
 
 ### Classic Features
 

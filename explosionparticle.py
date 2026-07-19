@@ -1,9 +1,10 @@
 import random
 import pygame
 from circleshape import CircleShape
-from constants import EXPLOSION_RADIUS, EXPLOSION_TIMER, LINE_WIDTH
+from constants import EXPLOSION_RADIUS, EXPLOSION_TIMER, LINE_WIDTH, LAYER_EFFECTS
 
 class ExplosionParticle(CircleShape):
+    _layer = LAYER_EFFECTS
     def __init__(self, x, y):
         super().__init__(x, y, EXPLOSION_RADIUS)
         self.timer = EXPLOSION_TIMER
@@ -23,4 +24,3 @@ class ExplosionParticle(CircleShape):
 
         if self.timer <= 0:
             self.kill()
-            

@@ -8,13 +8,15 @@ from constants import (
     PLAYER_ACCELERATION,
     PLAYER_DECELERATION, 
     PLAYER_SHOOT_COOLDOWN_SECONDS, 
-    PLAYER_SHOOT_SPEED
+    PLAYER_SHOOT_SPEED,
+    LAYER_PLAYER
     )
 from circleshape import CircleShape
 from shot import Shot
 from utils import wrap_position
 
 class Player(CircleShape):
+    _layer = LAYER_PLAYER
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
@@ -90,4 +92,3 @@ class Player(CircleShape):
         b = self.position - forward * self.radius - right
         c = self.position - forward * self.radius + right
         return [a, b, c]
-        

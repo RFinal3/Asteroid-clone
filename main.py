@@ -24,7 +24,7 @@ def main():
     print(f"Screen height: {SCREEN_HEIGHT}")
 
     updatable = pygame.sprite.Group()
-    drawable = pygame.sprite.Group()
+    drawable = pygame.sprite.LayeredUpdates()
     asteroids = pygame.sprite.Group()
     shots = pygame.sprite.Group()
     explosionparticles = pygame.sprite.Group()
