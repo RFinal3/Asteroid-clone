@@ -9,6 +9,9 @@ wheels/
 # Virtual environments
 .venv
 
-#Other stuff
-logger.py
+# Run-time data
 game_events.jsonl
+
+# Operating system files
+.DS_Store
+Thumbs.db
