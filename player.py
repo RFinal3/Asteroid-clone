@@ -9,7 +9,8 @@ from constants import (
     PLAYER_DECELERATION, 
     PLAYER_SHOOT_COOLDOWN_SECONDS, 
     PLAYER_SHOOT_SPEED,
-    LAYER_PLAYER
+    LAYER_PLAYER,
+    PLAYER_INVULNERABILITY_SECONDS
     )
 from circleshape import CircleShape
 from shot import Shot
@@ -25,6 +26,7 @@ class Player(CircleShape):
         self.invulnerability_timer = 0
         self.velocity = pygame.Vector2(0, 0)
         self.max_speed = PLAYER_MAX_SPEED
+        self.spawn_position: pygame.Vector2 = pygame.Vector2(x, y)
     
 
     def draw(self, screen):
@@ -65,14 +67,19 @@ class Player(CircleShape):
 
         if keys[pygame.K_a]:
             self.rotation -= PLAYER_TURN_SPEED * dt
+
         if keys[pygame.K_d]:
             self.rotation += PLAYER_TURN_SPEED * dt
+
         if keys[pygame.K_w]:
             self.move(dt) 
+
         if keys[pygame.K_s]:
             self.move(-dt)
+
         if keys[pygame.K_SPACE]:
             self.shoot()
+
         if not keys[pygame.K_w] and not keys[pygame.K_s]:
             self.decelerate(dt)
 
@@ -83,8 +90,24 @@ class Player(CircleShape):
 
         wrap_position(self.position, self.radius)
 
+    def respawn(self):
+        self.position.update(self.spawn_position)
+        self.velocity.update(0, 0)
+        self.invulnerability_timer = PLAYER_INVULNERABILITY_SECONDS
 
-    # in the Player class
+    
+    def take_damage(self):
+        if self.invulnerability_timer > 0:
+            return False
+
+        self.lives -= 1
+
+        if self.lives > 0:
+            self.respawn()
+
+        return True
+
+
     def triangle(self) -> list[pygame.Vector2]:
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5

@@ -33,9 +33,7 @@ Rather than stopping at the tutorial requirements, I plan to develop it through 
 
 ## Current Development
 
-The current goal is to centralize player damage handling in preparation for shields, UFOs, and hostile projectiles.
-
-See `development_roadmap.md` for the full development roadmap.
+v1.0 is currently in active development. See [development_roadmap.md](development_roadmap.md) for completed features and planned work.
 
 ## Built With
 

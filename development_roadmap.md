@@ -23,12 +23,13 @@
 
 - [x] Add a static starfield
 - [x] Add star twinkling
+- [ ] Make the ship break apart on collision with asteroid or UFO bullet
 
 ### Architecture
 
 - [x] Separate starfield ownership from gameplay sprites
 - [x] Formalize rendering layers
-- [ ] Centralize player damage handling
+- [x] Centralize player damage handling
 - [ ] Add reusable pickup handling
 
 ### Classic Features

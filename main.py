@@ -53,12 +53,9 @@ def main():
         updatable.update(dt)
         
         for asteroid in asteroids:
-            if player.invulnerability_timer <= 0 and polygons_collide(player.triangle(), asteroid.world_vertices()):
-                log_event("player_hit")
-                player.lives -= 1
-                player.position = pygame.Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-                player.velocity = pygame.Vector2(0, 0)
-                player.invulnerability_timer = 1
+            if polygons_collide(player.triangle(), asteroid.world_vertices()):
+                if player.take_damage():
+                    log_event("player_hit")
 
 
             if player.lives == 0:
