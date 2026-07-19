@@ -1,6 +1,6 @@
 # Development Roadmap
 
-## v1.0 — Classic Asteroids
+## v1.0 — Asteroids
 
 ### Core
 
@@ -32,11 +32,12 @@
 - [x] Centralize player damage handling
 - [x] Add reusable pickup handling
 
-### Classic Features
+### Arcade Features
 
 - [x] Add a shield power-up
-- [ ] Add a speed power-up
+- [x] Add a speed power-up
 - [ ] Add bombs
+- [ ] Add pickup spawning
 - [ ] Add UFOs
 - [ ] Add scaling difficulty
 - [ ] Add high-score tracking

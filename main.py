@@ -13,6 +13,7 @@ from starfield import StarField
 from utils import circle_collides_with_polygon, polygons_collide
 from pickup import Pickup
 from shieldpickup import ShieldPickup
+from speedpickup import SpeedPickup
 
 
 def main():
@@ -50,6 +51,16 @@ def main():
     shield_pickup = ShieldPickup(
         SCREEN_WIDTH * 0.75,
         SCREEN_HEIGHT / 2,
+    )
+
+    speed_pickup = SpeedPickup(
+        SCREEN_WIDTH * 0.25,
+        SCREEN_HEIGHT / 2,
+    )
+
+    speed_pickup = SpeedPickup(
+        SCREEN_WIDTH * 0.25,
+        SCREEN_HEIGHT / 2 - 50,
     )
 
 

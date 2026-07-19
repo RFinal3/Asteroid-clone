@@ -1,4 +1,7 @@
 import pygame
+from circleshape import CircleShape
+from shot import Shot
+from utils import wrap_position
 from constants import (
     PLAYER_RADIUS, 
     PLAYER_STARTING_LIVES, 
@@ -10,11 +13,10 @@ from constants import (
     PLAYER_SHOOT_COOLDOWN_SECONDS, 
     PLAYER_SHOOT_SPEED,
     LAYER_PLAYER,
-    PLAYER_INVULNERABILITY_SECONDS
+    PLAYER_INVULNERABILITY_SECONDS,
+    SPEED_BOOST_MULTIPLIER,
+    SPEED_BOOST_DURATION_SECONDS
     )
-from circleshape import CircleShape
-from shot import Shot
-from utils import wrap_position
 
 class Player(CircleShape):
     _layer = LAYER_PLAYER
@@ -24,11 +26,15 @@ class Player(CircleShape):
         self.shot_cooldown = 0
         self.lives = PLAYER_STARTING_LIVES
         self.invulnerability_timer = 0
-        self.velocity = pygame.Vector2(0, 0)
-        self.max_speed = PLAYER_MAX_SPEED
         self.spawn_position: pygame.Vector2 = pygame.Vector2(x, y)
         self.shield_count = 0
-    
+        self.velocity = pygame.Vector2(0, 0)
+        self.base_acceleration = PLAYER_ACCELERATION
+        self.base_max_speed = PLAYER_MAX_SPEED
+        self.acceleration = self.base_acceleration
+        self.max_speed = self.base_max_speed
+        self.speed_boost_timers = []
+        
 
     def draw(self, screen):
         points = self.triangle()
@@ -42,7 +48,7 @@ class Player(CircleShape):
     def move(self, dt):
         unit_vector = pygame.Vector2(0, 1)
         rotated_vector = unit_vector.rotate(self.rotation)
-        acceleration = rotated_vector * PLAYER_ACCELERATION * dt
+        acceleration = rotated_vector * self.acceleration * dt
         self.velocity += acceleration
         self.velocity.clamp_magnitude_ip(self.max_speed)
 
@@ -88,6 +94,7 @@ class Player(CircleShape):
 
         self.shot_cooldown -= dt
         self.invulnerability_timer -= dt
+        self.update_speed_boosts(dt)
 
         wrap_position(self.position, self.radius)
 
@@ -112,6 +119,27 @@ class Player(CircleShape):
             self.respawn()
 
         return True
+
+    def recalculate_speed_stats(self):
+        active_multiplier = SPEED_BOOST_MULTIPLIER ** len(self.speed_boost_timers)
+        self.acceleration = self.base_acceleration * active_multiplier
+        self.max_speed = self.base_max_speed * active_multiplier
+
+
+    def add_speed_boost(self):
+        self.speed_boost_timers.append(SPEED_BOOST_DURATION_SECONDS)
+        self.recalculate_speed_stats()
+
+    def update_speed_boosts(self, dt):
+        active_speed_boost_timers = []
+        for speed_boost in self.speed_boost_timers:
+            speed_boost -= dt
+
+            if speed_boost > 0:
+                active_speed_boost_timers.append(speed_boost)
+        
+        self.speed_boost_timers = active_speed_boost_timers
+        self.recalculate_speed_stats()
 
 
     def triangle(self) -> list[pygame.Vector2]:
