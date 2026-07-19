@@ -10,6 +10,7 @@ from shot import Shot
 from game import Game
 from explosionparticle import ExplosionParticle
 from starfield import StarField
+from utils import circle_collides_with_triangle
 
 
 def main():
@@ -51,8 +52,10 @@ def main():
         starfield.update(dt)
         updatable.update(dt)
         
-        for obj in asteroids:
-            if player.invulnerability_timer <= 0 and obj.collides_with(player):
+        for asteroid in asteroids:
+            if player.invulnerability_timer <= 0 and circle_collides_with_triangle(asteroid.position, 
+            asteroid.radius, 
+            player.triangle()):
                 log_event("player_hit")
                 player.lives -= 1
                 player.position = pygame.Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
