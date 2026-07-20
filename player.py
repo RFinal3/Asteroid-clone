@@ -28,12 +28,14 @@ class Player(CircleShape):
         self.invulnerability_timer = 0
         self.spawn_position: pygame.Vector2 = pygame.Vector2(x, y)
         self.shield_count = 0
+        self.bomb_count = 0
         self.velocity = pygame.Vector2(0, 0)
         self.base_acceleration = PLAYER_ACCELERATION
         self.base_max_speed = PLAYER_MAX_SPEED
         self.acceleration = self.base_acceleration
         self.max_speed = self.base_max_speed
         self.speed_boost_timers = []
+        
         
 
     def draw(self, screen):
@@ -140,6 +142,12 @@ class Player(CircleShape):
         
         self.speed_boost_timers = active_speed_boost_timers
         self.recalculate_speed_stats()
+
+    def consume_bomb(self):
+        if self.bomb_count <= 0:
+            return False
+        self.bomb_count -= 1
+        return True
 
 
     def triangle(self) -> list[pygame.Vector2]:

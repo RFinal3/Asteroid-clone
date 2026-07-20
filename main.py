@@ -14,6 +14,7 @@ from utils import circle_collides_with_polygon, polygons_collide
 from pickup import Pickup
 from shieldpickup import ShieldPickup
 from speedpickup import SpeedPickup
+from bombpickup import BombPickup
 
 
 def main():
@@ -32,9 +33,10 @@ def main():
     shots = pygame.sprite.Group()
     explosionparticles = pygame.sprite.Group()
     pickups = pygame.sprite.Group()
+    bomb_targets = pygame.sprite.Group()
 
     Player.containers = (updatable, drawable)
-    Asteroid.containers = (asteroids, updatable, drawable)
+    Asteroid.containers = (asteroids, bomb_targets, updatable, drawable)
     AsteroidField.containers = (updatable,)
     Shot.containers = (shots, drawable, updatable)
     ExplosionParticle.containers = (explosionparticles, updatable, drawable)
@@ -63,6 +65,11 @@ def main():
         SCREEN_HEIGHT / 2 - 50,
     )
 
+    bomb_pickup = BombPickup(
+        SCREEN_WIDTH / 2,
+        SCREEN_HEIGHT / 4,
+    )
+
 
     while True:
         log_state()
@@ -70,6 +77,14 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
+            
+            if event.type == pygame.KEYDOWN:
+
+                if event.key == pygame.K_b:
+                    if player.consume_bomb():
+                        for target in bomb_targets:
+                            target.kill()
+
 
         screen.fill("black")
         starfield.update(dt)
@@ -113,9 +128,13 @@ def main():
         
         score_text = text_font.render(f"Score: {game.score}", True, "white")
         lives_text = text_font.render(f"Lives: {player.lives}", True, "white")
+        shield_text = text_font.render(f"Shields: {player.shield_count}", True, "white")
+        bombs_text = text_font.render(f"Bombs: {player.bomb_count}", True, "white")
 
         screen.blit(score_text, (20, 20))
         screen.blit(lives_text, (20, 60))
+        screen.blit(shield_text, (20, 100))
+        screen.blit(bombs_text, (20, 140))
 
 
         pygame.display.flip()
