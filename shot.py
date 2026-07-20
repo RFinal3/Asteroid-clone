@@ -1,6 +1,10 @@
 import pygame
 from circleshape import CircleShape
-from constants import SHOT_RADIUS, LINE_WIDTH, LAYER_PROJECTILES
+from constants import (
+    SHOT_RADIUS, 
+    LINE_WIDTH, 
+    LAYER_PROJECTILES
+)
 
 class Shot(CircleShape):
     _layer = LAYER_PROJECTILES

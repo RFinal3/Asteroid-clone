@@ -1,5 +1,8 @@
 from circleshape import CircleShape
-from constants import LAYER_PICKUPS, PICKUP_RADIUS
+from constants import (
+    LAYER_PICKUPS, 
+    PICKUP_RADIUS
+)
 
 class Pickup(CircleShape):
     _layer = LAYER_PICKUPS

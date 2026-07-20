@@ -36,8 +36,8 @@
 
 - [x] Add a shield power-up
 - [x] Add a speed power-up
-- [ ] Add bombs
-- [ ] Add pickup spawning
+- [x] Add bombs
+- [x] Add pickup spawning
 - [ ] Add UFOs
 - [ ] Add scaling difficulty
 - [ ] Add high-score tracking

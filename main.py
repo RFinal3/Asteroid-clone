@@ -1,7 +1,12 @@
 import pygame
 import sys
 import random
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT, MIN_STAR_COUNT, MAX_STAR_COUNT
+from constants import (
+    SCREEN_WIDTH, 
+    SCREEN_HEIGHT, 
+    MIN_STAR_COUNT, 
+    MAX_STAR_COUNT
+)
 from player import Player
 from logger import log_state, log_event
 from asteroid import Asteroid
@@ -15,6 +20,7 @@ from pickup import Pickup
 from shieldpickup import ShieldPickup
 from speedpickup import SpeedPickup
 from bombpickup import BombPickup
+from pickup_spawner import PickupSpawner
 
 
 def main():
@@ -35,6 +41,7 @@ def main():
     pickups = pygame.sprite.Group()
     bomb_targets = pygame.sprite.Group()
 
+    PickupSpawner.containers = (updatable,)
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, bomb_targets, updatable, drawable)
     AsteroidField.containers = (updatable,)
@@ -43,32 +50,13 @@ def main():
     Pickup.containers = (pickups, drawable)
 
     asteroid_field = AsteroidField()
+    pickup_spawner = PickupSpawner()
 
     game = Game()
     text_font = pygame.font.Font(None, 36)
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     starfield = StarField(SCREEN_WIDTH, SCREEN_HEIGHT, MIN_STAR_COUNT, MAX_STAR_COUNT)
-
-    shield_pickup = ShieldPickup(
-        SCREEN_WIDTH * 0.75,
-        SCREEN_HEIGHT / 2,
-    )
-
-    speed_pickup = SpeedPickup(
-        SCREEN_WIDTH * 0.25,
-        SCREEN_HEIGHT / 2,
-    )
-
-    speed_pickup = SpeedPickup(
-        SCREEN_WIDTH * 0.25,
-        SCREEN_HEIGHT / 2 - 50,
-    )
-
-    bomb_pickup = BombPickup(
-        SCREEN_WIDTH / 2,
-        SCREEN_HEIGHT / 4,
-    )
 
 
     while True:
@@ -111,6 +99,7 @@ def main():
                 if circle_collides_with_polygon(shot.position, shot.radius, asteroid.world_vertices()):
                     game.score += 1
                     log_event("asteroid_shot")
+                    pickup_spawner.try_spawn(asteroid.position)
                     particle_number = random.randint(6, 24)
                     
                     for _ in range(particle_number):
