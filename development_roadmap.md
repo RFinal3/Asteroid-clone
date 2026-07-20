@@ -51,7 +51,7 @@
 ### 1. UFOs
 
 - [x] Add UFO sprite and movement
-- [ ] Add UFO spawning
+- [x] Add UFO spawning
 - [ ] Add UFO shooting
 - [ ] Add UFO bullets
 - [ ] Add UFO collision, destruction, and scoring

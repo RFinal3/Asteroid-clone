@@ -22,6 +22,7 @@ from speedpickup import SpeedPickup
 from bombpickup import BombPickup
 from pickup_spawner import PickupSpawner
 from ufo import UFO
+from ufospawner import UFOSpawner
 
 
 def main():
@@ -51,6 +52,7 @@ def main():
     ExplosionParticle.containers = (explosionparticles, updatable, drawable)
     Pickup.containers = (pickups, drawable, updatable)
     UFO.containers = (ufos, drawable, updatable)
+    UFOSpawner.containers = (updatable,)
 
     asteroid_field = AsteroidField(asteroids)
     pickup_spawner = PickupSpawner()
@@ -60,12 +62,7 @@ def main():
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     starfield = StarField(SCREEN_WIDTH, SCREEN_HEIGHT, MIN_STAR_COUNT, MAX_STAR_COUNT)
-
-    test_ufo = UFO(
-        SCREEN_WIDTH / 2,
-        SCREEN_HEIGHT / 4,
-        player
-    )
+    ufo_spawner = UFOSpawner(player, ufos)
 
 
     while True:
@@ -155,6 +152,7 @@ def main():
                     game.score += 1
                     log_event("asteroid_shot")
                     pickup_spawner.try_spawn(asteroid.position)
+                    ufo_spawner.try_spawn()
                     particle_number = random.randint(6, 24)
                     
                     for _ in range(particle_number):
