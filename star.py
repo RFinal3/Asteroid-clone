@@ -13,10 +13,9 @@ class Star():
         self.twinkle_interval = random.uniform(MIN_TWINKLE_INTERVAL, MAX_TWINKLE_INTERVAL)
         self.twinkle_timer = self.twinkle_interval
     
-    def draw(self, screen, font):
-        star = font.render(self.symbol, True, "white")
-        star_center = star.get_rect(center=self.position)
-        screen.blit(star, star_center)
+    def draw(self, screen, star_surface):
+        star_center = star_surface.get_rect(center=self.position)
+        screen.blit(star_surface, star_center)
 
     def update(self, dt):
         self.twinkle_timer -= dt

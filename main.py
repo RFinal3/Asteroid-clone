@@ -47,9 +47,9 @@ def main():
     AsteroidField.containers = (updatable,)
     Shot.containers = (shots, drawable, updatable)
     ExplosionParticle.containers = (explosionparticles, updatable, drawable)
-    Pickup.containers = (pickups, drawable)
+    Pickup.containers = (pickups, drawable, updatable)
 
-    asteroid_field = AsteroidField()
+    asteroid_field = AsteroidField(asteroids)
     pickup_spawner = PickupSpawner()
 
     game = Game()
@@ -73,6 +73,9 @@ def main():
                         for target in bomb_targets:
                             target.kill()
 
+        
+        fps = clock.get_fps()
+
 
         screen.fill("black")
         starfield.update(dt)
@@ -90,7 +93,50 @@ def main():
 
 
             if player.lives == 0:
-                print("Game over!")
+                print(f"Game over! Final score: {game.score}")
+                
+                if game.score <= 10:
+                    print("ROFL.")
+                
+                elif game.score <= 25:
+                    print("LOL.")
+
+                elif game.score <= 50:
+                    print("Okay.")
+
+                elif game.score <= 100:
+                    print("Okurt.")
+
+                elif game.score <= 200:
+                    print("Okkkkuuurrrrttt.")
+
+                elif game.score <= 300:
+                    print("Bro.")
+
+                elif game.score <= 400:
+                    print("Chill bro.")
+
+                elif game.score <= 500:
+                    print("Gyatt.")
+
+                elif game.score <= 600:
+                    print("Gyatt damn.")
+
+                elif game.score <= 700:
+                    print("Are you cheating bro?")
+
+                elif game.score <= 800:
+                    print("Someone check this dudes screen while he plays, I think he's cheating.")
+
+                elif game.score <= 900:
+                    print("So, you watched and it looks legit?")
+
+                elif game.score <= 1000:
+                    print("Yeah, definitely cheating.")
+
+                else:
+                    print("Okay, checking the code now.")
+
                 sys.exit()
 
         
@@ -129,6 +175,12 @@ def main():
         pygame.display.flip()
 
         dt = clock.tick(60) / 1000
+
+        pygame.display.set_caption(
+            f"Modernsteroids! | FPS: {clock.get_fps():.2f} | "
+            f"A: {len(asteroids)} | S: {len(shots)} | "
+            f"P: {len(pickups)} | D: {len(drawable)}"
+        )
 
 if __name__ == "__main__":
     main()
