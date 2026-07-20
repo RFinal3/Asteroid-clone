@@ -68,10 +68,6 @@ def main():
     starfield = StarField(SCREEN_WIDTH, SCREEN_HEIGHT, MIN_STAR_COUNT, MAX_STAR_COUNT)
     ufo_spawner = UFOSpawner(player, ufos)
 
-    # player.invulnerability_timer = float("inf")
-    # player.shield_count = 1
-    player.bomb_count = 1
-
 
     while True:
         log_state()

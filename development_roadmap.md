@@ -64,7 +64,7 @@
 
 ### 3. Bomb Polish
 
-- [ ] Add explosion particles to bomb targets
+- [x] Add explosion particles to bomb targets
 - [ ] Add a screen flash and fade
 - [ ] Briefly pause asteroid spawning after detonation
 
