@@ -1,5 +1,6 @@
 import pygame
 from circleshape import CircleShape
+from ufobullet import UFOBullet
 from constants import (
     UFO_RADIUS,
     LAYER_UFO,
@@ -10,6 +11,8 @@ from constants import (
     UFO_ACCELERATION,
     UFO_DECELERATION,
     UFO_MAX_SPEED,
+    UFO_SHOOT_COOLDOWN_SECONDS,
+    UFO_SHOOT_SPEED,
     SCREEN_WIDTH,
     SCREEN_HEIGHT
 )
@@ -21,6 +24,7 @@ class UFO(CircleShape):
         self.target = player
         self.acceleration = UFO_ACCELERATION
         self.max_speed = UFO_MAX_SPEED
+        self.shot_cooldown = UFO_SHOOT_COOLDOWN_SECONDS
 
         self.vertices = [
             pygame.Vector2(-self.radius * 0.35, -self.radius * 0.55),
@@ -54,6 +58,23 @@ class UFO(CircleShape):
             LINE_WIDTH,
         )
 
+    
+    def shoot(self):
+        if self.shot_cooldown > 0:
+            return
+
+        to_target = self.target.position - self.position
+
+        if to_target.length_squared() == 0:
+            return
+
+        self.shot_cooldown = UFO_SHOOT_COOLDOWN_SECONDS
+
+        bullet = UFOBullet(self.position.x, self.position.y)
+        bullet_vector = to_target.normalize()
+        bullet_vector = bullet_vector * UFO_SHOOT_SPEED
+        bullet.velocity = bullet_vector
+
     def update(self, dt):
         to_target = self.target.position - self.position
         distance_to_target = to_target.length()
@@ -69,8 +90,11 @@ class UFO(CircleShape):
 
             else:
                 self.velocity.move_towards_ip(pygame.Vector2(0, 0), UFO_DECELERATION * dt)
+
+            self.shoot()
         
         self.position += self.velocity * dt
+        self.shot_cooldown -= dt
 
     
     def move(self, dt, to_target):

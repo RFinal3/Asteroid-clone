@@ -5,7 +5,8 @@ from constants import (
     SCREEN_WIDTH, 
     SCREEN_HEIGHT, 
     MIN_STAR_COUNT, 
-    MAX_STAR_COUNT
+    MAX_STAR_COUNT,
+    UFO_SCORE_VALUE
 )
 from player import Player
 from logger import log_state, log_event
@@ -23,6 +24,7 @@ from bombpickup import BombPickup
 from pickup_spawner import PickupSpawner
 from ufo import UFO
 from ufospawner import UFOSpawner
+from ufobullet import UFOBullet
 
 
 def main():
@@ -43,6 +45,7 @@ def main():
     pickups = pygame.sprite.Group()
     bomb_targets = pygame.sprite.Group()
     ufos = pygame.sprite.Group()
+    ufo_bullets = pygame.sprite.Group()
 
     PickupSpawner.containers = (updatable,)
     Player.containers = (updatable, drawable)
@@ -51,8 +54,9 @@ def main():
     Shot.containers = (shots, drawable, updatable)
     ExplosionParticle.containers = (explosionparticles, updatable, drawable)
     Pickup.containers = (pickups, drawable, updatable)
-    UFO.containers = (ufos, drawable, updatable)
+    UFO.containers = (ufos, bomb_targets, drawable, updatable)
     UFOSpawner.containers = (updatable,)
+    UFOBullet.containers = (ufo_bullets, drawable, updatable)
 
     asteroid_field = AsteroidField(asteroids)
     pickup_spawner = PickupSpawner()
@@ -63,6 +67,10 @@ def main():
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     starfield = StarField(SCREEN_WIDTH, SCREEN_HEIGHT, MIN_STAR_COUNT, MAX_STAR_COUNT)
     ufo_spawner = UFOSpawner(player, ufos)
+
+    # player.invulnerability_timer = float("inf")
+    # player.shield_count = 1
+    player.bomb_count = 1
 
 
     while True:
@@ -77,6 +85,11 @@ def main():
                 if event.key == pygame.K_b:
                     if player.consume_bomb():
                         for target in bomb_targets:
+                            particle_number = random.randint(6, 24)
+                    
+                            for _ in range(particle_number):
+                                ExplosionParticle(target.position.x, target.position.y)
+                            
                             target.kill()
 
         
@@ -90,6 +103,13 @@ def main():
         for pickup in pickups:
             if circle_collides_with_polygon(pickup.position, pickup.radius, player.triangle()):
                 pickup.collect(player)
+
+
+        for ufo_bullet in ufo_bullets:
+            if circle_collides_with_polygon(ufo_bullet.position, ufo_bullet.radius, player.triangle()):
+                ufo_bullet.kill()
+                if player.take_damage():
+                    log_event("ufo_hit_player")
 
         
         for asteroid in asteroids:
@@ -160,6 +180,24 @@ def main():
 
                     asteroid.split()
                     shot.kill()
+
+                    break
+
+        
+        for ufo in ufos:
+            for shot in shots:
+                if circle_collides_with_polygon(shot.position, shot.radius, ufo.world_vertices()):
+                    game.score += UFO_SCORE_VALUE
+                    log_event("ufo_hit")
+                    particle_number = random.randint(12, 36)
+
+                    for _ in range(particle_number):
+                        ExplosionParticle(ufo.position.x, ufo.position.y)
+
+                    ufo.kill()
+                    shot.kill()
+
+                    break
 
 
         starfield.draw(screen)

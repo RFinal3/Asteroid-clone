@@ -41,7 +41,7 @@
 - [x] Add a speed power-up
 - [x] Add bomb pickups, inventory, and basic activation
 - [x] Add pickup spawning
-- [ ] Add UFOs
+- [x] Add UFOs
 - [ ] Add scaling difficulty
 - [ ] Add high-score tracking
 - [ ] Add pause-menu and game-over options
@@ -52,10 +52,10 @@
 
 - [x] Add UFO sprite and movement
 - [x] Add UFO spawning
-- [ ] Add UFO shooting
-- [ ] Add UFO bullets
-- [ ] Add UFO collision, destruction, and scoring
-- [ ] Make bombs destroy UFOs
+- [x] Add UFO shooting
+- [x] Add UFO bullets
+- [x] Add UFO collision, destruction, and scoring
+- [x] Make bombs destroy UFOs
 
 ### 2. Destruction Effects
 
