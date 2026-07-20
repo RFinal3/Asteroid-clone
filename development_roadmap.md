@@ -18,7 +18,7 @@
 - [x] Render asteroids as irregular polygons
 - [x] Give the ship a triangular hitbox
 - [x] Make asteroid hitboxes match their visible shapes
-- [ ] Make the ship break apart on collision with asteroid or UFO bullet
+- [ ] Make the ship break apart when the player loses a life
 
 ### Background System
 
@@ -31,18 +31,75 @@
 - [x] Formalize rendering layers
 - [x] Centralize player damage handling
 - [x] Add reusable pickup handling
+- [x] Add bounded shot and pickup lifetimes
+- [x] Add an asteroid population cap
+- [x] Cache rendered star glyph surfaces
 
 ### Arcade Features
 
 - [x] Add a shield power-up
 - [x] Add a speed power-up
-- [x] Add bombs
+- [x] Add bomb pickups, inventory, and basic activation
 - [x] Add pickup spawning
 - [ ] Add UFOs
 - [ ] Add scaling difficulty
 - [ ] Add high-score tracking
-- [ ] Add a pause menu
-- [ ] Add resume, restart, high-scores, and quit options
+- [ ] Add pause-menu and game-over options
+
+## Remaining Work for v1.0
+
+### 1. UFOs
+
+- [x] Add UFO sprite and movement
+- [ ] Add UFO spawning
+- [ ] Add UFO shooting
+- [ ] Add UFO bullets
+- [ ] Add UFO collision, destruction, and scoring
+- [ ] Make bombs destroy UFOs
+
+### 2. Destruction Effects
+
+- [ ] Make the player ship break apart when the player loses a life
+- [ ] Trigger destruction from asteroids and UFO bullets
+
+### 3. Bomb Polish
+
+- [ ] Add explosion particles to bomb targets
+- [ ] Add a screen flash and fade
+- [ ] Briefly pause asteroid spawning after detonation
+
+### 4. Scaling Difficulty
+
+- [ ] Scale asteroid spawn rate
+- [ ] Scale asteroid population cap
+- [ ] Scale UFO frequency and behavior
+- [ ] Consider asteroid speed scaling
+
+### 5. Game States and Menus
+
+- [ ] Add pause and resume
+- [ ] Add restart and quit
+- [ ] Add a game-over screen
+- [ ] Replace immediate `sys.exit()` on game over
+
+### 6. High Scores
+
+- [ ] Save and load high scores
+- [ ] Display the high-score table
+- [ ] Add completed runs to the table
+
+### 7. Audio
+
+- [ ] Add shooting, thrust, explosion, pickup, shield, bomb, and UFO sounds
+- [ ] Create original sounds or use appropriately licensed assets
+
+### 8. Beta and v1.0 Release
+
+- [ ] Run family high-score playtest
+- [ ] Gather balance and usability feedback
+- [ ] Fix beta bugs
+- [ ] Remove or toggle development diagnostics
+- [ ] Release v1.0
 
 
 ## v2.0 — Expanded Asteroids
@@ -50,8 +107,7 @@
 Ideas under consideration:
 
 - [ ] Add multiple levels
-- [ ] Add level-specific background artwork
-- [ ] Give levels different backgrounds
+- [ ] Add level-specific backgrounds and artwork
 - [ ] Increase difficulty across levels
 - [ ] Add a story or campaign
 - [ ] Increase alien activity at higher levels

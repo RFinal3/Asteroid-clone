@@ -21,6 +21,7 @@ from shieldpickup import ShieldPickup
 from speedpickup import SpeedPickup
 from bombpickup import BombPickup
 from pickup_spawner import PickupSpawner
+from ufo import UFO
 
 
 def main():
@@ -40,6 +41,7 @@ def main():
     explosionparticles = pygame.sprite.Group()
     pickups = pygame.sprite.Group()
     bomb_targets = pygame.sprite.Group()
+    ufos = pygame.sprite.Group()
 
     PickupSpawner.containers = (updatable,)
     Player.containers = (updatable, drawable)
@@ -48,6 +50,7 @@ def main():
     Shot.containers = (shots, drawable, updatable)
     ExplosionParticle.containers = (explosionparticles, updatable, drawable)
     Pickup.containers = (pickups, drawable, updatable)
+    UFO.containers = (ufos, drawable, updatable)
 
     asteroid_field = AsteroidField(asteroids)
     pickup_spawner = PickupSpawner()
@@ -57,6 +60,12 @@ def main():
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     starfield = StarField(SCREEN_WIDTH, SCREEN_HEIGHT, MIN_STAR_COUNT, MAX_STAR_COUNT)
+
+    test_ufo = UFO(
+        SCREEN_WIDTH / 2,
+        SCREEN_HEIGHT / 4,
+        player
+    )
 
 
     while True:
@@ -135,7 +144,7 @@ def main():
                     print("Yeah, definitely cheating.")
 
                 else:
-                    print("Okay, checking the code now.")
+                    print("Okay, checking the logs now.")
 
                 sys.exit()
 

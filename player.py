@@ -132,6 +132,7 @@ class Player(CircleShape):
         self.speed_boost_timers.append(SPEED_BOOST_DURATION_SECONDS)
         self.recalculate_speed_stats()
 
+
     def update_speed_boosts(self, dt):
         active_speed_boost_timers = []
         for speed_boost in self.speed_boost_timers:
@@ -142,6 +143,7 @@ class Player(CircleShape):
         
         self.speed_boost_timers = active_speed_boost_timers
         self.recalculate_speed_stats()
+
 
     def consume_bomb(self):
         if self.bomb_count <= 0:
