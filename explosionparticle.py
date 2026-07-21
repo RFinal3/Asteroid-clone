@@ -10,6 +10,8 @@ from constants import (
 
 class ExplosionParticle(CircleShape):
     _layer = LAYER_EFFECTS
+
+
     def __init__(self, x, y):
         super().__init__(x, y, EXPLOSION_RADIUS)
         self.timer = EXPLOSION_TIMER
@@ -20,8 +22,10 @@ class ExplosionParticle(CircleShape):
 
         self.velocity = vector * random.uniform(60, 160) * 1.2
 
+
     def draw(self, screen):
         pygame.draw.circle(screen, "white", self.position, self.radius, LINE_WIDTH)
+
 
     def update(self, dt):
         self.position += self.velocity * dt

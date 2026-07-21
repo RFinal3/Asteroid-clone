@@ -45,6 +45,7 @@ class UFO(CircleShape):
 
         return points
 
+
     def draw(self, screen):
         points = self.world_vertices()
         pygame.draw.polygon(screen, UFO_COLOR, points, 0)
@@ -74,6 +75,7 @@ class UFO(CircleShape):
         bullet_vector = to_target.normalize()
         bullet_vector = bullet_vector * UFO_SHOOT_SPEED
         bullet.velocity = bullet_vector
+
 
     def update(self, dt):
         to_target = self.target.position - self.position

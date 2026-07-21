@@ -8,15 +8,19 @@ from constants import (
     PICKUP_DROP_CHANCE
 )
 
+
 class PickupSpawner(pygame.sprite.Sprite):
     containers: pygame.sprite.Group
+
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self, self.containers)
         self.elapsed_time = 0.0
         
+        
     def update(self, dt):
         self.elapsed_time += dt
+    
     
     def try_spawn(self, position):
         if self.elapsed_time < PICKUP_SPAWN_DELAY_SECONDS:

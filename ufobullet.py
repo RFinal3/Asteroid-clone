@@ -13,5 +13,6 @@ class UFOBullet(Shot):
         super().__init__(x, y)
         self.radius = UFO_BULLET_RADIUS
 
+
     def draw(self, screen):
         pygame.draw.circle(screen, "white", self.position, self.radius, 0)

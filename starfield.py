@@ -20,6 +20,7 @@ class StarField:
             star_true_position = Star(position_x, position_y)
             self.stars.append(star_true_position)
 
+
     def draw(self, screen):
         for star in self.stars:
             star_surface = self.symbol_surfaces[star.symbol]

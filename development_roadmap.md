@@ -45,6 +45,7 @@
 - [ ] Add scaling difficulty
 - [ ] Add high-score tracking
 - [ ] Add pause-menu and game-over options
+- [ ] Add audio
 
 ## Remaining Work for v1.0
 

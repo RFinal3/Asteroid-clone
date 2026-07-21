@@ -15,11 +15,15 @@ from constants import (
     LAYER_PLAYER,
     PLAYER_INVULNERABILITY_SECONDS,
     SPEED_BOOST_MULTIPLIER,
-    SPEED_BOOST_DURATION_SECONDS
+    SPEED_BOOST_DURATION_SECONDS,
+    PLAYER_RESPAWN_DELAY_SECONDS,
+    SHIP_FRAGMENT_LIFETIME_SECONDS
     )
 
 class Player(CircleShape):
     _layer = LAYER_PLAYER
+
+    
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
@@ -35,10 +39,14 @@ class Player(CircleShape):
         self.acceleration = self.base_acceleration
         self.max_speed = self.base_max_speed
         self.speed_boost_timers = []
+        self.respawn_timer = 0.0
         
         
 
     def draw(self, screen):
+        if self.respawn_timer > 0:
+            return
+
         points = self.triangle()
         pygame.draw.polygon(screen, "black", points, 0)
         pygame.draw.polygon(screen, "white", points, LINE_WIDTH)
@@ -47,12 +55,14 @@ class Player(CircleShape):
     def rotate(self, dt):
         self.rotation += PLAYER_TURN_SPEED * dt
 
+
     def move(self, dt):
         unit_vector = pygame.Vector2(0, 1)
         rotated_vector = unit_vector.rotate(self.rotation)
         acceleration = rotated_vector * self.acceleration * dt
         self.velocity += acceleration
         self.velocity.clamp_magnitude_ip(self.max_speed)
+
 
     def decelerate(self, dt):
         self.velocity.move_towards_ip(pygame.Vector2(0, 0), PLAYER_DECELERATION * dt)
@@ -72,6 +82,14 @@ class Player(CircleShape):
         
 
     def update(self, dt: float) -> None:
+        if self.respawn_timer > 0:
+            self.respawn_timer -= dt
+
+            if self.respawn_timer <= 0:
+                self.respawn()
+                self.respawn_timer = 0.0
+            return
+
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_a]:
@@ -100,6 +118,7 @@ class Player(CircleShape):
 
         wrap_position(self.position, self.radius)
 
+
     def respawn(self):
         self.position.update(self.spawn_position)
         self.velocity.update(0, 0)
@@ -107,7 +126,7 @@ class Player(CircleShape):
 
     
     def take_damage(self):
-        if self.invulnerability_timer > 0:
+        if self.invulnerability_timer > 0 or self.respawn_timer > 0:
             return False
 
         if self.shield_count > 0:
@@ -118,9 +137,10 @@ class Player(CircleShape):
         self.lives -= 1
 
         if self.lives > 0:
-            self.respawn()
+            self.respawn_timer = PLAYER_RESPAWN_DELAY_SECONDS
 
         return True
+
 
     def recalculate_speed_stats(self):
         active_multiplier = SPEED_BOOST_MULTIPLIER ** len(self.speed_boost_timers)

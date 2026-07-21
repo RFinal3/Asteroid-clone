@@ -1,16 +1,18 @@
 import random
 import pygame
 from circleshape import CircleShape
+from logger import log_event
+from utils import wrap_position
 from constants import (
     LINE_WIDTH, 
     ASTEROID_MIN_RADIUS, 
     LAYER_WORLD
 )
-from logger import log_event
-from utils import wrap_position
 
 class Asteroid(CircleShape):
     _layer = LAYER_WORLD
+
+
     def __init__(self, x: float, y: float, radius: float) -> None:
         super().__init__(x, y, radius)
         self.vertices = []

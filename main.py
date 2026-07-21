@@ -1,13 +1,6 @@
 import pygame
 import sys
 import random
-from constants import (
-    SCREEN_WIDTH, 
-    SCREEN_HEIGHT, 
-    MIN_STAR_COUNT, 
-    MAX_STAR_COUNT,
-    UFO_SCORE_VALUE
-)
 from player import Player
 from logger import log_state, log_event
 from asteroid import Asteroid
@@ -25,6 +18,15 @@ from pickup_spawner import PickupSpawner
 from ufo import UFO
 from ufospawner import UFOSpawner
 from ufobullet import UFOBullet
+from shipfragment import ShipFragment, spawn_ship_fragments
+from combat import handle_player_hit
+from constants import (
+    SCREEN_WIDTH, 
+    SCREEN_HEIGHT, 
+    MIN_STAR_COUNT, 
+    MAX_STAR_COUNT,
+    UFO_SCORE_VALUE
+)
 
 
 def main():
@@ -46,6 +48,7 @@ def main():
     bomb_targets = pygame.sprite.Group()
     ufos = pygame.sprite.Group()
     ufo_bullets = pygame.sprite.Group()
+    
 
     PickupSpawner.containers = (updatable,)
     Player.containers = (updatable, drawable)
@@ -57,6 +60,7 @@ def main():
     UFO.containers = (ufos, bomb_targets, drawable, updatable)
     UFOSpawner.containers = (updatable,)
     UFOBullet.containers = (ufo_bullets, drawable, updatable)
+    ShipFragment.containers = (drawable, updatable)
 
     asteroid_field = AsteroidField(asteroids)
     pickup_spawner = PickupSpawner()
@@ -65,6 +69,7 @@ def main():
     text_font = pygame.font.Font(None, 36)
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    triangle_points = player.triangle()
     starfield = StarField(SCREEN_WIDTH, SCREEN_HEIGHT, MIN_STAR_COUNT, MAX_STAR_COUNT)
     ufo_spawner = UFOSpawner(player, ufos)
 
@@ -96,6 +101,7 @@ def main():
         starfield.update(dt)
         updatable.update(dt)
 
+
         for pickup in pickups:
             if circle_collides_with_polygon(pickup.position, pickup.radius, player.triangle()):
                 pickup.collect(player)
@@ -104,15 +110,13 @@ def main():
         for ufo_bullet in ufo_bullets:
             if circle_collides_with_polygon(ufo_bullet.position, ufo_bullet.radius, player.triangle()):
                 ufo_bullet.kill()
-                if player.take_damage():
-                    log_event("ufo_hit_player")
+                handle_player_hit(player, "ufo_hit_player")
 
         
         for asteroid in asteroids:
             if polygons_collide(player.triangle(), asteroid.world_vertices()):
-                if player.take_damage():
-                    log_event("player_hit")
-
+                handle_player_hit(player, "player_hit")
+                    
 
             if player.lives == 0:
                 print(f"Game over! Final score: {game.score}")
@@ -215,13 +219,16 @@ def main():
 
         pygame.display.flip()
 
+
         dt = clock.tick(60) / 1000
+
 
         pygame.display.set_caption(
             f"Modernsteroids! | FPS: {clock.get_fps():.2f} | "
             f"A: {len(asteroids)} | S: {len(shots)} | "
             f"P: {len(pickups)} | D: {len(drawable)}"
         )
+
 
 if __name__ == "__main__":
     main()

@@ -1,6 +1,5 @@
 import random
 from collections.abc import Callable
-
 import pygame
 from asteroid import Asteroid
 from constants import (
@@ -14,6 +13,7 @@ from constants import (
 )
 
 Edge = tuple[pygame.Vector2, Callable[[float], pygame.Vector2]]
+
 
 class AsteroidField(pygame.sprite.Sprite):
     containers: pygame.sprite.Group
@@ -41,16 +41,19 @@ class AsteroidField(pygame.sprite.Sprite):
         ),
     ]
 
+
     def __init__(self, asteroids) -> None:
         pygame.sprite.Sprite.__init__(self, self.containers)
         self.spawn_timer = 0.0
         self.asteroids = asteroids
+
 
     def spawn(
         self, radius: float, position: pygame.Vector2, velocity: pygame.Vector2
     ) -> None:
         asteroid = Asteroid(position.x, position.y, radius)
         asteroid.velocity = velocity
+
 
     def update(self, dt: float) -> None:
         self.spawn_timer += dt
