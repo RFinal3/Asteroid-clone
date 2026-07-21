@@ -18,7 +18,7 @@
 - [x] Render asteroids as irregular polygons
 - [x] Give the ship a triangular hitbox
 - [x] Make asteroid hitboxes match their visible shapes
-- [ ] Make the ship break apart when the player loses a life
+- [x] Make the ship break apart when the player loses a life
 
 ### Background System
 
@@ -60,8 +60,8 @@
 
 ### 2. Destruction Effects
 
-- [ ] Make the player ship break apart when the player loses a life
-- [ ] Trigger destruction from asteroids and UFO bullets
+- [x] Make the player ship break apart when the player loses a life
+- [x] Trigger destruction from asteroids and UFO bullets
 
 ### 3. Bomb Polish
 
@@ -78,6 +78,7 @@
 
 ### 5. Game States and Menus
 
+- [ ] Add debug mode and diagnostic overlay
 - [ ] Add pause and resume
 - [ ] Add restart and quit
 - [ ] Add a game-over screen
