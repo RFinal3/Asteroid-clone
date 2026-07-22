@@ -42,3 +42,14 @@ class PickupSpawner(pygame.sprite.Sprite):
         chosen_pickup_class(position.x, position.y)
 
         return True
+
+
+    def force_spawn(self, pickup_type, position):
+        pickup_types = {
+            "shield": ShieldPickup,
+            "speed": SpeedPickup,
+            "bomb": BombPickup,
+        }
+
+        chosen_pickup_class = pickup_types[pickup_type]
+        chosen_pickup_class(position.x, position.y)

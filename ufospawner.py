@@ -54,7 +54,12 @@ class UFOSpawner(pygame.sprite.Sprite):
         if value >= UFO_SPAWN_CHANCE:
             return False
 
+        
+        self.spawn_random_ufo()
+        return True
 
+
+    def spawn_random_ufo(self):
         edge = random.choice(("left", "right", "top", "bottom"))
 
 
@@ -63,7 +68,7 @@ class UFOSpawner(pygame.sprite.Sprite):
                 -UFO_RADIUS,
                 random.uniform(0, SCREEN_HEIGHT)
             )
-        
+            
         elif edge == "right":
             position = pygame.Vector2(
                 SCREEN_WIDTH + UFO_RADIUS,
@@ -83,4 +88,4 @@ class UFOSpawner(pygame.sprite.Sprite):
             )
 
         UFO(position.x, position.y, self.target)
-        return True
+            

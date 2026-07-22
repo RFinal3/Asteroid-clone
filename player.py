@@ -40,7 +40,7 @@ class Player(CircleShape):
         self.max_speed = self.base_max_speed
         self.speed_boost_timers = []
         self.respawn_timer = 0.0
-        
+        self.debug_invulnerability = False
         
 
     def draw(self, screen):
@@ -126,7 +126,7 @@ class Player(CircleShape):
 
     
     def take_damage(self):
-        if self.invulnerability_timer > 0 or self.respawn_timer > 0:
+        if self.invulnerability_timer > 0 or self.respawn_timer > 0 or self.debug_invulnerability:
             return False
 
         if self.shield_count > 0:
@@ -151,6 +151,14 @@ class Player(CircleShape):
     def add_speed_boost(self):
         self.speed_boost_timers.append(SPEED_BOOST_DURATION_SECONDS)
         self.recalculate_speed_stats()
+
+
+    def add_shield(self):
+        self.shield_count += 1
+
+
+    def add_bomb(self):
+        self.bomb_count += 1
 
 
     def update_speed_boosts(self, dt):

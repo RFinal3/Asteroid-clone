@@ -13,6 +13,6 @@ class ShieldPickup(Pickup):
 
 
     def apply(self, player):
-        player.shield_count += 1
+        player.add_shield
 
 

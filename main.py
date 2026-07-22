@@ -20,6 +20,7 @@ from ufospawner import UFOSpawner
 from ufobullet import UFOBullet
 from shipfragment import ShipFragment, spawn_ship_fragments
 from combat import handle_player_hit
+from debugmanager import DebugManager
 from constants import (
     SCREEN_WIDTH, 
     SCREEN_HEIGHT, 
@@ -64,6 +65,7 @@ def main():
 
     asteroid_field = AsteroidField(asteroids)
     pickup_spawner = PickupSpawner()
+    debug_instance = DebugManager()
 
     game = Game()
     text_font = pygame.font.Font(None, 36)
@@ -92,6 +94,12 @@ def main():
                                 ExplosionParticle(target.position.x, target.position.y)
                             
                             target.kill()
+
+                
+                if event.key == pygame.K_F3:
+                    debug_instance.toggle()
+
+                debug_instance.handle_event(event, player, asteroid_field, pickup_spawner, ufo_spawner)
 
         
         fps = clock.get_fps()
@@ -216,6 +224,19 @@ def main():
         screen.blit(shield_text, (20, 100))
         screen.blit(bombs_text, (20, 140))
 
+        debug_counts = {
+            "Asteroids": len(asteroids),
+            "Shots": len(shots),
+            "Pickups": len(pickups),
+            "UFOs": len(ufos),
+            "UFO bullets": len(ufo_bullets),
+            "Drawables": len(drawable),
+            "Invunerable": player.debug_invulnerability,
+            "Asteroid spawning paused": asteroid_field.spawning_paused,
+        }
+
+        debug_instance.draw(screen, fps, debug_counts)
+
 
         pygame.display.flip()
 
@@ -224,7 +245,7 @@ def main():
 
 
         pygame.display.set_caption(
-            f"Modernsteroids! | FPS: {clock.get_fps():.2f} | "
+            f"Modernsteroids! | FPS: {clock.get_fps():.0f} | "
             f"A: {len(asteroids)} | S: {len(shots)} | "
             f"P: {len(pickups)} | D: {len(drawable)}"
         )
