@@ -78,7 +78,7 @@
 
 ### 5. Game States and Menus
 
-- [ ] Add debug mode and diagnostic overlay
+- [x] Add debug mode and diagnostic overlay
 - [ ] Add pause and resume
 - [ ] Add restart and quit
 - [ ] Add a game-over screen

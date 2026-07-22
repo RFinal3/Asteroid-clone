@@ -21,6 +21,7 @@ Rather than stopping at the tutorial requirements, I plan to develop it through 
 - Irregular asteroid shapes
 - Triangular player hitbox
 - Picked up powers such as shield, speed, and bomb
+- UFO spawns and chases player
 
 ## Controls
 
