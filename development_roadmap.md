@@ -66,8 +66,8 @@
 ### 3. Bomb Polish
 
 - [x] Add explosion particles to bomb targets
-- [ ] Add a screen flash and fade
-- [ ] Briefly pause asteroid spawning after detonation
+- [x] Add a screen flash and fade
+- [x] Briefly pause asteroid spawning after detonation
 
 ### 4. Scaling Difficulty
 

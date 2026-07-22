@@ -47,6 +47,7 @@ class AsteroidField(pygame.sprite.Sprite):
         self.spawn_timer = 0.0
         self.asteroids = asteroids
         self.spawning_paused = False
+        self.spawn_pause_timer = 0.0
 
 
     def spawn(
@@ -57,7 +58,13 @@ class AsteroidField(pygame.sprite.Sprite):
 
 
     def update(self, dt: float) -> None:
-        if self.spawning_paused == True:
+        if self.spawn_pause_timer > 0:
+            self.spawn_pause_timer = max(
+                0.0,
+                self.spawn_pause_timer - dt,
+            )
+
+        if self.spawning_paused or self.spawn_pause_timer > 0:
             return
 
         self.spawn_timer += dt
@@ -82,3 +89,7 @@ class AsteroidField(pygame.sprite.Sprite):
     
     def toggle_spawning(self):
         self.spawning_paused = not self.spawning_paused
+
+
+    def pause_spawning(self, duration):
+        self.spawn_pause_timer = max(self.spawn_pause_timer, duration)

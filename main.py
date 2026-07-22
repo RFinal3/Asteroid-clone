@@ -21,12 +21,15 @@ from ufobullet import UFOBullet
 from shipfragment import ShipFragment, spawn_ship_fragments
 from combat import handle_player_hit
 from debugmanager import DebugManager
+from screenflash import ScreenFlash
 from constants import (
     SCREEN_WIDTH, 
     SCREEN_HEIGHT, 
     MIN_STAR_COUNT, 
     MAX_STAR_COUNT,
-    UFO_SCORE_VALUE
+    UFO_SCORE_VALUE,
+    SCREEN_FLASH_DURATION_SECONDS,
+    BOMB_SPAWN_PAUSE_SECONDS
 )
 
 
@@ -62,6 +65,7 @@ def main():
     UFOSpawner.containers = (updatable,)
     UFOBullet.containers = (ufo_bullets, drawable, updatable)
     ShipFragment.containers = (drawable, updatable)
+    ScreenFlash.containers = (updatable, drawable)
 
     asteroid_field = AsteroidField(asteroids)
     pickup_spawner = PickupSpawner()
@@ -94,6 +98,9 @@ def main():
                                 ExplosionParticle(target.position.x, target.position.y)
                             
                             target.kill()
+                        
+                        ScreenFlash(SCREEN_FLASH_DURATION_SECONDS)
+                        asteroid_field.pause_spawning(BOMB_SPAWN_PAUSE_SECONDS)
 
                 
                 if event.key == pygame.K_F3:
