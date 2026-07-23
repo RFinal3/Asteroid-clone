@@ -23,6 +23,7 @@ Rather than stopping at the tutorial requirements, I plan to develop it through 
 - Picked up powers such as shield, speed, and bomb
 - UFO spawns and chases player
 - Bomb explosions, leaving light and particles behind
+- Scaling difficulty as time progresses
 
 ## Controls
 

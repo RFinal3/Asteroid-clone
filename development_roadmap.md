@@ -71,10 +71,10 @@
 
 ### 4. Scaling Difficulty
 
-- [ ] Scale asteroid spawn rate
-- [ ] Scale asteroid population cap
-- [ ] Scale UFO frequency and behavior
-- [ ] Consider asteroid speed scaling
+- [x] Scale asteroid spawn rate
+- [x] Scale asteroid population cap
+- [x] Scale UFO frequency and behavior
+- [x] Consider asteroid speed scaling
 
 ### 5. Game States and Menus
 
