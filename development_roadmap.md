@@ -81,14 +81,14 @@
 - [x] Add debug mode and diagnostic overlay
 - [x] Add pause and resume
 - [x] Add restart and quit
-- [ ] Add a game-over screen
-- [ ] Replace immediate `sys.exit()` on game over
+- [x] Add a game-over screen
+- [x] Replace immediate `sys.exit()` on game over
 
 ### 6. High Scores
 
 - [x] Save and load high scores
-- [ ] Display the high-score table
-- [ ] Add completed runs to the table
+- [x] Display the high-score table
+- [x] Add completed runs to the table
 
 ### 7. Audio
 

@@ -1,5 +1,4 @@
 import pygame
-import sys
 import random
 from player import Player
 from logger import log_state, log_event
@@ -26,6 +25,8 @@ from screenflash import ScreenFlash
 from pausemenu import PauseMenu
 from highscore import HighScoreManager
 from highscorescreen import HighScoreScreen
+from nameentryscreen import NameEntryScreen
+from gameoverscreen import GameOverScreen
 from constants import (
     SCREEN_WIDTH, 
     SCREEN_HEIGHT, 
@@ -69,6 +70,8 @@ def run_game(screen, clock, high_scores):
     debug_instance = DebugManager()
     pause_menu = PauseMenu()
     high_score_screen = HighScoreScreen()
+    name_entry_screen = NameEntryScreen()
+    game_over_screen = GameOverScreen()
 
     text_font = pygame.font.Font(None, 36)
 
@@ -94,7 +97,37 @@ def run_game(screen, clock, high_scores):
 
                     continue
 
+            if game.state == GameState.NAME_ENTRY:
+                submitted_name = name_entry_screen.handle_event(event)
+
+                if submitted_name is not None:
+                    high_scores.add_score(submitted_name, game.score)
+                    name_entry_screen.stop()
+                    game.finish_name_entry()
+
+                continue
+
             if game.state == GameState.HIGH_SCORES:
+                high_score_action = high_score_screen.handle_event(event)
+
+                if high_score_action == "Back":
+                    game.close_high_scores()
+
+                continue
+
+
+            if game.state == GameState.GAME_OVER:
+                game_over_action = game_over_screen.handle_event(event)
+
+                if game_over_action == "Restart":
+                    return "restart"
+
+                elif game_over_action == "High Scores":
+                    game.open_high_scores()
+
+                elif game_over_action == "Quit":
+                    return "quit"
+
                 continue
 
             if game.state == GameState.PAUSED:
@@ -160,52 +193,56 @@ def run_game(screen, clock, high_scores):
                     handle_player_hit(player, "player_hit")
                         
 
-                if player.lives == 0:
-                    print(f"Game over! Final score: {game.score}")
+            if player.lives == 0:
+                print(f"Game over! Final score: {game.score}")
                     
-                    if game.score <= 10:
-                        print("ROFL.")
+                if game.score <= 10:
+                    print("ROFL.")
                     
-                    elif game.score <= 25:
-                        print("LOL.")
+                elif game.score <= 25:
+                    print("LOL.")
 
-                    elif game.score <= 50:
-                        print("Okay.")
+                elif game.score <= 50:
+                    print("Okay.")
 
-                    elif game.score <= 100:
-                        print("Okurt.")
+                elif game.score <= 100:
+                    print("Okurt.")
 
-                    elif game.score <= 200:
-                        print("Okkkkuuurrrrttt.")
+                elif game.score <= 200:
+                    print("Okkkkuuurrrrttt.")
 
-                    elif game.score <= 300:
-                        print("Bro.")
+                elif game.score <= 300:
+                    print("Bro.")
 
-                    elif game.score <= 400:
-                        print("Chill bro.")
+                elif game.score <= 400:
+                    print("Chill bro.")
 
-                    elif game.score <= 500:
-                        print("Gyatt.")
+                elif game.score <= 500:
+                    print("Gyatt.")
 
-                    elif game.score <= 600:
-                        print("Gyatt damn.")
+                elif game.score <= 600:
+                    print("Gyatt damn.")
 
-                    elif game.score <= 700:
-                        print("Are you cheating bro?")
+                elif game.score <= 700:
+                    print("Are you cheating bro?")
 
-                    elif game.score <= 800:
-                        print("Someone check this dudes screen while he plays, I think he's cheating.")
+                elif game.score <= 800:
+                    print("Someone check this dudes screen while he plays, I think he's cheating.")
 
-                    elif game.score <= 900:
-                        print("So, you watched and it looks legit?")
+                elif game.score <= 900:
+                    print("So, you watched and it looks legit?")
 
-                    elif game.score <= 1000:
-                        print("Yeah, definitely cheating.")
+                elif game.score <= 1000:
+                    print("Yeah, definitely cheating.")
 
-                    else:
-                        print("Okay, checking the logs now.")
+                else:
+                    print("Okay, checking the logs now.")
 
-                    sys.exit()
+                score_qualifies = high_scores.qualifies(game.score)
+                game.end_game(score_qualifies)
+
+                if game.state == GameState.NAME_ENTRY:
+                    name_entry_screen.start()
 
             
             for asteroid in asteroids:
@@ -281,8 +318,11 @@ def run_game(screen, clock, high_scores):
         elif game.state == GameState.HIGH_SCORES:
             high_score_screen.draw(screen, high_scores.entries)
 
-        pygame.display.flip()
+        elif game.state == GameState.NAME_ENTRY:
+            name_entry_screen.draw(screen, game.score)
 
+        elif game.state == GameState.GAME_OVER:
+            game_over_screen.draw(screen, game.score, game.score_qualified)
 
         pygame.display.flip()
 

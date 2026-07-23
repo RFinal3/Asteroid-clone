@@ -12,6 +12,7 @@ class Game:
         self.difficulty_level = 1
         self.state = GameState.PLAYING
         self.previous_state = None
+        self.score_qualified = False
 
     
     def update(self, dt):
@@ -45,3 +46,17 @@ class Game:
     def close_high_scores(self):
         self.state = self.previous_state
         self.previous_state = None
+
+
+    def end_game(self, score_qualifies):
+        self.score_qualified = score_qualifies
+
+        if score_qualifies:
+            self.state = GameState.NAME_ENTRY
+        else:
+            self.state = GameState.GAME_OVER
+
+
+    def finish_name_entry(self):
+        self.state = GameState.GAME_OVER
+        self.open_high_scores()

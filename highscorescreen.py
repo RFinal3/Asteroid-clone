@@ -6,6 +6,8 @@ class HighScoreScreen:
         self.title_font = pygame.font.Font(None, 72)
         self.entry_font = pygame.font.Font(None, 36)
         self.info_font = pygame.font.Font(None, 28)
+        self.back_rect = None
+        self.back_hovered = False
 
     def draw(self, screen, entries):
         overlay = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
@@ -34,3 +36,41 @@ class HighScoreScreen:
             no_scores_rect = no_scores_text.get_rect(center=(screen.get_width() // 2, next_y))
 
             screen.blit(no_scores_text, no_scores_rect)
+
+        if self.back_hovered:
+            back_color = "yellow"
+        else:
+            back_color = "white"
+
+        back_text = self.entry_font.render(
+            "Back",
+            True,
+            back_color,
+        )
+
+        self.back_rect = back_text.get_rect(
+            center=(
+                screen.get_width() // 2,
+                screen.get_height() - 60,
+            )
+        )
+
+        screen.blit(back_text, self.back_rect)
+
+
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEMOTION:
+            if self.back_rect is not None:
+                self.back_hovered = self.back_rect.collidepoint(
+                    event.pos
+                )
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if (
+                event.button == 1
+                and self.back_rect is not None
+                and self.back_rect.collidepoint(event.pos)
+            ):
+                return "Back"
+
+        return None
