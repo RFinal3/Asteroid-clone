@@ -67,11 +67,11 @@ def main():
     ShipFragment.containers = (drawable, updatable)
     ScreenFlash.containers = (updatable, drawable)
 
-    asteroid_field = AsteroidField(asteroids)
+    game = Game()
+    asteroid_field = AsteroidField(asteroids, game)
     pickup_spawner = PickupSpawner()
     debug_instance = DebugManager()
 
-    game = Game()
     text_font = pygame.font.Font(None, 36)
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
@@ -110,6 +110,7 @@ def main():
 
         
         fps = clock.get_fps()
+        game.update(dt)
 
 
         screen.fill("black")
@@ -240,6 +241,9 @@ def main():
             "Drawables": len(drawable),
             "Invunerable": player.debug_invulnerability,
             "Asteroid spawning paused": asteroid_field.spawning_paused,
+            "Difficulty": game.difficulty_level,
+            "Asteroid spawn rate": f"{asteroid_field.get_current_spawn_rate():.2f}",
+            "Asteroid cap": asteroid_field.get_current_cap()
         }
 
         debug_instance.draw(screen, fps, debug_counts)
