@@ -79,8 +79,8 @@
 ### 5. Game States and Menus
 
 - [x] Add debug mode and diagnostic overlay
-- [ ] Add pause and resume
-- [ ] Add restart and quit
+- [x] Add pause and resume
+- [x] Add restart and quit
 - [ ] Add a game-over screen
 - [ ] Replace immediate `sys.exit()` on game over
 

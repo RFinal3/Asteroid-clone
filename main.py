@@ -24,6 +24,7 @@ from combat import handle_player_hit
 from debugmanager import DebugManager
 from screenflash import ScreenFlash
 from pausemenu import PauseMenu
+from highscore import HighScoreManager
 from constants import (
     SCREEN_WIDTH, 
     SCREEN_HEIGHT, 
@@ -35,7 +36,7 @@ from constants import (
 )
 
 
-def run_game(screen, clock):
+def run_game(screen, clock, high_scores):
     dt = 0.0
 
     updatable = pygame.sprite.Group()
@@ -284,13 +285,14 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
+    high_scores = HighScoreManager()
 
     print(f"Starting Asteroids with pygame version {pygame.version.ver}")
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
 
     while True:
-        session_action = run_game(screen, clock)
+        session_action = run_game(screen, clock, high_scores)
 
         if session_action != "restart":
             break
