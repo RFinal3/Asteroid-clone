@@ -62,7 +62,6 @@ def main():
     ExplosionParticle.containers = (explosionparticles, updatable, drawable)
     Pickup.containers = (pickups, drawable, updatable)
     UFO.containers = (ufos, bomb_targets, drawable, updatable)
-    UFOSpawner.containers = (updatable,)
     UFOBullet.containers = (ufo_bullets, drawable, updatable)
     ShipFragment.containers = (drawable, updatable)
     ScreenFlash.containers = (updatable, drawable)
@@ -77,7 +76,7 @@ def main():
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     triangle_points = player.triangle()
     starfield = StarField(SCREEN_WIDTH, SCREEN_HEIGHT, MIN_STAR_COUNT, MAX_STAR_COUNT)
-    ufo_spawner = UFOSpawner(player, ufos)
+    ufo_spawner = UFOSpawner(player, ufos, game)
 
 
     while True:
@@ -243,7 +242,8 @@ def main():
             "Asteroid spawning paused": asteroid_field.spawning_paused,
             "Difficulty": game.difficulty_level,
             "Asteroid spawn rate": f"{asteroid_field.get_current_spawn_rate():.2f}",
-            "Asteroid cap": asteroid_field.get_current_cap()
+            "Asteroid cap": asteroid_field.get_current_cap(),
+            "UFO cap": ufo_spawner.get_current_cap()
         }
 
         debug_instance.draw(screen, fps, debug_counts)
@@ -255,11 +255,7 @@ def main():
         dt = clock.tick(60) / 1000
 
 
-        pygame.display.set_caption(
-            f"Modernsteroids! | FPS: {clock.get_fps():.0f} | "
-            f"A: {len(asteroids)} | S: {len(shots)} | "
-            f"P: {len(pickups)} | D: {len(drawable)}"
-        )
+        pygame.display.set_caption(f"Modernsteroids!")
 
 
 if __name__ == "__main__":

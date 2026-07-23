@@ -11,27 +11,20 @@ from constants import (
     SCREEN_WIDTH
 )
 
-class UFOSpawner(pygame.sprite.Sprite):
-    containers: pygame.sprite.Group
-
-
-    def __init__(self, player, ufos):
-        pygame.sprite.Sprite.__init__(self, self.containers)
+class UFOSpawner:
+    def __init__(self, player, ufos, game):
         self.target = player
         self.ufos = ufos
         self.elapsed_time = 0.0
-
-
-    def update(self, dt):
-        self.elapsed_time += dt
+        self.game = game
 
 
     def get_current_cap(self):
-        if self.elapsed_time < UFO_INITIAL_SPAWN_DELAY_SECONDS:
+        if self.game.elapsed_time < UFO_INITIAL_SPAWN_DELAY_SECONDS:
             return 0
 
         completed_intervals = int(
-            (self.elapsed_time - UFO_INITIAL_SPAWN_DELAY_SECONDS) 
+            (self.game.elapsed_time - UFO_INITIAL_SPAWN_DELAY_SECONDS) 
         // UFO_CAP_INCREASE_INTERVAL_SECONDS
         )
 
