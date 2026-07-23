@@ -11,6 +11,7 @@ class Game:
         self.elapsed_time = 0.0
         self.difficulty_level = 1
         self.state = GameState.PLAYING
+        self.previous_state = None
 
     
     def update(self, dt):
@@ -34,3 +35,13 @@ class Game:
             self.pause()
         elif self.state == GameState.PAUSED:
             self.resume()
+
+
+    def open_high_scores(self):
+        self.previous_state = self.state
+        self.state = GameState.HIGH_SCORES
+
+
+    def close_high_scores(self):
+        self.state = self.previous_state
+        self.previous_state = None

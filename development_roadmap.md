@@ -86,7 +86,7 @@
 
 ### 6. High Scores
 
-- [ ] Save and load high scores
+- [x] Save and load high scores
 - [ ] Display the high-score table
 - [ ] Add completed runs to the table
 

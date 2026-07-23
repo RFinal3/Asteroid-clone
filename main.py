@@ -25,6 +25,7 @@ from debugmanager import DebugManager
 from screenflash import ScreenFlash
 from pausemenu import PauseMenu
 from highscore import HighScoreManager
+from highscorescreen import HighScoreScreen
 from constants import (
     SCREEN_WIDTH, 
     SCREEN_HEIGHT, 
@@ -67,6 +68,7 @@ def run_game(screen, clock, high_scores):
     pickup_spawner = PickupSpawner()
     debug_instance = DebugManager()
     pause_menu = PauseMenu()
+    high_score_screen = HighScoreScreen()
 
     text_font = pygame.font.Font(None, 36)
 
@@ -85,8 +87,15 @@ def run_game(screen, clock, high_scores):
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    game.toggle_pause()
+                    if game.state == GameState.HIGH_SCORES:
+                        game.close_high_scores()
+                    else:
+                        game.toggle_pause()
+
                     continue
+
+            if game.state == GameState.HIGH_SCORES:
+                continue
 
             if game.state == GameState.PAUSED:
                 pause_action = pause_menu.handle_event(event)
@@ -100,6 +109,9 @@ def run_game(screen, clock, high_scores):
                 elif pause_action == "Restart":
                     return "restart"
 
+                elif pause_action == "High Scores":
+                    game.open_high_scores()
+
                 continue
 
             if event.type == pygame.KEYDOWN:
@@ -109,10 +121,7 @@ def run_game(screen, clock, high_scores):
                             particle_number = random.randint(6, 24)
 
                             for _ in range(particle_number):
-                                ExplosionParticle(
-                                    target.position.x,
-                                    target.position.y,
-                                )
+                                ExplosionParticle(target.position.x, target.position.y)
 
                             target.kill()
 
@@ -268,6 +277,9 @@ def run_game(screen, clock, high_scores):
 
         if game.state == GameState.PAUSED:
             pause_menu.draw(screen)
+
+        elif game.state == GameState.HIGH_SCORES:
+            high_score_screen.draw(screen, high_scores.entries)
 
         pygame.display.flip()
 
