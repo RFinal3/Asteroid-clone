@@ -7,6 +7,7 @@ from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
 from game import Game
+from gamestate import GameState
 from explosionparticle import ExplosionParticle
 from starfield import StarField
 from utils import circle_collides_with_polygon, polygons_collide
@@ -22,6 +23,7 @@ from shipfragment import ShipFragment, spawn_ship_fragments
 from combat import handle_player_hit
 from debugmanager import DebugManager
 from screenflash import ScreenFlash
+from pausemenu import PauseMenu
 from constants import (
     SCREEN_WIDTH, 
     SCREEN_HEIGHT, 
@@ -33,15 +35,8 @@ from constants import (
 )
 
 
-def main():
-    pygame.init()
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    clock = pygame.time.Clock()
+def run_game(screen, clock):
     dt = 0.0
-
-    print(f"Starting Asteroids with pygame version {pygame.version.ver}")
-    print(f"Screen width: {SCREEN_WIDTH}")
-    print(f"Screen height: {SCREEN_HEIGHT}")
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.LayeredUpdates()
@@ -70,6 +65,7 @@ def main():
     asteroid_field = AsteroidField(asteroids, game)
     pickup_spawner = PickupSpawner()
     debug_instance = DebugManager()
+    pause_menu = PauseMenu()
 
     text_font = pygame.font.Font(None, 36)
 
@@ -85,23 +81,43 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-            
-            if event.type == pygame.KEYDOWN:
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    game.toggle_pause()
+                    continue
+
+            if game.state == GameState.PAUSED:
+                pause_action = pause_menu.handle_event(event)
+
+                if pause_action == "Resume":
+                    game.resume()
+
+                elif pause_action == "Quit":
+                    return "quit"
+
+                elif pause_action == "Restart":
+                    return "restart"
+
+                continue
+
+            if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_b:
                     if player.consume_bomb():
                         for target in bomb_targets:
                             particle_number = random.randint(6, 24)
-                    
+
                             for _ in range(particle_number):
-                                ExplosionParticle(target.position.x, target.position.y)
-                            
+                                ExplosionParticle(
+                                    target.position.x,
+                                    target.position.y,
+                                )
+
                             target.kill()
-                        
+
                         ScreenFlash(SCREEN_FLASH_DURATION_SECONDS)
                         asteroid_field.pause_spawning(BOMB_SPAWN_PAUSE_SECONDS)
 
-                
                 if event.key == pygame.K_F3:
                     debug_instance.toggle()
 
@@ -109,110 +125,111 @@ def main():
 
         
         fps = clock.get_fps()
-        game.update(dt)
-
-
         screen.fill("black")
-        starfield.update(dt)
-        updatable.update(dt)
-
-
-        for pickup in pickups:
-            if circle_collides_with_polygon(pickup.position, pickup.radius, player.triangle()):
-                pickup.collect(player)
-
-
-        for ufo_bullet in ufo_bullets:
-            if circle_collides_with_polygon(ufo_bullet.position, ufo_bullet.radius, player.triangle()):
-                ufo_bullet.kill()
-                handle_player_hit(player, "ufo_hit_player")
 
         
-        for asteroid in asteroids:
-            if polygons_collide(player.triangle(), asteroid.world_vertices()):
-                handle_player_hit(player, "player_hit")
+        if game.state == GameState.PLAYING:
+            game.update(dt)
+            starfield.update(dt)
+            updatable.update(dt)
+
+        if game.state == GameState.PLAYING:
+            for pickup in pickups:
+                if circle_collides_with_polygon(pickup.position, pickup.radius, player.triangle()):
+                    pickup.collect(player)
+
+
+            for ufo_bullet in ufo_bullets:
+                if circle_collides_with_polygon(ufo_bullet.position, ufo_bullet.radius, player.triangle()):
+                    ufo_bullet.kill()
+                    handle_player_hit(player, "ufo_hit_player")
+
+            
+            for asteroid in asteroids:
+                if polygons_collide(player.triangle(), asteroid.world_vertices()):
+                    handle_player_hit(player, "player_hit")
+                        
+
+                if player.lives == 0:
+                    print(f"Game over! Final score: {game.score}")
                     
-
-            if player.lives == 0:
-                print(f"Game over! Final score: {game.score}")
-                
-                if game.score <= 10:
-                    print("ROFL.")
-                
-                elif game.score <= 25:
-                    print("LOL.")
-
-                elif game.score <= 50:
-                    print("Okay.")
-
-                elif game.score <= 100:
-                    print("Okurt.")
-
-                elif game.score <= 200:
-                    print("Okkkkuuurrrrttt.")
-
-                elif game.score <= 300:
-                    print("Bro.")
-
-                elif game.score <= 400:
-                    print("Chill bro.")
-
-                elif game.score <= 500:
-                    print("Gyatt.")
-
-                elif game.score <= 600:
-                    print("Gyatt damn.")
-
-                elif game.score <= 700:
-                    print("Are you cheating bro?")
-
-                elif game.score <= 800:
-                    print("Someone check this dudes screen while he plays, I think he's cheating.")
-
-                elif game.score <= 900:
-                    print("So, you watched and it looks legit?")
-
-                elif game.score <= 1000:
-                    print("Yeah, definitely cheating.")
-
-                else:
-                    print("Okay, checking the logs now.")
-
-                sys.exit()
-
-        
-        for asteroid in asteroids:
-            for shot in shots:
-                if circle_collides_with_polygon(shot.position, shot.radius, asteroid.world_vertices()):
-                    game.score += 1
-                    log_event("asteroid_shot")
-                    pickup_spawner.try_spawn(asteroid.position)
-                    ufo_spawner.try_spawn()
-                    particle_number = random.randint(6, 24)
+                    if game.score <= 10:
+                        print("ROFL.")
                     
-                    for _ in range(particle_number):
-                        ExplosionParticle(asteroid.position.x, asteroid.position.y)
+                    elif game.score <= 25:
+                        print("LOL.")
 
-                    asteroid.split()
-                    shot.kill()
+                    elif game.score <= 50:
+                        print("Okay.")
 
-                    break
+                    elif game.score <= 100:
+                        print("Okurt.")
 
-        
-        for ufo in ufos:
-            for shot in shots:
-                if circle_collides_with_polygon(shot.position, shot.radius, ufo.world_vertices()):
-                    game.score += UFO_SCORE_VALUE
-                    log_event("ufo_hit")
-                    particle_number = random.randint(12, 36)
+                    elif game.score <= 200:
+                        print("Okkkkuuurrrrttt.")
 
-                    for _ in range(particle_number):
-                        ExplosionParticle(ufo.position.x, ufo.position.y)
+                    elif game.score <= 300:
+                        print("Bro.")
 
-                    ufo.kill()
-                    shot.kill()
+                    elif game.score <= 400:
+                        print("Chill bro.")
 
-                    break
+                    elif game.score <= 500:
+                        print("Gyatt.")
+
+                    elif game.score <= 600:
+                        print("Gyatt damn.")
+
+                    elif game.score <= 700:
+                        print("Are you cheating bro?")
+
+                    elif game.score <= 800:
+                        print("Someone check this dudes screen while he plays, I think he's cheating.")
+
+                    elif game.score <= 900:
+                        print("So, you watched and it looks legit?")
+
+                    elif game.score <= 1000:
+                        print("Yeah, definitely cheating.")
+
+                    else:
+                        print("Okay, checking the logs now.")
+
+                    sys.exit()
+
+            
+            for asteroid in asteroids:
+                for shot in shots:
+                    if circle_collides_with_polygon(shot.position, shot.radius, asteroid.world_vertices()):
+                        game.score += 1
+                        log_event("asteroid_shot")
+                        pickup_spawner.try_spawn(asteroid.position)
+                        ufo_spawner.try_spawn()
+                        particle_number = random.randint(6, 24)
+                        
+                        for _ in range(particle_number):
+                            ExplosionParticle(asteroid.position.x, asteroid.position.y)
+
+                        asteroid.split()
+                        shot.kill()
+
+                        break
+
+            
+            for ufo in ufos:
+                for shot in shots:
+                    if circle_collides_with_polygon(shot.position, shot.radius, ufo.world_vertices()):
+                        game.score += UFO_SCORE_VALUE
+                        log_event("ufo_hit")
+                        particle_number = random.randint(12, 36)
+
+                        for _ in range(particle_number):
+                            ExplosionParticle(ufo.position.x, ufo.position.y)
+
+                        ufo.kill()
+                        shot.kill()
+
+                        break
 
 
         starfield.draw(screen)
@@ -248,6 +265,11 @@ def main():
 
         debug_instance.draw(screen, fps, debug_counts)
 
+        if game.state == GameState.PAUSED:
+            pause_menu.draw(screen)
+
+        pygame.display.flip()
+
 
         pygame.display.flip()
 
@@ -256,6 +278,24 @@ def main():
 
 
         pygame.display.set_caption(f"Modernsteroids!")
+
+
+def main():
+    pygame.init()
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    clock = pygame.time.Clock()
+
+    print(f"Starting Asteroids with pygame version {pygame.version.ver}")
+    print(f"Screen width: {SCREEN_WIDTH}")
+    print(f"Screen height: {SCREEN_HEIGHT}")
+
+    while True:
+        session_action = run_game(screen, clock)
+
+        if session_action != "restart":
+            break
+
+    pygame.quit()
 
 
 if __name__ == "__main__":
