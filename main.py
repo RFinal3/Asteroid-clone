@@ -27,6 +27,8 @@ from highscore import HighScoreManager
 from highscorescreen import HighScoreScreen
 from nameentryscreen import NameEntryScreen
 from gameoverscreen import GameOverScreen
+from settingsmanager import SettingsManager
+from optionsscreen import OptionsScreen
 from constants import (
     SCREEN_WIDTH, 
     SCREEN_HEIGHT, 
@@ -34,11 +36,12 @@ from constants import (
     MAX_STAR_COUNT,
     UFO_SCORE_VALUE,
     SCREEN_FLASH_DURATION_SECONDS,
-    BOMB_SPAWN_PAUSE_SECONDS
+    BOMB_SPAWN_PAUSE_SECONDS,
+    PLAYER_TURN_SPEED_STEP
 )
 
 
-def run_game(screen, clock, high_scores):
+def run_game(screen, clock, high_scores, settings):
     dt = 0.0
 
     updatable = pygame.sprite.Group()
@@ -72,10 +75,12 @@ def run_game(screen, clock, high_scores):
     high_score_screen = HighScoreScreen()
     name_entry_screen = NameEntryScreen()
     game_over_screen = GameOverScreen()
+    options_screen = OptionsScreen()
 
     text_font = pygame.font.Font(None, 36)
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    player.turn_speed = settings.player_turn_speed
     triangle_points = player.triangle()
     starfield = StarField(SCREEN_WIDTH, SCREEN_HEIGHT, MIN_STAR_COUNT, MAX_STAR_COUNT)
     ufo_spawner = UFOSpawner(player, ufos, game)
@@ -92,6 +97,11 @@ def run_game(screen, clock, high_scores):
                 if event.key == pygame.K_ESCAPE:
                     if game.state == GameState.HIGH_SCORES:
                         game.close_high_scores()
+                    elif game.state == GameState.OPTIONS:
+                        if options_screen.confirming_clear:
+                            options_screen.cancel_clear_confirmation()
+                        else:
+                            game.close_options()
                     else:
                         game.toggle_pause()
 
@@ -112,6 +122,42 @@ def run_game(screen, clock, high_scores):
 
                 if high_score_action == "Back":
                     game.close_high_scores()
+
+                continue
+
+
+            if game.state == GameState.OPTIONS:
+                options_action = options_screen.handle_event(event)
+
+                if (
+                    isinstance(options_action, tuple)
+                    and options_action[0] == "Set Rotation"
+                ):
+                    settings.set_player_turn_speed(options_action[1])
+                    player.turn_speed = settings.player_turn_speed
+
+                elif options_action == "Decrease Rotation":
+                    settings.set_player_turn_speed(
+                        settings.player_turn_speed
+                        - PLAYER_TURN_SPEED_STEP
+                    )
+                    player.turn_speed = settings.player_turn_speed
+
+                elif options_action == "Increase Rotation":
+                    settings.set_player_turn_speed(
+                        settings.player_turn_speed
+                        + PLAYER_TURN_SPEED_STEP
+                    )
+                    player.turn_speed = settings.player_turn_speed
+
+                elif options_action == "Clear High Scores":
+                    options_screen.open_clear_confirmation()
+
+                elif options_action == "Confirm Clear":
+                    high_scores.clear()
+
+                elif options_action == "Back":
+                    game.close_options()
 
                 continue
 
@@ -145,6 +191,9 @@ def run_game(screen, clock, high_scores):
                 elif pause_action == "High Scores":
                     game.open_high_scores()
 
+                elif pause_action == "Options":
+                    game.open_options()
+
                 continue
 
             if event.type == pygame.KEYDOWN:
@@ -175,6 +224,9 @@ def run_game(screen, clock, high_scores):
             game.update(dt)
             starfield.update(dt)
             updatable.update(dt)
+
+        elif game.state == GameState.OPTIONS:
+            options_screen.draw(screen, settings)
 
         if game.state == GameState.PLAYING:
             for pickup in pickups:
@@ -318,6 +370,9 @@ def run_game(screen, clock, high_scores):
         elif game.state == GameState.HIGH_SCORES:
             high_score_screen.draw(screen, high_scores.entries)
 
+        elif game.state == GameState.OPTIONS:
+            options_screen.draw(screen, settings)
+
         elif game.state == GameState.NAME_ENTRY:
             name_entry_screen.draw(screen, game.score)
 
@@ -338,13 +393,14 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     high_scores = HighScoreManager()
+    settings = SettingsManager()
 
     print(f"Starting Asteroids with pygame version {pygame.version.ver}")
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
 
     while True:
-        session_action = run_game(screen, clock, high_scores)
+        session_action = run_game(screen, clock, high_scores, settings)
 
         if session_action != "restart":
             break

@@ -60,3 +60,13 @@ class Game:
     def finish_name_entry(self):
         self.state = GameState.GAME_OVER
         self.open_high_scores()
+
+    
+    def open_options(self):
+        self.previous_state = self.state
+        self.state = GameState.OPTIONS
+
+
+    def close_options(self):
+        self.state = self.previous_state
+        self.previous_state = None

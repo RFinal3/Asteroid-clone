@@ -8,7 +8,7 @@ class PauseMenu:
         self.selected_index = 0
         self.option_rects = []
 
-        self.options = ("Resume", "Restart", "High Scores", "Quit")
+        self.options = ("Resume", "Restart", "High Scores", "Options", "Quit")
 
 
     def draw(self, screen):

@@ -41,6 +41,7 @@ class Player(CircleShape):
         self.speed_boost_timers = []
         self.respawn_timer = 0.0
         self.debug_invulnerability = False
+        self.turn_speed = PLAYER_TURN_SPEED
         
 
     def draw(self, screen):
@@ -53,7 +54,7 @@ class Player(CircleShape):
 
     
     def rotate(self, dt):
-        self.rotation += PLAYER_TURN_SPEED * dt
+        self.rotation += self.turn_speed * dt
 
 
     def move(self, dt):
@@ -93,10 +94,10 @@ class Player(CircleShape):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_a]:
-            self.rotation -= PLAYER_TURN_SPEED * dt
+            self.rotation -= self.turn_speed * dt
 
         if keys[pygame.K_d]:
-            self.rotation += PLAYER_TURN_SPEED * dt
+            self.rotation += self.turn_speed * dt
 
         if keys[pygame.K_w]:
             self.move(dt) 

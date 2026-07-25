@@ -78,3 +78,8 @@ class HighScoreManager:
 
         self.save()
         return True
+
+
+    def clear(self):
+        self.entries = []
+        return self.save()

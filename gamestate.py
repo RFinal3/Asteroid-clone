@@ -6,3 +6,4 @@ class GameState(Enum):
     HIGH_SCORES = auto()
     GAME_OVER = auto()
     NAME_ENTRY = auto()
+    OPTIONS = auto()
