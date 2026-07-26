@@ -42,10 +42,10 @@
 - [x] Add bomb pickups, inventory, and basic activation
 - [x] Add pickup spawning
 - [x] Add UFOs
-- [ ] Add scaling difficulty
-- [ ] Add high-score tracking
-- [ ] Add pause-menu and game-over options
-- [ ] Add audio
+- [x] Add scaling difficulty
+- [x] Add high-score tracking
+- [x] Add pause-menu and game-over options
+- [x] Add audio
 
 ## Remaining Work for v1.0
 

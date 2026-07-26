@@ -29,6 +29,8 @@ from nameentryscreen import NameEntryScreen
 from gameoverscreen import GameOverScreen
 from settingsmanager import SettingsManager
 from optionsscreen import OptionsScreen
+from titlemenu import TitleMenu
+from menustate import MenuState
 from constants import (
     SCREEN_WIDTH, 
     SCREEN_HEIGHT, 
@@ -39,6 +41,95 @@ from constants import (
     BOMB_SPAWN_PAUSE_SECONDS,
     PLAYER_TURN_SPEED_STEP
 )
+
+
+def run_title_menu(screen, clock, high_scores, settings):
+    title_menu = TitleMenu()
+    starfield = StarField(SCREEN_WIDTH, SCREEN_HEIGHT, MIN_STAR_COUNT, MAX_STAR_COUNT)
+    high_score_screen = HighScoreScreen()
+    options_screen = OptionsScreen()
+    current_state = MenuState.TITLE
+
+    dt = 0.0
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return "quit"
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    if current_state == MenuState.OPTIONS:
+                        if options_screen.confirming_clear:
+                            options_screen.cancel_clear_confirmation()
+                        else:
+                            current_state = MenuState.TITLE
+
+                        continue
+
+                    elif current_state == MenuState.HIGH_SCORES:
+                        current_state = MenuState.TITLE
+                        continue
+
+            if current_state == MenuState.TITLE:
+                action = title_menu.handle_event(event)
+
+                if action == "Start Game":
+                    return "start"
+
+                elif action == "High Scores":
+                    current_state = MenuState.HIGH_SCORES
+
+                elif action == "Options":
+                    current_state = MenuState.OPTIONS
+
+                elif action == "Quit":
+                    return "quit"
+
+            elif current_state == MenuState.OPTIONS:
+                action = options_screen.handle_event(event)
+
+                if (isinstance(action, tuple) and action[0] == "Set Rotation"):
+                    settings.set_player_turn_speed(action[1])
+
+                elif action == "Decrease Rotation":
+                    settings.set_player_turn_speed(settings.player_turn_speed - PLAYER_TURN_SPEED_STEP)
+
+                elif action == "Increase Rotation":
+                    settings.set_player_turn_speed(settings.player_turn_speed + PLAYER_TURN_SPEED_STEP)
+
+                elif action == "Clear High Scores":
+                    options_screen.open_clear_confirmation()
+
+                elif action == "Confirm Clear":
+                    high_scores.clear()
+
+                elif action == "Back":
+                    current_state = MenuState.TITLE
+
+            elif current_state == MenuState.HIGH_SCORES:
+                action = high_score_screen.handle_event(event)
+
+                if action == "Back":
+                    current_state = MenuState.TITLE
+
+            
+
+        starfield.update(dt)
+
+        screen.fill("black")
+        starfield.draw(screen)
+        if current_state == MenuState.TITLE:
+            title_menu.draw(screen)
+
+        elif current_state == MenuState.HIGH_SCORES:
+            high_score_screen.draw(screen, high_scores.entries)
+
+        elif current_state == MenuState.OPTIONS:
+            options_screen.draw(screen, settings)
+
+        pygame.display.flip()
+        dt = clock.tick(60) / 1000
 
 
 def run_game(screen, clock, high_scores, settings):
@@ -91,7 +182,7 @@ def run_game(screen, clock, high_scores, settings):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return
+                return "quit"
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -182,9 +273,6 @@ def run_game(screen, clock, high_scores, settings):
                 if pause_action == "Resume":
                     game.resume()
 
-                elif pause_action == "Quit":
-                    return "quit"
-
                 elif pause_action == "Restart":
                     return "restart"
 
@@ -193,6 +281,12 @@ def run_game(screen, clock, high_scores, settings):
 
                 elif pause_action == "Options":
                     game.open_options()
+
+                elif pause_action == "Quit to Menu":
+                    return "menu"
+
+                elif pause_action == "Quit Program":
+                    return "quit"
 
                 continue
 
@@ -400,9 +494,20 @@ def main():
     print(f"Screen height: {SCREEN_HEIGHT}")
 
     while True:
-        session_action = run_game(screen, clock, high_scores, settings)
+        title_action = run_title_menu(screen, clock, high_scores, settings)
 
-        if session_action != "restart":
+        if title_action == "quit":
+            break
+
+        while True:
+            session_action = run_game(screen, clock, high_scores, settings,)
+
+            if session_action == "restart":
+                continue
+
+            break
+
+        if session_action == "quit":
             break
 
     pygame.quit()

@@ -26,18 +26,11 @@ class HighScoreManager:
 
     def save(self):
         try:
-            self.file_path.parent.mkdir(
-                parents=True,
-                exist_ok=True,
-            )
+            self.file_path.parent.mkdir(parents=True, exist_ok=True)
 
-            data = {
-                "scores": self.entries,
-            }
+            data = {"scores": self.entries}
 
-            self.file_path.write_text(
-                json.dumps(data, indent=4)
-            )
+            self.file_path.write_text(json.dumps(data, indent=4))
 
         except OSError:
             return False
@@ -64,16 +57,10 @@ class HighScoreManager:
         if not cleaned_name:
             cleaned_name = "Anonymous"
 
-        entry = {
-            "name": cleaned_name,
-            "score": score,
-        }
+        entry = {"name": cleaned_name, "score": score}
 
         self.entries.append(entry)
-        self.entries.sort(
-            key=lambda entry: entry["score"],
-            reverse=True,
-        )
+        self.entries.sort(key=lambda entry: entry["score"], reverse=True)
         self.entries = self.entries[:10]
 
         self.save()
