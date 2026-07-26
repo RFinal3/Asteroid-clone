@@ -64,17 +64,14 @@ class AsteroidField(pygame.sprite.Sprite):
     def update(self, dt: float) -> None:
         current_spawn_rate = self.get_current_spawn_rate()
 
-        if self.spawn_timer > current_spawn_rate:
-            self.spawn_pause_timer = max(
-                0.0,
-                self.spawn_pause_timer - dt,
-            )
+        if self.spawn_pause_timer > 0:
+            self.spawn_pause_timer = max(0.0, self.spawn_pause_timer - dt)
 
         if self.spawning_paused or self.spawn_pause_timer > 0:
             return
 
         self.spawn_timer += dt
-        if self.spawn_timer > ASTEROID_SPAWN_RATE_SECONDS:
+        if self.spawn_timer > current_spawn_rate:
             self.spawn_timer = 0
             current_cap = self.get_current_cap()
 

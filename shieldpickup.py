@@ -13,6 +13,6 @@ class ShieldPickup(Pickup):
 
 
     def apply(self, player):
-        player.add_shield
+        player.add_shield()
 
 

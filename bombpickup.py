@@ -13,4 +13,4 @@ class BombPickup(Pickup):
 
 
     def apply(self, player):
-        player.add_bomb
+        player.add_bomb()
