@@ -10,3 +10,4 @@ class SpeedPickup(Pickup):
 
     def apply(self, player):
         player.add_speed_boost()
+        self.sound_manager.play("speed_boost_collected")

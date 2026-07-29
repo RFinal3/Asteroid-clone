@@ -92,21 +92,34 @@
 
 ### 7. Audio
 
-- [ ] Add shooting, thrust, explosion, pickup, shield, bomb, and UFO sounds
-- [ ] Create original sounds or use appropriately licensed assets
+- [x] Add shooting, thrust, explosion, pickup, shield, bomb, UFO, and menu sounds
+- [x] Create original sound assets
+- [x] Wire current alpha sound effects into gameplay and menus
 
-### 8. Beta and v1.0 Release
+### 8. Audio polish
+
+- [ ] Mix and balance overall effect levels
+- [ ] Revisit ship-shot timing on packaged Windows build
+- [ ] Clean up speed-boost-collected sound tail
+- [ ] Tune bomb flash duration against bomb-used sound
+- [ ] Create a positive Top 10 result sound
+- [ ] Consider idle/moving engine loops for 2.0
+- [ ] Complete audio wiring across all remaining menus and events
+- [ ] Add volume control to options
+
+### 9. Alpha, Public Beta, v1.0 Release
 
 - [ ] Run family high-score playtest
 - [ ] Gather balance and usability feedback
-- [ ] Fix beta bugs
+- [ ] Fix alpha bugs and use feedback received from players
 - [ ] Remove or toggle development diagnostics
+- [ ] Release online for public beta, bring some attention to it to get more feedback
 - [ ] Release v1.0
 
 
 ## v2.0 — Expanded Asteroids
 
-Ideas under consideration:
+### Ideas under consideration:
 
 - [ ] Add multiple levels
 - [ ] Add level-specific backgrounds and artwork
@@ -118,7 +131,7 @@ Ideas under consideration:
 
 ## v3.0 — Asteroids Roguelike
 
-Ideas under consideration:
+### Ideas under consideration:
 
 - [ ] Add upgrade choices between levels
 - [ ] Offer three randomly selected upgrades after each level

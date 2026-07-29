@@ -137,7 +137,7 @@ class OptionsScreen:
                     self.selected_index = index
                     break
 
-            if event.buttons[0] and self.slider_rect.collidepoint(event.pos):
+            if (self.slider_rect is not None and event.buttons[0] and self.slider_rect.collidepoint(event.pos)):
                 return ("Set Rotation", self.get_slider_value(event.pos[0]))
 
         if event.type == pygame.MOUSEBUTTONDOWN:

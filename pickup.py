@@ -7,9 +7,10 @@ from constants import (
 
 class Pickup(CircleShape):
     _layer = LAYER_PICKUPS
-    def __init__(self, x, y):
+    def __init__(self, x, y, sound_manager):
         super().__init__(x, y, PICKUP_RADIUS)
         self.lifetime = PICKUP_LIFETIME_SECONDS
+        self.sound_manager = sound_manager
 
 
     def draw(self, screen):

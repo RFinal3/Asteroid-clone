@@ -17,14 +17,17 @@ from constants import (
     SPEED_BOOST_MULTIPLIER,
     SPEED_BOOST_DURATION_SECONDS,
     PLAYER_RESPAWN_DELAY_SECONDS,
-    SHIP_FRAGMENT_LIFETIME_SECONDS
+    SHIP_FRAGMENT_LIFETIME_SECONDS,
+    SHIP_ENGINE_MAX_VOLUME,
+    SHIP_ENGINE_VOLUME_CHANGE_PER_SECOND,
+    SHIP_ENGINE_STOP_FADE_MS
     )
 
 class Player(CircleShape):
     _layer = LAYER_PLAYER
 
     
-    def __init__(self, x, y):
+    def __init__(self, x, y, sound_manager):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.shot_cooldown = 0
@@ -42,6 +45,8 @@ class Player(CircleShape):
         self.respawn_timer = 0.0
         self.debug_invulnerability = False
         self.turn_speed = PLAYER_TURN_SPEED
+        self.sound_manager = sound_manager
+        self.engine_channel = None
         
 
     def draw(self, screen):
@@ -72,6 +77,8 @@ class Player(CircleShape):
     def shoot(self):
         if self.shot_cooldown > 0:
             return
+            
+        self.sound_manager.play("ship_shot")
 
         self.shot_cooldown = PLAYER_SHOOT_COOLDOWN_SECONDS
 
@@ -84,14 +91,20 @@ class Player(CircleShape):
 
     def update(self, dt: float) -> None:
         if self.respawn_timer > 0:
+            self.stop_engine_sound()
             self.respawn_timer -= dt
 
             if self.respawn_timer <= 0:
                 self.respawn()
                 self.respawn_timer = 0.0
+
             return
 
         keys = pygame.key.get_pressed()
+
+        engine_active = keys[pygame.K_w] or keys[pygame.K_s] or keys[pygame.K_a] or keys[pygame.K_d]
+
+        self.update_engine_sound(dt, engine_active)
 
         if keys[pygame.K_a]:
             self.rotation -= self.turn_speed * dt
@@ -127,15 +140,24 @@ class Player(CircleShape):
 
     
     def take_damage(self):
-        if self.invulnerability_timer > 0 or self.respawn_timer > 0 or self.debug_invulnerability:
-            return False
+        if (
+            self.lives <= 0 or 
+            self.invulnerability_timer > 0 or 
+            self.respawn_timer > 0 or 
+            self.debug_invulnerability
+        ):
+                return False
+        
 
         if self.shield_count > 0:
             self.shield_count -= 1
+            self.sound_manager.play("shield_consumed")
             self.invulnerability_timer = PLAYER_INVULNERABILITY_SECONDS
             return True
 
         self.lives -= 1
+        self.stop_engine_sound()
+        self.sound_manager.play("ship_destruction")
 
         if self.lives > 0:
             self.respawn_timer = PLAYER_RESPAWN_DELAY_SECONDS
@@ -188,3 +210,43 @@ class Player(CircleShape):
         b = self.position - forward * self.radius - right
         c = self.position - forward * self.radius + right
         return [a, b, c]
+
+
+    def start_engine_sound(self):
+        if self.engine_channel is None or not self.engine_channel.get_busy():
+            self.engine_channel = self.sound_manager.play("ship_engine", loops=-1)
+
+            if self.engine_channel is not None:
+                self.engine_channel.set_volume(0.0)
+                self.engine_volume = 0.0
+
+
+    def stop_engine_sound(self):
+        if self.engine_channel is not None:
+            self.engine_channel.fadeout(SHIP_ENGINE_STOP_FADE_MS)
+
+        self.engine_channel = None
+        self.engine_volume = 0.0
+
+
+    def update_engine_sound(self, dt, engine_active):
+        if engine_active:
+            self.start_engine_sound()
+
+        if self.engine_channel is None:
+            return
+
+        if engine_active:
+            target_volume = SHIP_ENGINE_MAX_VOLUME
+        else:
+            target_volume = 0.0
+
+        volume_change = (SHIP_ENGINE_VOLUME_CHANGE_PER_SECOND * dt)
+
+        if self.engine_volume < target_volume:
+            self.engine_volume = min(target_volume, self.engine_volume + volume_change)
+
+        elif self.engine_volume > target_volume:
+            self.engine_volume = max(target_volume, self.engine_volume - volume_change)
+
+        self.engine_channel.set_volume(self.engine_volume)

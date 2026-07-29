@@ -3,8 +3,8 @@ from constants import LINE_WIDTH
 from pickup import Pickup
 
 class ShieldPickup(Pickup):
-    def __init__(self, x, y):
-        super().__init__(x, y)
+    def __init__(self, x, y, sound_manager):
+        super().__init__(x, y, sound_manager)
 
 
     def draw(self, screen):
@@ -14,5 +14,6 @@ class ShieldPickup(Pickup):
 
     def apply(self, player):
         player.add_shield()
+        self.sound_manager.play("shield_collected")
 
 

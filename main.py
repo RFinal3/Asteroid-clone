@@ -31,6 +31,7 @@ from settingsmanager import SettingsManager
 from optionsscreen import OptionsScreen
 from titlemenu import TitleMenu
 from menustate import MenuState
+from soundmanager import SoundManager
 from constants import (
     SCREEN_WIDTH, 
     SCREEN_HEIGHT, 
@@ -39,11 +40,12 @@ from constants import (
     UFO_SCORE_VALUE,
     SCREEN_FLASH_DURATION_SECONDS,
     BOMB_SPAWN_PAUSE_SECONDS,
-    PLAYER_TURN_SPEED_STEP
+    PLAYER_TURN_SPEED_STEP,
+    GAME_OVER_SOUND_DELAY_SECONDS
 )
 
 
-def run_title_menu(screen, clock, high_scores, settings):
+def run_title_menu(screen, clock, high_scores, settings, sound_manager):
     title_menu = TitleMenu()
     starfield = StarField(SCREEN_WIDTH, SCREEN_HEIGHT, MIN_STAR_COUNT, MAX_STAR_COUNT)
     high_score_screen = HighScoreScreen()
@@ -60,6 +62,8 @@ def run_title_menu(screen, clock, high_scores, settings):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if current_state == MenuState.OPTIONS:
+                        sound_manager.play("menu_back")
+
                         if options_screen.confirming_clear:
                             options_screen.cancel_clear_confirmation()
                         else:
@@ -68,19 +72,27 @@ def run_title_menu(screen, clock, high_scores, settings):
                         continue
 
                     elif current_state == MenuState.HIGH_SCORES:
+                        sound_manager.play("menu_back")
                         current_state = MenuState.TITLE
                         continue
 
             if current_state == MenuState.TITLE:
+                previous_index = title_menu.selected_index
                 action = title_menu.handle_event(event)
 
+                if title_menu.selected_index != previous_index:
+                    sound_manager.play("menu_option_change")
+
                 if action == "Start Game":
+                    sound_manager.play("menu_forward")
                     return "start"
 
                 elif action == "High Scores":
+                    sound_manager.play("menu_forward")
                     current_state = MenuState.HIGH_SCORES
 
                 elif action == "Options":
+                    sound_manager.play("menu_forward")
                     current_state = MenuState.OPTIONS
 
                 elif action == "Quit":
@@ -105,12 +117,14 @@ def run_title_menu(screen, clock, high_scores, settings):
                     high_scores.clear()
 
                 elif action == "Back":
+                    sound_manager.play("menu_back")
                     current_state = MenuState.TITLE
 
             elif current_state == MenuState.HIGH_SCORES:
                 action = high_score_screen.handle_event(event)
 
                 if action == "Back":
+                    sound_manager.play("menu_back")
                     current_state = MenuState.TITLE
 
             
@@ -132,8 +146,9 @@ def run_title_menu(screen, clock, high_scores, settings):
         dt = clock.tick(60) / 1000
 
 
-def run_game(screen, clock, high_scores, settings):
+def run_game(screen, clock, high_scores, settings, sound_manager):
     dt = 0.0
+    game_over_sound_timer = None
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.LayeredUpdates()
@@ -160,7 +175,7 @@ def run_game(screen, clock, high_scores, settings):
 
     game = Game()
     asteroid_field = AsteroidField(asteroids, game)
-    pickup_spawner = PickupSpawner()
+    pickup_spawner = PickupSpawner(sound_manager)
     debug_instance = DebugManager()
     pause_menu = PauseMenu()
     high_score_screen = HighScoreScreen()
@@ -170,11 +185,11 @@ def run_game(screen, clock, high_scores, settings):
 
     text_font = pygame.font.Font(None, 36)
 
-    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, sound_manager)
     player.turn_speed = settings.player_turn_speed
     triangle_points = player.triangle()
     starfield = StarField(SCREEN_WIDTH, SCREEN_HEIGHT, MIN_STAR_COUNT, MAX_STAR_COUNT)
-    ufo_spawner = UFOSpawner(player, ufos, game)
+    ufo_spawner = UFOSpawner(player, ufos, game, sound_manager)
 
 
     while True:
@@ -187,13 +202,25 @@ def run_game(screen, clock, high_scores, settings):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if game.state == GameState.HIGH_SCORES:
+                        sound_manager.play("menu_back")
                         game.close_high_scores()
+
                     elif game.state == GameState.OPTIONS:
+                        sound_manager.play("menu_back")
+
                         if options_screen.confirming_clear:
                             options_screen.cancel_clear_confirmation()
                         else:
                             game.close_options()
+
                     else:
+                        if game.state == GameState.PLAYING:
+                            player.stop_engine_sound()
+                            sound_manager.play("pause_game")
+
+                        elif game.state == GameState.PAUSED:
+                            sound_manager.play("menu_back")
+
                         game.toggle_pause()
 
                     continue
@@ -212,6 +239,7 @@ def run_game(screen, clock, high_scores, settings):
                 high_score_action = high_score_screen.handle_event(event)
 
                 if high_score_action == "Back":
+                    sound_manager.play("menu_back")
                     game.close_high_scores()
 
                 continue
@@ -248,6 +276,7 @@ def run_game(screen, clock, high_scores, settings):
                     high_scores.clear()
 
                 elif options_action == "Back":
+                    sound_manager.play("menu_back")
                     game.close_options()
 
                 continue
@@ -268,21 +297,30 @@ def run_game(screen, clock, high_scores, settings):
                 continue
 
             if game.state == GameState.PAUSED:
+                previous_index = pause_menu.selected_index
                 pause_action = pause_menu.handle_event(event)
 
+                if pause_menu.selected_index != previous_index:
+                    sound_manager.play("menu_option_change")
+
                 if pause_action == "Resume":
+                    sound_manager.play("menu_back")
                     game.resume()
 
                 elif pause_action == "Restart":
+                    sound_manager.play("menu_forward")
                     return "restart"
 
                 elif pause_action == "High Scores":
+                    sound_manager.play("menu_forward")
                     game.open_high_scores()
 
                 elif pause_action == "Options":
+                    sound_manager.play("menu_forward")
                     game.open_options()
 
                 elif pause_action == "Quit to Menu":
+                    sound_manager.play("menu_back")
                     return "menu"
 
                 elif pause_action == "Quit Program":
@@ -293,6 +331,7 @@ def run_game(screen, clock, high_scores, settings):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_b:
                     if player.consume_bomb():
+                        sound_manager.play("bomb_used")
                         for target in bomb_targets:
                             particle_number = random.randint(6, 24)
 
@@ -340,6 +379,7 @@ def run_game(screen, clock, high_scores, settings):
                         
 
             if player.lives == 0:
+                game_over_sound_timer = GAME_OVER_SOUND_DELAY_SECONDS
                 print(f"Game over! Final score: {game.score}")
                     
                 if game.score <= 10:
@@ -394,6 +434,7 @@ def run_game(screen, clock, high_scores, settings):
             for asteroid in asteroids:
                 for shot in shots:
                     if circle_collides_with_polygon(shot.position, shot.radius, asteroid.world_vertices()):
+                        sound_manager.play("asteroid_death")
                         game.score += 1
                         log_event("asteroid_shot")
                         pickup_spawner.try_spawn(asteroid.position)
@@ -412,6 +453,7 @@ def run_game(screen, clock, high_scores, settings):
             for ufo in ufos:
                 for shot in shots:
                     if circle_collides_with_polygon(shot.position, shot.radius, ufo.world_vertices()):
+                        sound_manager.play("ufo_death")
                         game.score += UFO_SCORE_VALUE
                         log_event("ufo_hit")
                         particle_number = random.randint(12, 36)
@@ -423,6 +465,14 @@ def run_game(screen, clock, high_scores, settings):
                         shot.kill()
 
                         break
+
+        
+        if game_over_sound_timer is not None:
+            game_over_sound_timer -= dt
+
+            if game_over_sound_timer <= 0:
+                sound_manager.play("game_over")
+                game_over_sound_timer = None
 
 
         starfield.draw(screen)
@@ -483,24 +533,27 @@ def run_game(screen, clock, high_scores, settings):
 
 
 def main():
+    pygame.mixer.pre_init(frequency=48000, size=-16, channels=2, buffer=256)
     pygame.init()
+    pygame.mixer.set_num_channels(32)
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     high_scores = HighScoreManager()
     settings = SettingsManager()
+    sound_manager = SoundManager()
 
     print(f"Starting Asteroids with pygame version {pygame.version.ver}")
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
 
     while True:
-        title_action = run_title_menu(screen, clock, high_scores, settings)
+        title_action = run_title_menu(screen, clock, high_scores, settings, sound_manager)
 
         if title_action == "quit":
             break
 
         while True:
-            session_action = run_game(screen, clock, high_scores, settings,)
+            session_action = run_game(screen, clock, high_scores, settings, sound_manager)
 
             if session_action == "restart":
                 continue

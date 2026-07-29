@@ -26,6 +26,7 @@ Rather than stopping at the tutorial requirements, I plan to develop it through 
 - Scaling difficulty as time progresses
 - Pause menu
 - Local leaderboards
+- Sounds!
 
 ## Controls
 

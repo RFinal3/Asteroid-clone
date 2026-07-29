@@ -12,11 +12,12 @@ from constants import (
 )
 
 class UFOSpawner:
-    def __init__(self, player, ufos, game):
+    def __init__(self, player, ufos, game, sound_manager):
         self.target = player
         self.ufos = ufos
         self.elapsed_time = 0.0
         self.game = game
+        self.sound_manager = sound_manager
 
 
     def get_current_cap(self):
@@ -80,5 +81,6 @@ class UFOSpawner:
                 SCREEN_HEIGHT + UFO_RADIUS
             )
 
-        UFO(position.x, position.y, self.target)
+        UFO(position.x, position.y, self.target, self.sound_manager)
+        self.sound_manager.play("ufo_spawn")
             

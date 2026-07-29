@@ -19,12 +19,13 @@ from constants import (
 
 class UFO(CircleShape):
     _layer = LAYER_UFO
-    def __init__(self, x, y, player):
+    def __init__(self, x, y, player, sound_manager):
         super().__init__(x, y, UFO_RADIUS)
         self.target = player
         self.acceleration = UFO_ACCELERATION
         self.max_speed = UFO_MAX_SPEED
         self.shot_cooldown = UFO_SHOOT_COOLDOWN_SECONDS
+        self.sound_manager = sound_manager
 
         self.vertices = [
             pygame.Vector2(-self.radius * 0.35, -self.radius * 0.55),
@@ -75,6 +76,7 @@ class UFO(CircleShape):
         bullet_vector = to_target.normalize()
         bullet_vector = bullet_vector * UFO_SHOOT_SPEED
         bullet.velocity = bullet_vector
+        self.sound_manager.play("ufo_shot")
 
 
     def update(self, dt):
