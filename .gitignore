@@ -11,7 +11,7 @@ wheels/
 
 # Run-time data
 game_events.jsonl
-game_states.jsonl
+game_state.jsonl
 
 # Operating system files
 .DS_Store
