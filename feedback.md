@@ -1,0 +1,6 @@
+- [ ] Add controller support
+- [ ] Reassess movement after testing with a controller.
+- [ ] Experiment with slightly stronger natural deceleration/friction.
+- [ ] Preserve momentum-based Asteroids movement; don’t turn it into direct movement.
+- [ ] Finish Classic Mode in Pygame.
+- [ ] Move later expanded development to Unity after Classic reaches v1.0.

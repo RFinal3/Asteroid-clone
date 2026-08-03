@@ -59,6 +59,29 @@ def run_title_menu(screen, clock, high_scores, settings, sound_manager):
             if event.type == pygame.QUIT:
                 return "quit"
 
+            if event.type == pygame.JOYBUTTONDOWN:
+                log_event(
+                    "joystick_button_pressed",
+                    button=event.button,
+                    joy=event.instance_id,
+                )
+
+            if event.type == pygame.JOYAXISMOTION and abs(event.value) > 0.2:
+                log_event(
+                    "joystick_axis_motion",
+                    axis=event.axis,
+                    value=round(event.value, 2),
+                    joy=event.instance_id,
+                )
+
+            if event.type == pygame.JOYHATMOTION:
+                log_event(
+                    "joystick_hat_motion",
+                    hat=event.hat,
+                    value=event.value,
+                    joy=event.instance_id,
+                )
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if current_state == MenuState.OPTIONS:
@@ -536,6 +559,17 @@ def main():
     pygame.mixer.pre_init(frequency=48000, size=-16, channels=2, buffer=256)
     pygame.init()
     pygame.mixer.set_num_channels(32)
+    controller_count = pygame.joystick.get_count()
+
+    if controller_count == 0:
+        print("No joystick detected.")
+    
+    for joystick_index in range(controller_count):
+        joystick = pygame.joystick.Joystick(joystick_index)
+        joystick.init()
+        print(f"Joystick detected ({joystick_index}): {joystick.get_name()} | Instance ID: {joystick.get_instance_id()}")
+
+
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     high_scores = HighScoreManager()
