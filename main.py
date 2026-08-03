@@ -566,18 +566,31 @@ def main():
         log_event("no_joystick_detected")
 
     joysticks = []
+    game_controller = None
     
     for joystick_index in range(controller_count):
         joystick = pygame.joystick.Joystick(joystick_index)
         joystick.init()
         joysticks.append(joystick)
-        print(f"Joystick detected ({joystick_index}): {joystick.get_name()} | Instance ID: {joystick.get_instance_id()}")
-        log_event(
-            "joystick_detected",
-            joystick_index=joystick_index,
-            instance_id=joystick.get_instance_id(),
-            name=joystick.get_name(),
-        )
+        joystick_name = joystick.get_name()
+
+        if "xbox" in joystick_name.lower():
+            game_controller = joystick
+            print(f"Xbox controller detected ({joystick_index}): {joystick_name} | Instance ID: {joystick.get_instance_id()}")
+            log_event(
+                "xbox_controller_detected",
+                joystick_index=joystick_index,
+                instance_id=joystick.get_instance_id(),
+                name=joystick_name,
+            )
+        else:
+            print(f"Joystick detected ({joystick_index}): {joystick_name} | Instance ID: {joystick.get_instance_id()}")
+            log_event(
+                "joystick_detected",
+                joystick_index=joystick_index,
+                instance_id=joystick.get_instance_id(),
+                name=joystick_name,
+            )
 
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
