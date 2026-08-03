@@ -222,31 +222,47 @@ def run_game(screen, clock, high_scores, settings, sound_manager, game_controlle
             if event.type == pygame.QUIT:
                 return "quit"
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    if game.state == GameState.HIGH_SCORES:
-                        sound_manager.play("menu_back")
-                        game.close_high_scores()
+            keyboard_pause_requested = (
+                event.type == pygame.KEYDOWN
+                and event.key == pygame.K_ESCAPE
+            )
 
-                    elif game.state == GameState.OPTIONS:
-                        sound_manager.play("menu_back")
+            controller_pause_requested = (
+                game_controller is not None
+                and event.type == pygame.JOYBUTTONDOWN
+                and event.instance_id == game_controller.get_instance_id()
+                and event.button == 7
+            )
 
-                        if options_screen.confirming_clear:
-                            options_screen.cancel_clear_confirmation()
-                        else:
-                            game.close_options()
+            pause_requested = (
+                keyboard_pause_requested
+                or controller_pause_requested
+            )
 
+            if pause_requested:
+                if game.state == GameState.HIGH_SCORES:
+                    sound_manager.play("menu_back")
+                    game.close_high_scores()
+
+                elif game.state == GameState.OPTIONS:
+                    sound_manager.play("menu_back")
+
+                    if options_screen.confirming_clear:
+                        options_screen.cancel_clear_confirmation()
                     else:
-                        if game.state == GameState.PLAYING:
-                            player.stop_engine_sound()
-                            sound_manager.play("pause_game")
+                        game.close_options()
 
-                        elif game.state == GameState.PAUSED:
-                            sound_manager.play("menu_back")
+                else:
+                    if game.state == GameState.PLAYING:
+                        player.stop_engine_sound()
+                        sound_manager.play("pause_game")
 
-                        game.toggle_pause()
+                    elif game.state == GameState.PAUSED:
+                        sound_manager.play("menu_back")
 
-                    continue
+                    game.toggle_pause()
+
+                continue
 
             if game.state == GameState.NAME_ENTRY:
                 submitted_name = name_entry_screen.handle_event(event)
