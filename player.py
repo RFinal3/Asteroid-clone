@@ -105,10 +105,12 @@ class Player(CircleShape):
 
         controller_turn = 0.0
         controller_thrust = 0.0
+        controller_shoot = False
 
         if self.game_controller is not None:
             raw_turn_input = self.game_controller.get_axis(0)
             raw_thrust_input = -self.game_controller.get_axis(1)
+            controller_shoot = bool(self.game_controller.get_button(0))
 
             if abs(raw_turn_input) > CONTROLLER_DEADZONE:
                 controller_turn = raw_turn_input
@@ -144,7 +146,7 @@ class Player(CircleShape):
         if controller_thrust != 0.0:
             self.move(controller_thrust * dt)
 
-        if keys[pygame.K_SPACE]:
+        if keys[pygame.K_SPACE] or controller_shoot:
             self.shoot()
 
         if (
