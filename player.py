@@ -27,7 +27,7 @@ class Player(CircleShape):
     _layer = LAYER_PLAYER
 
     
-    def __init__(self, x, y, sound_manager):
+    def __init__(self, x, y, sound_manager, game_controller):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.shot_cooldown = 0
@@ -47,7 +47,7 @@ class Player(CircleShape):
         self.turn_speed = PLAYER_TURN_SPEED
         self.sound_manager = sound_manager
         self.engine_channel = None
-        
+        self.game_controller = game_controller
 
     def draw(self, screen):
         if self.respawn_timer > 0:

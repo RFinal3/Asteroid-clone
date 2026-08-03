@@ -169,7 +169,7 @@ def run_title_menu(screen, clock, high_scores, settings, sound_manager):
         dt = clock.tick(60) / 1000
 
 
-def run_game(screen, clock, high_scores, settings, sound_manager):
+def run_game(screen, clock, high_scores, settings, sound_manager, game_controller):
     dt = 0.0
     game_over_sound_timer = None
 
@@ -208,7 +208,7 @@ def run_game(screen, clock, high_scores, settings, sound_manager):
 
     text_font = pygame.font.Font(None, 36)
 
-    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, sound_manager)
+    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, sound_manager, game_controller)
     player.turn_speed = settings.player_turn_speed
     triangle_points = player.triangle()
     starfield = StarField(SCREEN_WIDTH, SCREEN_HEIGHT, MIN_STAR_COUNT, MAX_STAR_COUNT)
@@ -610,7 +610,7 @@ def main():
             break
 
         while True:
-            session_action = run_game(screen, clock, high_scores, settings, sound_manager)
+            session_action = run_game(screen, clock, high_scores, settings, sound_manager, game_controller)
 
             if session_action == "restart":
                 continue
