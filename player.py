@@ -20,7 +20,8 @@ from constants import (
     SHIP_FRAGMENT_LIFETIME_SECONDS,
     SHIP_ENGINE_MAX_VOLUME,
     SHIP_ENGINE_VOLUME_CHANGE_PER_SECOND,
-    SHIP_ENGINE_STOP_FADE_MS
+    SHIP_ENGINE_STOP_FADE_MS,
+    CONTROLLER_DEADZONE
     )
 
 class Player(CircleShape):
@@ -102,7 +103,27 @@ class Player(CircleShape):
 
         keys = pygame.key.get_pressed()
 
-        engine_active = keys[pygame.K_w] or keys[pygame.K_s] or keys[pygame.K_a] or keys[pygame.K_d]
+        controller_turn = 0.0
+        controller_thrust = 0.0
+
+        if self.game_controller is not None:
+            raw_turn_input = self.game_controller.get_axis(0)
+            raw_thrust_input = -self.game_controller.get_axis(1)
+
+            if abs(raw_turn_input) > CONTROLLER_DEADZONE:
+                controller_turn = raw_turn_input
+
+            if abs(raw_thrust_input) > CONTROLLER_DEADZONE:
+                controller_thrust = raw_thrust_input
+
+        engine_active = (
+            keys[pygame.K_w] 
+            or keys[pygame.K_s] 
+            or keys[pygame.K_a] 
+            or keys[pygame.K_d] 
+            or controller_turn != 0.0
+            or controller_thrust != 0.0
+            )
 
         self.update_engine_sound(dt, engine_active)
 
@@ -112,16 +133,25 @@ class Player(CircleShape):
         if keys[pygame.K_d]:
             self.rotation += self.turn_speed * dt
 
+        self.rotation += controller_turn * self.turn_speed * dt
+
         if keys[pygame.K_w]:
             self.move(dt) 
 
         if keys[pygame.K_s]:
             self.move(-dt)
 
+        if controller_thrust != 0.0:
+            self.move(controller_thrust * dt)
+
         if keys[pygame.K_SPACE]:
             self.shoot()
 
-        if not keys[pygame.K_w] and not keys[pygame.K_s]:
+        if (
+            not keys[pygame.K_w] 
+            and not keys[pygame.K_s]
+            and controller_thrust == 0.0
+        ):
             self.decelerate(dt)
 
         self.position += self.velocity * dt
