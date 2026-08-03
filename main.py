@@ -351,25 +351,45 @@ def run_game(screen, clock, high_scores, settings, sound_manager, game_controlle
 
                 continue
 
+            keyboard_bomb_requested = (
+                event.type == pygame.KEYDOWN 
+                and event.key == pygame.K_b
+            )
+
+            controller_bomb_requested = (
+                game_controller is not None
+                and event.type == pygame.JOYBUTTONDOWN
+                and event.instance_id == game_controller.get_instance_id()
+                and event.button == 1
+            )
+
+            bomb_requested = keyboard_bomb_requested or controller_bomb_requested
+
+            if bomb_requested:
+                if player.consume_bomb():
+                    sound_manager.play("bomb_used")
+                    for target in bomb_targets:
+                        particle_number = random.randint(6, 24)
+
+                        for _ in range(particle_number):
+                            ExplosionParticle(target.position.x, target.position.y)
+
+                        target.kill()
+
+                    ScreenFlash(SCREEN_FLASH_DURATION_SECONDS)
+                    asteroid_field.pause_spawning(BOMB_SPAWN_PAUSE_SECONDS)
+
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_b:
-                    if player.consume_bomb():
-                        sound_manager.play("bomb_used")
-                        for target in bomb_targets:
-                            particle_number = random.randint(6, 24)
-
-                            for _ in range(particle_number):
-                                ExplosionParticle(target.position.x, target.position.y)
-
-                            target.kill()
-
-                        ScreenFlash(SCREEN_FLASH_DURATION_SECONDS)
-                        asteroid_field.pause_spawning(BOMB_SPAWN_PAUSE_SECONDS)
-
                 if event.key == pygame.K_F3:
                     debug_instance.toggle()
 
-                debug_instance.handle_event(event, player, asteroid_field, pickup_spawner, ufo_spawner)
+                debug_instance.handle_event(
+                    event,
+                    player,
+                    asteroid_field,
+                    pickup_spawner,
+                    ufo_spawner,
+                )
 
         
         fps = clock.get_fps()
