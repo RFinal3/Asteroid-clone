@@ -564,10 +564,13 @@ def main():
     if controller_count == 0:
         print("No joystick detected.")
         log_event("no_joystick_detected")
+
+    joysticks = []
     
     for joystick_index in range(controller_count):
         joystick = pygame.joystick.Joystick(joystick_index)
         joystick.init()
+        joysticks.append(joystick)
         print(f"Joystick detected ({joystick_index}): {joystick.get_name()} | Instance ID: {joystick.get_instance_id()}")
         log_event(
             "joystick_detected",
