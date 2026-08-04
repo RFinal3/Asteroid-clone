@@ -103,7 +103,17 @@ def run_title_menu(screen, clock, high_scores, settings, sound_manager, input_ma
                     return "quit"
 
             elif current_state == MenuState.OPTIONS:
+                previous_index = options_screen.selected_index
+                previous_confirmation = options_screen.confirmation_selected
+
                 action = options_screen.handle_event(event, input_manager)
+
+                if (
+                    options_screen.selected_index != previous_index
+                    or options_screen.confirmation_selected
+                    != previous_confirmation
+                ):
+                    sound_manager.play("menu_option_change")
 
                 if (isinstance(action, tuple) and action[0] == "Set Rotation"):
                     settings.set_player_turn_speed(action[1])
@@ -189,6 +199,7 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
 
     text_font = pygame.font.Font(None, 36)
 
+    input_manager.suppress_shooting_until_released()
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, sound_manager, input_manager)
     player.turn_speed = settings.player_turn_speed
     triangle_points = player.triangle()
@@ -239,6 +250,7 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
                     elif game.state == GameState.PAUSED:
                         sound_manager.play("menu_back")
 
+                    input_manager.suppress_shooting_until_released()
                     game.toggle_pause()
 
                 continue
@@ -322,6 +334,7 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
 
                 if pause_action == "Resume":
                     sound_manager.play("menu_back")
+                    input_manager.suppress_shooting_until_released()
                     game.resume()
 
                 elif pause_action == "Restart":

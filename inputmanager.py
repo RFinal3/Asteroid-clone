@@ -9,6 +9,11 @@ class InputManager:
         self.controller = None
         self.controller_name = None
         self.controller_instance_id = None
+        self.shoot_supressed = False
+        self.menu_axis_latched = {
+            pygame.CONTROLLER_AXIS_LEFTX: False,
+            pygame.CONTROLLER_AXIS_LEFTY: False,
+        }
 
         controller.init()
 
@@ -57,7 +62,19 @@ class InputManager:
         if self.controller is None:
             return False
 
-        return self.controller.get_button(pygame.CONTROLLER_BUTTON_A)
+        shooting = self.controller.get_button(
+            pygame.CONTROLLER_BUTTON_A
+        )
+
+        if not shooting:
+            self.shooting_suppressed = False
+            return False
+
+        return not self.shooting_suppressed
+
+    
+    def suppress_shooting_until_released(self):
+        self.shoot_supressed = True
 
 
     def is_bomb_pressed(self, event):
@@ -117,6 +134,43 @@ class InputManager:
             and event.instance_id == self.controller_instance_id
         ):
             return controller_actions.get(event.button)
+
+        elif (
+            self.controller is not None
+            and event.type == pygame.CONTROLLERAXISMOTION
+            and event.instance_id == self.controller_instance_id
+        ):
+            axis = event.axis
+
+            if axis not in self.menu_axis_latched:
+                return None
+
+            normalized_value = event.value / 32767.0
+            normalized_value = max(
+                -1.0,
+                min(1.0, normalized_value),
+            )
+
+            if abs(normalized_value) <= 0.5:
+                self.menu_axis_latched[axis] = False
+                return None
+
+            if self.menu_axis_latched[axis]:
+                return None
+
+            self.menu_axis_latched[axis] = True
+
+            if axis == pygame.CONTROLLER_AXIS_LEFTY:
+                if normalized_value < 0:
+                    return "up"
+
+                return "down"
+
+            if axis == pygame.CONTROLLER_AXIS_LEFTX:
+                if normalized_value < 0:
+                    return "left"
+
+                return "right"
 
         return None
 
