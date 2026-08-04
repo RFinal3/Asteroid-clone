@@ -46,7 +46,7 @@ from constants import (
 )
 
 
-def run_title_menu(screen, clock, high_scores, settings, sound_manager):
+def run_title_menu(screen, clock, high_scores, settings, sound_manager, input_manager):
     title_menu = TitleMenu()
     starfield = StarField(SCREEN_WIDTH, SCREEN_HEIGHT, MIN_STAR_COUNT, MAX_STAR_COUNT)
     high_score_screen = HighScoreScreen()
@@ -79,7 +79,7 @@ def run_title_menu(screen, clock, high_scores, settings, sound_manager):
 
             if current_state == MenuState.TITLE:
                 previous_index = title_menu.selected_index
-                action = title_menu.handle_event(event)
+                action = title_menu.handle_event(event, input_manager)
 
                 if title_menu.selected_index != previous_index:
                     sound_manager.play("menu_option_change")
@@ -300,7 +300,7 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
 
             if game.state == GameState.PAUSED:
                 previous_index = pause_menu.selected_index
-                pause_action = pause_menu.handle_event(event)
+                pause_action = pause_menu.handle_event(event, input_manager)
 
                 if pause_menu.selected_index != previous_index:
                     sound_manager.play("menu_option_change")
@@ -559,7 +559,7 @@ def main():
     print(f"Screen height: {SCREEN_HEIGHT}")
 
     while True:
-        title_action = run_title_menu(screen, clock, high_scores, settings, sound_manager)
+        title_action = run_title_menu(screen, clock, high_scores, settings, sound_manager, input_manager)
 
         if title_action == "quit":
             break

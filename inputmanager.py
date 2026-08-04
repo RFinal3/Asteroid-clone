@@ -86,3 +86,36 @@ class InputManager:
         )
 
         return keyboard_requested or controller_requested
+
+
+    def get_menu_action(self, event):
+        keyboard_actions = {
+            pygame.K_UP: "up",
+            pygame.K_DOWN: "down",
+            pygame.K_LEFT: "left",
+            pygame.K_RIGHT: "right",
+            pygame.K_RETURN: "select",
+            pygame.K_KP_ENTER: "select",
+            pygame.K_ESCAPE: "back"
+        }
+
+        controller_actions = {
+            pygame.CONTROLLER_BUTTON_DPAD_UP: "up",
+            pygame.CONTROLLER_BUTTON_DPAD_DOWN: "down",
+            pygame.CONTROLLER_BUTTON_DPAD_LEFT: "left",
+            pygame.CONTROLLER_BUTTON_DPAD_RIGHT: "right",
+            pygame.CONTROLLER_BUTTON_A: "select",
+            pygame.CONTROLLER_BUTTON_B: "back",
+        }
+
+        if event.type == pygame.KEYDOWN:
+            return keyboard_actions.get(event.key)
+
+        elif (
+            self.controller is not None
+            and event.type == pygame.CONTROLLERBUTTONDOWN
+            and event.instance_id == self.controller_instance_id
+        ):
+            return controller_actions.get(event.button)
+
+        return None

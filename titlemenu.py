@@ -32,29 +32,25 @@ class TitleMenu:
             next_y = option_rect.bottom + 25
 
 
-    def handle_event(self, event):
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                self.selected_index -= 1
-
-            elif event.key == pygame.K_DOWN:
-                self.selected_index += 1
-
-            self.selected_index %= len(self.options)
-
+    def handle_event(self, event, input_manager):
+        menu_action = input_manager.get_menu_action(event)
         
+        if menu_action == "up":
+            self.selected_index -= 1
+        elif menu_action == "down":
+            self.selected_index += 1
+
+        self.selected_index %= len(self.options)
+
         if event.type == pygame.MOUSEMOTION:
             for index, option_rect in enumerate(self.option_rect):
                 if option_rect.collidepoint(event.pos):
                     self.selected_index = index
                     break
 
-        
-        if event.type == pygame.KEYDOWN:
-            if event.key in (pygame.K_RETURN, pygame.K_KP_ENTER):
-                return self.options[self.selected_index]
+        if menu_action == "select":
+            return self.options[self.selected_index]
 
-        
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 for index, option_rect in enumerate(self.option_rect):
