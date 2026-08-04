@@ -32,6 +32,7 @@ from optionsscreen import OptionsScreen
 from titlemenu import TitleMenu
 from menustate import MenuState
 from soundmanager import SoundManager
+from inputmanager import InputManager
 from constants import (
     SCREEN_WIDTH, 
     SCREEN_HEIGHT, 
@@ -169,7 +170,7 @@ def run_title_menu(screen, clock, high_scores, settings, sound_manager):
         dt = clock.tick(60) / 1000
 
 
-def run_game(screen, clock, high_scores, settings, sound_manager, game_controller):
+def run_game(screen, clock, high_scores, settings, sound_manager, game_controller, input_manager):
     dt = 0.0
     game_over_sound_timer = None
 
@@ -208,7 +209,7 @@ def run_game(screen, clock, high_scores, settings, sound_manager, game_controlle
 
     text_font = pygame.font.Font(None, 36)
 
-    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, sound_manager, game_controller)
+    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, sound_manager, input_manager)
     player.turn_speed = settings.player_turn_speed
     triangle_points = player.triangle()
     starfield = StarField(SCREEN_WIDTH, SCREEN_HEIGHT, MIN_STAR_COUNT, MAX_STAR_COUNT)
@@ -596,6 +597,7 @@ def main():
     pygame.init()
     pygame.mixer.set_num_channels(32)
     controller_count = pygame.joystick.get_count()
+    input_manager = InputManager()
 
     if controller_count == 0:
         print("No joystick detected.")
@@ -646,7 +648,15 @@ def main():
             break
 
         while True:
-            session_action = run_game(screen, clock, high_scores, settings, sound_manager, game_controller)
+            session_action = run_game(
+                screen, 
+                clock, 
+                high_scores, 
+                settings, 
+                sound_manager, 
+                game_controller, 
+                input_manager
+            )
 
             if session_action == "restart":
                 continue

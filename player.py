@@ -28,7 +28,7 @@ class Player(CircleShape):
     _layer = LAYER_PLAYER
 
     
-    def __init__(self, x, y, sound_manager, game_controller):
+    def __init__(self, x, y, sound_manager, input_manager):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.shot_cooldown = 0
@@ -48,7 +48,7 @@ class Player(CircleShape):
         self.turn_speed = PLAYER_TURN_SPEED
         self.sound_manager = sound_manager
         self.engine_channel = None
-        self.game_controller = game_controller
+        self.input_manager = input_manager
 
     def draw(self, screen):
         if self.respawn_timer > 0:
@@ -103,20 +103,9 @@ class Player(CircleShape):
 
         keys = pygame.key.get_pressed()
 
-        controller_turn = 0.0
-        controller_thrust = 0.0
-        controller_shoot = False
-
-        if self.game_controller is not None:
-            raw_turn_input = self.game_controller.get_axis(0)
-            raw_thrust_input = -self.game_controller.get_axis(1)
-            controller_shoot = bool(self.game_controller.get_button(0))
-
-            if abs(raw_turn_input) > CONTROLLER_DEADZONE:
-                controller_turn = raw_turn_input
-
-            if abs(raw_thrust_input) > CONTROLLER_DEADZONE:
-                controller_thrust = raw_thrust_input
+        controller_turn = self.input_manager.get_turn_input()
+        controller_thrust = self.input_manager.get_thrust_input()
+        controller_shoot = self.input_manager.is_shooting()
 
         engine_active = (
             keys[pygame.K_w] 
