@@ -60,22 +60,25 @@ def run_title_menu(screen, clock, high_scores, settings, sound_manager, input_ma
             if event.type == pygame.QUIT:
                 return "quit"
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    if current_state == MenuState.OPTIONS:
-                        sound_manager.play("menu_back")
+            pause_requested = input_manager.is_pause_pressed(event)
 
-                        if options_screen.confirming_clear:
-                            options_screen.cancel_clear_confirmation()
-                        else:
+            if pause_requested:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        if current_state == MenuState.OPTIONS:
+                            sound_manager.play("menu_back")
+
+                            if options_screen.confirming_clear:
+                                options_screen.cancel_clear_confirmation()
+                            else:
+                                current_state = MenuState.TITLE
+
+                            continue
+
+                        elif current_state == MenuState.HIGH_SCORES:
+                            sound_manager.play("menu_back")
                             current_state = MenuState.TITLE
-
-                        continue
-
-                    elif current_state == MenuState.HIGH_SCORES:
-                        sound_manager.play("menu_back")
-                        current_state = MenuState.TITLE
-                        continue
+                            continue
 
             if current_state == MenuState.TITLE:
                 previous_index = title_menu.selected_index
@@ -200,6 +203,19 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
             if event.type == pygame.QUIT:
                 return "quit"
 
+            if game.state == GameState.NAME_ENTRY:
+                submitted_name = name_entry_screen.handle_event(
+                    event,
+                    input_manager,
+                )
+
+                if submitted_name is not None:
+                    high_scores.add_score(submitted_name, game.score)
+                    name_entry_screen.stop()
+                    game.finish_name_entry()
+
+                continue
+
             pause_requested = input_manager.is_pause_pressed(event)
 
             if pause_requested:
@@ -224,16 +240,6 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
                         sound_manager.play("menu_back")
 
                     game.toggle_pause()
-
-                continue
-
-            if game.state == GameState.NAME_ENTRY:
-                submitted_name = name_entry_screen.handle_event(event)
-
-                if submitted_name is not None:
-                    high_scores.add_score(submitted_name, game.score)
-                    name_entry_screen.stop()
-                    game.finish_name_entry()
 
                 continue
 
@@ -537,7 +543,7 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
             options_screen.draw(screen, settings)
 
         elif game.state == GameState.NAME_ENTRY:
-            name_entry_screen.draw(screen, game.score)
+            name_entry_screen.draw(screen, game.score, input_manager)
 
         elif game.state == GameState.GAME_OVER:
             game_over_screen.draw(screen, game.score, game.score_qualified)

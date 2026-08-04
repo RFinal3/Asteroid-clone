@@ -119,3 +119,28 @@ class InputManager:
             return controller_actions.get(event.button)
 
         return None
+
+
+    def has_controller(self):
+        return self.controller is not None
+
+    
+    def is_name_character_pressed(self, event):
+        return self._controller_button_pressed(
+            event,
+            pygame.CONTROLLER_BUTTON_A,
+        )
+
+    
+    def is_name_submit_pressed(self, event):
+        return self._controller_button_pressed(
+            event,
+            pygame.CONTROLLER_BUTTON_A,
+        )
+
+
+    def is_name_delete_pressed(self, event):
+        return self._controller_button_pressed(
+            event,
+            pygame.CONTROLLER_BUTTON_B,
+        )
