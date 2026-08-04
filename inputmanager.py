@@ -1,11 +1,15 @@
-from pygame._sdl2 import controller
 import pygame
+from pygame._sdl2 import controller
+
 from constants import CONTROLLER_DEADZONE
+
 
 class InputManager:
     def __init__(self):
         self.controller = None
         self.controller_name = None
+        self.controller_instance_id = None
+
         controller.init()
 
         for device_index in range(controller.get_count()):
@@ -14,7 +18,18 @@ class InputManager:
 
             self.controller = controller.Controller(device_index)
             self.controller_name = controller.name_forindex(device_index)
+
+            selected_joystick = self.controller.as_joystick()
+            self.controller_instance_id = selected_joystick.get_instance_id()
             break
+
+    def _controller_button_pressed(self, event, button):
+        return (
+            self.controller is not None
+            and event.type == pygame.CONTROLLERBUTTONDOWN
+            and event.instance_id == self.controller_instance_id
+            and event.button == button
+        )
 
         
     def _get_axis(self, axis):
@@ -43,3 +58,31 @@ class InputManager:
             return False
 
         return self.controller.get_button(pygame.CONTROLLER_BUTTON_A)
+
+
+    def is_bomb_pressed(self, event):
+        keyboard_requested = (
+            event.type == pygame.KEYDOWN
+            and event.key == pygame.K_b
+        )
+
+        controller_requested = self._controller_button_pressed(
+            event,
+            pygame.CONTROLLER_BUTTON_B,
+        )
+
+        return keyboard_requested or controller_requested
+
+
+    def is_pause_pressed(self, event):
+        keyboard_requested = (
+            event.type == pygame.KEYDOWN
+            and event.key == pygame.K_ESCAPE
+        )
+
+        controller_requested = self._controller_button_pressed(
+            event,
+            pygame.CONTROLLER_BUTTON_START,
+        )
+
+        return keyboard_requested or controller_requested

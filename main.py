@@ -60,29 +60,6 @@ def run_title_menu(screen, clock, high_scores, settings, sound_manager):
             if event.type == pygame.QUIT:
                 return "quit"
 
-            if event.type == pygame.JOYBUTTONDOWN:
-                log_event(
-                    "joystick_button_pressed",
-                    button=event.button,
-                    joy=event.instance_id,
-                )
-
-            if event.type == pygame.JOYAXISMOTION and abs(event.value) > 0.2:
-                log_event(
-                    "joystick_axis_motion",
-                    axis=event.axis,
-                    value=round(event.value, 2),
-                    joy=event.instance_id,
-                )
-
-            if event.type == pygame.JOYHATMOTION:
-                log_event(
-                    "joystick_hat_motion",
-                    hat=event.hat,
-                    value=event.value,
-                    joy=event.instance_id,
-                )
-
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if current_state == MenuState.OPTIONS:
@@ -170,7 +147,7 @@ def run_title_menu(screen, clock, high_scores, settings, sound_manager):
         dt = clock.tick(60) / 1000
 
 
-def run_game(screen, clock, high_scores, settings, sound_manager, game_controller, input_manager):
+def run_game(screen, clock, high_scores, settings, sound_manager, input_manager):
     dt = 0.0
     game_over_sound_timer = None
 
@@ -223,22 +200,7 @@ def run_game(screen, clock, high_scores, settings, sound_manager, game_controlle
             if event.type == pygame.QUIT:
                 return "quit"
 
-            keyboard_pause_requested = (
-                event.type == pygame.KEYDOWN
-                and event.key == pygame.K_ESCAPE
-            )
-
-            controller_pause_requested = (
-                game_controller is not None
-                and event.type == pygame.JOYBUTTONDOWN
-                and event.instance_id == game_controller.get_instance_id()
-                and event.button == 7
-            )
-
-            pause_requested = (
-                keyboard_pause_requested
-                or controller_pause_requested
-            )
+            pause_requested = input_manager.is_pause_pressed(event)
 
             if pause_requested:
                 if game.state == GameState.HIGH_SCORES:
@@ -368,19 +330,7 @@ def run_game(screen, clock, high_scores, settings, sound_manager, game_controlle
 
                 continue
 
-            keyboard_bomb_requested = (
-                event.type == pygame.KEYDOWN 
-                and event.key == pygame.K_b
-            )
-
-            controller_bomb_requested = (
-                game_controller is not None
-                and event.type == pygame.JOYBUTTONDOWN
-                and event.instance_id == game_controller.get_instance_id()
-                and event.button == 1
-            )
-
-            bomb_requested = keyboard_bomb_requested or controller_bomb_requested
+            bomb_requested = input_manager.is_bomb_pressed(event)
 
             if bomb_requested:
                 if player.consume_bomb():
@@ -596,40 +546,7 @@ def main():
     pygame.mixer.pre_init(frequency=48000, size=-16, channels=2, buffer=256)
     pygame.init()
     pygame.mixer.set_num_channels(32)
-    controller_count = pygame.joystick.get_count()
     input_manager = InputManager()
-
-    if controller_count == 0:
-        print("No joystick detected.")
-        log_event("no_joystick_detected")
-
-    joysticks = []
-    game_controller = None
-    
-    for joystick_index in range(controller_count):
-        joystick = pygame.joystick.Joystick(joystick_index)
-        joystick.init()
-        joysticks.append(joystick)
-        joystick_name = joystick.get_name()
-
-        if "xbox" in joystick_name.lower():
-            game_controller = joystick
-            print(f"Xbox controller detected ({joystick_index}): {joystick_name} | Instance ID: {joystick.get_instance_id()}")
-            log_event(
-                "xbox_controller_detected",
-                joystick_index=joystick_index,
-                instance_id=joystick.get_instance_id(),
-                name=joystick_name,
-            )
-        else:
-            print(f"Joystick detected ({joystick_index}): {joystick_name} | Instance ID: {joystick.get_instance_id()}")
-            log_event(
-                "joystick_detected",
-                joystick_index=joystick_index,
-                instance_id=joystick.get_instance_id(),
-                name=joystick_name,
-            )
-
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
@@ -649,12 +566,11 @@ def main():
 
         while True:
             session_action = run_game(
-                screen, 
-                clock, 
-                high_scores, 
-                settings, 
-                sound_manager, 
-                game_controller, 
+                screen,
+                clock,
+                high_scores,
+                settings,
+                sound_manager,
                 input_manager
             )
 
