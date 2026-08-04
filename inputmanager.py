@@ -9,7 +9,7 @@ class InputManager:
         self.controller = None
         self.controller_name = None
         self.controller_instance_id = None
-        self.shoot_supressed = False
+        self.shooting_suppressed = False
         self.menu_axis_latched = {
             pygame.CONTROLLER_AXIS_LEFTX: False,
             pygame.CONTROLLER_AXIS_LEFTY: False,
@@ -74,7 +74,7 @@ class InputManager:
 
     
     def suppress_shooting_until_released(self):
-        self.shoot_supressed = True
+        self.shooting_suppressed = True
 
 
     def is_bomb_pressed(self, event):
