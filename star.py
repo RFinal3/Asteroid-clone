@@ -1,6 +1,8 @@
-import pygame
 import random
-from constants import STAR_SYMBOLS, MIN_TWINKLE_INTERVAL, MAX_TWINKLE_INTERVAL
+
+import pygame
+
+from constants import MAX_TWINKLE_INTERVAL, MIN_TWINKLE_INTERVAL, STAR_SYMBOLS
 
 
 class Star:

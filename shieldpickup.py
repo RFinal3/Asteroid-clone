@@ -1,4 +1,5 @@
 import pygame
+
 from constants import LINE_WIDTH
 from pickup import Pickup
 

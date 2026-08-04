@@ -1,7 +1,9 @@
 import random
+
 import pygame
-from star import Star
+
 from constants import STAR_SYMBOLS
+from star import Star
 
 
 class StarField:

@@ -1,21 +1,22 @@
 import pygame
+
 from circleshape import CircleShape
-from ufobullet import UFOBullet
 from constants import (
-    UFO_RADIUS,
     LAYER_UFO,
     LINE_WIDTH,
-    UFO_COLOR,
-    UFO_MIN_DISTANCE,
-    UFO_MAX_DISTANCE,
+    SCREEN_HEIGHT,
+    SCREEN_WIDTH,
     UFO_ACCELERATION,
+    UFO_COLOR,
     UFO_DECELERATION,
+    UFO_MAX_DISTANCE,
     UFO_MAX_SPEED,
+    UFO_MIN_DISTANCE,
+    UFO_RADIUS,
     UFO_SHOOT_COOLDOWN_SECONDS,
     UFO_SHOOT_SPEED,
-    SCREEN_WIDTH,
-    SCREEN_HEIGHT,
 )
+from ufobullet import UFOBullet
 
 
 class UFO(CircleShape):

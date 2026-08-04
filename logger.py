@@ -18,7 +18,7 @@ class GroupInfo(TypedDict):
     sprites: list[SpriteInfo]
 
 
-__all__ = ["log_state", "log_event"]
+__all__ = ["log_event", "log_state"]
 
 _FPS = 60
 _MAX_SECONDS = 16
@@ -27,7 +27,7 @@ _SPRITE_SAMPLE_LIMIT = 10  # Maximum number of sprites to log per group
 _frame_count = 0
 _state_log_initialized = False
 _event_log_initialized = False
-_start_time = datetime.now()
+_start_time = datetime.now().astimezone()
 
 
 def log_state() -> None:
@@ -42,7 +42,7 @@ def log_state() -> None:
     if _frame_count % _FPS != 0:
         return
 
-    now = datetime.now()
+    now = datetime.now().astimezone()
 
     frame = inspect.currentframe()
     if frame is None:
@@ -136,7 +136,7 @@ def log_state() -> None:
 def log_event(event_type: str, **details: object) -> None:
     global _event_log_initialized
 
-    now = datetime.now()
+    now = datetime.now().astimezone()
 
     event: dict[str, object] = {
         "timestamp": now.strftime("%H:%M:%S.%f")[:-3],

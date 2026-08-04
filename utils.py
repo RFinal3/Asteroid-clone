@@ -57,10 +57,7 @@ def polygons_collide(polygon_a, polygon_b):
     if point_in_polygon(polygon_a[0], polygon_b):
         return True
 
-    if point_in_polygon(polygon_b[0], polygon_a):
-        return True
-
-    return False
+    return bool(point_in_polygon(polygon_b[0], polygon_a))
 
 
 def line_segments_intersect(a_start, a_end, b_start, b_end):

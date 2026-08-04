@@ -49,11 +49,10 @@ class TitleMenu:
         if menu_action == "select":
             return self.options[self.selected_index]
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:
-                for index, option_rect in enumerate(self.option_rect):
-                    if option_rect.collidepoint(event.pos):
-                        self.selected_index = index
-                        return self.options[index]
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            for index, option_rect in enumerate(self.option_rect):
+                if option_rect.collidepoint(event.pos):
+                    self.selected_index = index
+                    return self.options[index]
 
         return None

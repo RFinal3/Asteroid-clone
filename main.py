@@ -1,49 +1,48 @@
-import pygame
 import random
-from player import Player
-from logger import log_state, log_event
+
+import pygame
+
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
-from shot import Shot
-from game import Game
-from gamestate import GameState
-from explosionparticle import ExplosionParticle
-from starfield import StarField
-from utils import circle_collides_with_polygon, polygons_collide
-from pickup import Pickup
-from shieldpickup import ShieldPickup
-from speedpickup import SpeedPickup
-from bombpickup import BombPickup
-from pickup_spawner import PickupSpawner
-from ufo import UFO
-from ufospawner import UFOSpawner
-from ufobullet import UFOBullet
-from shipfragment import ShipFragment, spawn_ship_fragments
 from combat import handle_player_hit
+from constants import (
+    BOMB_SPAWN_PAUSE_SECONDS,
+    GAME_OVER_SOUND_DELAY_SECONDS,
+    MAX_STAR_COUNT,
+    MIN_STAR_COUNT,
+    PLAYER_TURN_SPEED_STEP,
+    SCREEN_FLASH_DURATION_SECONDS,
+    SCREEN_HEIGHT,
+    SCREEN_WIDTH,
+    UFO_SCORE_VALUE,
+)
 from debugmanager import DebugManager
-from screenflash import ScreenFlash
-from pausemenu import PauseMenu
+from explosionparticle import ExplosionParticle
+from game import Game
+from gameoverscreen import GameOverScreen
+from gamestate import GameState
 from highscore import HighScoreManager
 from highscorescreen import HighScoreScreen
-from nameentryscreen import NameEntryScreen
-from gameoverscreen import GameOverScreen
-from settingsmanager import SettingsManager
-from optionsscreen import OptionsScreen
-from titlemenu import TitleMenu
-from menustate import MenuState
-from soundmanager import SoundManager
 from inputmanager import InputManager
-from constants import (
-    SCREEN_WIDTH,
-    SCREEN_HEIGHT,
-    MIN_STAR_COUNT,
-    MAX_STAR_COUNT,
-    UFO_SCORE_VALUE,
-    SCREEN_FLASH_DURATION_SECONDS,
-    BOMB_SPAWN_PAUSE_SECONDS,
-    PLAYER_TURN_SPEED_STEP,
-    GAME_OVER_SOUND_DELAY_SECONDS,
-)
+from logger import log_event, log_state
+from menustate import MenuState
+from nameentryscreen import NameEntryScreen
+from optionsscreen import OptionsScreen
+from pausemenu import PauseMenu
+from pickup import Pickup
+from pickup_spawner import PickupSpawner
+from player import Player
+from screenflash import ScreenFlash
+from settingsmanager import SettingsManager
+from shipfragment import ShipFragment
+from shot import Shot
+from soundmanager import SoundManager
+from starfield import StarField
+from titlemenu import TitleMenu
+from ufo import UFO
+from ufobullet import UFOBullet
+from ufospawner import UFOSpawner
+from utils import circle_collides_with_polygon, polygons_collide
 
 
 def run_title_menu(screen, clock, high_scores, settings, sound_manager, input_manager):
@@ -62,23 +61,25 @@ def run_title_menu(screen, clock, high_scores, settings, sound_manager, input_ma
 
             pause_requested = input_manager.is_pause_pressed(event)
 
-            if pause_requested:
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        if current_state == MenuState.OPTIONS:
-                            sound_manager.play("menu_back")
+            if (
+                pause_requested
+                and event.type == pygame.KEYDOWN
+                and event.key == pygame.K_ESCAPE
+            ):
+                if current_state == MenuState.OPTIONS:
+                    sound_manager.play("menu_back")
 
-                            if options_screen.confirming_clear:
-                                options_screen.cancel_clear_confirmation()
-                            else:
-                                current_state = MenuState.TITLE
+                    if options_screen.confirming_clear:
+                        options_screen.cancel_clear_confirmation()
+                    else:
+                        current_state = MenuState.TITLE
 
-                            continue
+                    continue
 
-                        elif current_state == MenuState.HIGH_SCORES:
-                            sound_manager.play("menu_back")
-                            current_state = MenuState.TITLE
-                            continue
+                elif current_state == MenuState.HIGH_SCORES:
+                    sound_manager.play("menu_back")
+                    current_state = MenuState.TITLE
+                    continue
 
             if current_state == MenuState.TITLE:
                 previous_index = title_menu.selected_index
@@ -202,7 +203,6 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
     input_manager.suppress_shooting_until_released()
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, sound_manager, input_manager)
     player.turn_speed = settings.player_turn_speed
-    triangle_points = player.triangle()
     starfield = StarField(SCREEN_WIDTH, SCREEN_HEIGHT, MIN_STAR_COUNT, MAX_STAR_COUNT)
     ufo_spawner = UFOSpawner(player, ufos, game, sound_manager)
 
@@ -355,19 +355,18 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
 
             bomb_requested = input_manager.is_bomb_pressed(event)
 
-            if bomb_requested:
-                if player.consume_bomb():
-                    sound_manager.play("bomb_used")
-                    for target in bomb_targets:
-                        particle_number = random.randint(6, 24)
+            if bomb_requested and player.consume_bomb():
+                sound_manager.play("bomb_used")
+                for target in bomb_targets:
+                    particle_number = random.randint(6, 24)
 
-                        for _ in range(particle_number):
-                            ExplosionParticle(target.position.x, target.position.y)
+                    for _ in range(particle_number):
+                        ExplosionParticle(target.position.x, target.position.y)
 
-                        target.kill()
+                    target.kill()
 
-                    ScreenFlash(SCREEN_FLASH_DURATION_SECONDS)
-                    asteroid_field.pause_spawning(BOMB_SPAWN_PAUSE_SECONDS)
+                ScreenFlash(SCREEN_FLASH_DURATION_SECONDS)
+                asteroid_field.pause_spawning(BOMB_SPAWN_PAUSE_SECONDS)
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_F3:
@@ -560,7 +559,7 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
 
         dt = clock.tick(60) / 1000
 
-        pygame.display.set_caption(f"Modernsteroids!")
+        pygame.display.set_caption("Modernsteroids!")
 
 
 def main():

@@ -66,17 +66,15 @@ class HighScoreScreen:
     def handle_event(self, event, input_manager):
         menu_action = input_manager.get_menu_action(event)
 
-        if event.type == pygame.MOUSEMOTION:
-            if self.back_rect is not None:
-                self.back_hovered = self.back_rect.collidepoint(event.pos)
+        if event.type == pygame.MOUSEMOTION and self.back_rect is not None:
+            self.back_hovered = self.back_rect.collidepoint(event.pos)
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if (
-                event.button == 1
-                and self.back_rect is not None
-                and self.back_rect.collidepoint(event.pos)
-            ):
-                return "Back"
+        if event.type == pygame.MOUSEBUTTONDOWN and (
+            event.button == 1
+            and self.back_rect is not None
+            and self.back_rect.collidepoint(event.pos)
+        ):
+            return "Back"
 
         if menu_action in ("select", "back"):
             return "Back"

@@ -1,9 +1,11 @@
 import random
+
 import pygame
+
+from bombpickup import BombPickup
+from constants import PICKUP_DROP_CHANCE, PICKUP_SPAWN_DELAY_SECONDS
 from shieldpickup import ShieldPickup
 from speedpickup import SpeedPickup
-from bombpickup import BombPickup
-from constants import PICKUP_SPAWN_DELAY_SECONDS, PICKUP_DROP_CHANCE
 
 
 class PickupSpawner(pygame.sprite.Sprite):

@@ -67,11 +67,10 @@ class PauseMenu:
         if menu_action == "back":
             return "Resume"
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:
-                for index, option_rect in enumerate(self.option_rects):
-                    if option_rect.collidepoint(event.pos):
-                        self.selected_index = index
-                        return self.options[index]
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            for index, option_rect in enumerate(self.option_rects):
+                if option_rect.collidepoint(event.pos):
+                    self.selected_index = index
+                    return self.options[index]
 
         return None

@@ -1,15 +1,17 @@
 import random
+
 import pygame
-from ufo import UFO
+
 from constants import (
-    UFO_INITIAL_SPAWN_DELAY_SECONDS,
-    UFO_CAP_INCREASE_INTERVAL_SECONDS,
-    UFO_MAX_COUNT,
-    UFO_SPAWN_CHANCE,
-    UFO_RADIUS,
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
+    UFO_CAP_INCREASE_INTERVAL_SECONDS,
+    UFO_INITIAL_SPAWN_DELAY_SECONDS,
+    UFO_MAX_COUNT,
+    UFO_RADIUS,
+    UFO_SPAWN_CHANCE,
 )
+from ufo import UFO
 
 
 class UFOSpawner:

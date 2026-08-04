@@ -1,6 +1,7 @@
 import pygame
+
+from constants import LAYER_PROJECTILES, UFO_BULLET_RADIUS
 from shot import Shot
-from constants import LINE_WIDTH, LAYER_PROJECTILES, UFO_BULLET_RADIUS
 
 
 class UFOBullet(Shot):

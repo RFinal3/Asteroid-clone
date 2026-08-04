@@ -1,5 +1,6 @@
 import pygame
-from constants import SCREEN_HEIGHT, SCREEN_WIDTH, LAYER_SCREEN_FLASH
+
+from constants import LAYER_SCREEN_FLASH, SCREEN_HEIGHT, SCREEN_WIDTH
 
 
 class ScreenFlash(pygame.sprite.Sprite):

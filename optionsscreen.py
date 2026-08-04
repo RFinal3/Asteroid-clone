@@ -151,21 +151,20 @@ class OptionsScreen:
             ):
                 return ("Set Rotation", self.get_slider_value(event.pos[0]))
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:
-                if self.slider_rect.inflate(20, 30).collidepoint(event.pos):
-                    self.selected_index = 0
-                    return ("Set Rotation", self.get_slider_value(event.pos[0]))
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if self.slider_rect.inflate(20, 30).collidepoint(event.pos):
+                self.selected_index = 0
+                return ("Set Rotation", self.get_slider_value(event.pos[0]))
 
-                for index, option_rect in enumerate(self.option_rects):
-                    if option_rect.collidepoint(event.pos):
-                        self.selected_index = index
+            for index, option_rect in enumerate(self.option_rects):
+                if option_rect.collidepoint(event.pos):
+                    self.selected_index = index
 
-                        if index == 1:
-                            return "Clear High Scores"
+                    if index == 1:
+                        return "Clear High Scores"
 
-                        if index == 2:
-                            return "Back"
+                    if index == 2:
+                        return "Back"
 
         return None
 
@@ -210,16 +209,15 @@ class OptionsScreen:
                     self.confirmation_selected = index
                     break
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:
-                for index, option_rect in enumerate(self.confirmation_rects):
-                    if option_rect.collidepoint(event.pos):
-                        self.confirming_clear = False
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            for index, option_rect in enumerate(self.confirmation_rects):
+                if option_rect.collidepoint(event.pos):
+                    self.confirming_clear = False
 
-                        if index == 1:
-                            return "Confirm Clear"
+                    if index == 1:
+                        return "Confirm Clear"
 
-                        return None
+                    return None
 
         return None
 

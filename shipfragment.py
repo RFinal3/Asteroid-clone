@@ -1,11 +1,13 @@
-import pygame
 import random
+
+import pygame
+
 from constants import (
     LAYER_EFFECTS,
     LINE_WIDTH,
-    SHIP_FRAGMENT_SPEED,
     SHIP_FRAGMENT_LIFETIME_SECONDS,
     SHIP_FRAGMENT_ROTATION_SPEED,
+    SHIP_FRAGMENT_SPEED,
 )
 
 

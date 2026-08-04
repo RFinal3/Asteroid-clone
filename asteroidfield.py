@@ -1,18 +1,21 @@
 import random
 from collections.abc import Callable
+from typing import ClassVar
+
 import pygame
+
 from asteroid import Asteroid
 from constants import (
+    ASTEROID_CAP_INCREASE_PER_LEVEL,
     ASTEROID_KINDS,
     ASTEROID_MAX_RADIUS,
+    ASTEROID_MAX_SCALING_LEVEL,
     ASTEROID_MIN_RADIUS,
+    ASTEROID_SPAWN_RATE_DECREASE_PER_LEVEL,
     ASTEROID_SPAWN_RATE_SECONDS,
+    ASTEROID_STARTING_MAX_COUNT,
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
-    ASTEROID_STARTING_MAX_COUNT,
-    ASTEROID_CAP_INCREASE_PER_LEVEL,
-    ASTEROID_SPAWN_RATE_DECREASE_PER_LEVEL,
-    ASTEROID_MAX_SCALING_LEVEL,
 )
 
 Edge = tuple[pygame.Vector2, Callable[[float], pygame.Vector2]]
@@ -21,7 +24,7 @@ Edge = tuple[pygame.Vector2, Callable[[float], pygame.Vector2]]
 class AsteroidField(pygame.sprite.Sprite):
     containers: pygame.sprite.Group
 
-    edges: list[Edge] = [
+    edges: ClassVar[list[Edge]] = [
         (
             pygame.Vector2(1, 0),
             lambda y: pygame.Vector2(-ASTEROID_MAX_RADIUS, y * SCREEN_HEIGHT),

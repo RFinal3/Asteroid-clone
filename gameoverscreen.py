@@ -32,8 +32,19 @@ class GameOverScreen:
             message = "You did not make the Top 10."
             color = "white"
 
+        message_text = self.option_font.render(
+            message,
+            True,
+            color,
+        )
+
+        message_rect = message_text.get_rect(
+            center=(screen.get_width() // 2, score_rect.bottom + 40)
+        )
+
         screen.blit(score_text, score_rect)
-        next_y = score_rect.bottom + 60
+        screen.blit(message_text, message_rect)
+        next_y = message_rect.bottom + 40
 
         self.option_rects = []
 
@@ -71,11 +82,10 @@ class GameOverScreen:
         if menu_action == "select":
             return self.options[self.selected_index]
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:
-                for index, option_rect in enumerate(self.option_rects):
-                    if option_rect.collidepoint(event.pos):
-                        self.selected_index = index
-                        return self.options[index]
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            for index, option_rect in enumerate(self.option_rects):
+                if option_rect.collidepoint(event.pos):
+                    self.selected_index = index
+                    return self.options[index]
 
         return None
