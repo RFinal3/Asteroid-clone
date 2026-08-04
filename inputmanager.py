@@ -189,7 +189,7 @@ class InputManager:
     def is_name_submit_pressed(self, event):
         return self._controller_button_pressed(
             event,
-            pygame.CONTROLLER_BUTTON_A,
+            pygame.CONTROLLER_BUTTON_START,
         )
 
 
