@@ -4,6 +4,7 @@ import math
 from datetime import datetime
 from typing import NotRequired, TypedDict
 
+
 class SpriteInfo(TypedDict):
     type: str
     pos: NotRequired[list[float]]

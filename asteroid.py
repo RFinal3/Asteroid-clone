@@ -3,15 +3,11 @@ import pygame
 from circleshape import CircleShape
 from logger import log_event
 from utils import wrap_position
-from constants import (
-    LINE_WIDTH, 
-    ASTEROID_MIN_RADIUS, 
-    LAYER_WORLD
-)
+from constants import LINE_WIDTH, ASTEROID_MIN_RADIUS, LAYER_WORLD
+
 
 class Asteroid(CircleShape):
     _layer = LAYER_WORLD
-
 
     def __init__(self, x: float, y: float, radius: float) -> None:
         super().__init__(x, y, radius)
@@ -29,7 +25,6 @@ class Asteroid(CircleShape):
             rotation = vertex.rotate(angle)
             self.vertices.append(rotation)
 
-    
     def world_vertices(self):
         points = []
         for vertex in self.vertices:
@@ -37,23 +32,20 @@ class Asteroid(CircleShape):
             points.append(point)
         return points
 
-
     def draw(self, screen):
         points = self.world_vertices()
         pygame.draw.polygon(screen, "black", points, 0)
         pygame.draw.polygon(screen, "white", points, LINE_WIDTH)
 
-
     def update(self, dt):
         self.position += self.velocity * dt
         wrap_position(self.position, self.radius)
 
-    
     def split(self):
         self.kill()
         if self.radius <= ASTEROID_MIN_RADIUS:
             return
-        
+
         log_event("asteroid_split")
 
         random_angle = random.uniform(20, 50)

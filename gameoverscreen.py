@@ -10,7 +10,6 @@ class GameOverScreen:
 
         self.options = ("Restart", "High Scores", "Quit")
 
-
     def draw(self, screen, score, score_qualified):
         overlay = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 180))
@@ -22,7 +21,9 @@ class GameOverScreen:
 
         score_text = self.option_font.render(f"Final Score: {score}", True, "white")
 
-        score_rect = score_text.get_rect(center=(screen.get_width() // 2, title_rect.bottom + 50))
+        score_rect = score_text.get_rect(
+            center=(screen.get_width() // 2, title_rect.bottom + 50)
+        )
 
         if score_qualified:
             message = "You made the Top 10!"
@@ -51,10 +52,8 @@ class GameOverScreen:
 
             next_y = option_rect.bottom + 25
 
-
     def handle_event(self, event, input_manager):
         menu_action = input_manager.get_menu_action(event)
-
 
         if menu_action == "up":
             self.selected_index -= 1
@@ -63,18 +62,15 @@ class GameOverScreen:
 
         self.selected_index %= len(self.options)
 
-        
         if event.type == pygame.MOUSEMOTION:
             for index, option_rect in enumerate(self.option_rects):
                 if option_rect.collidepoint(event.pos):
                     self.selected_index = index
                     break
 
-        
         if menu_action == "select":
             return self.options[self.selected_index]
 
-        
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 for index, option_rect in enumerate(self.option_rects):
@@ -82,5 +78,4 @@ class GameOverScreen:
                         self.selected_index = index
                         return self.options[index]
 
-        
         return None

@@ -12,7 +12,7 @@ from constants import (
     ASTEROID_STARTING_MAX_COUNT,
     ASTEROID_CAP_INCREASE_PER_LEVEL,
     ASTEROID_SPAWN_RATE_DECREASE_PER_LEVEL,
-    ASTEROID_MAX_SCALING_LEVEL
+    ASTEROID_MAX_SCALING_LEVEL,
 )
 
 Edge = tuple[pygame.Vector2, Callable[[float], pygame.Vector2]]
@@ -44,7 +44,6 @@ class AsteroidField(pygame.sprite.Sprite):
         ),
     ]
 
-
     def __init__(self, asteroids, game) -> None:
         pygame.sprite.Sprite.__init__(self, self.containers)
         self.spawn_timer = 0.0
@@ -52,14 +51,12 @@ class AsteroidField(pygame.sprite.Sprite):
         self.spawning_paused = False
         self.spawn_pause_timer = 0.0
         self.game = game
-        
 
     def spawn(
         self, radius: float, position: pygame.Vector2, velocity: pygame.Vector2
     ) -> None:
         asteroid = Asteroid(position.x, position.y, radius)
         asteroid.velocity = velocity
-
 
     def update(self, dt: float) -> None:
         current_spawn_rate = self.get_current_spawn_rate()
@@ -80,7 +77,6 @@ class AsteroidField(pygame.sprite.Sprite):
 
             self.spawn_random_asteroid()
 
-    
     def spawn_random_asteroid(self):
         edge = random.choice(self.edges)
         speed = random.randint(40, 100)
@@ -90,21 +86,18 @@ class AsteroidField(pygame.sprite.Sprite):
         kind = random.randint(1, ASTEROID_KINDS)
         self.spawn(ASTEROID_MIN_RADIUS * kind, position, velocity)
 
-    
     def toggle_spawning(self):
         self.spawning_paused = not self.spawning_paused
-
 
     def pause_spawning(self, duration):
         self.spawn_pause_timer = max(self.spawn_pause_timer, duration)
 
-    
     def get_current_spawn_rate(self):
         scaling_level = min(self.game.difficulty_level, ASTEROID_MAX_SCALING_LEVEL)
 
         levels_above_one = scaling_level - 1
 
-        rate_reduction = (levels_above_one * ASTEROID_SPAWN_RATE_DECREASE_PER_LEVEL)
+        rate_reduction = levels_above_one * ASTEROID_SPAWN_RATE_DECREASE_PER_LEVEL
 
         return ASTEROID_SPAWN_RATE_SECONDS - rate_reduction
 
@@ -115,9 +108,6 @@ class AsteroidField(pygame.sprite.Sprite):
         )
         levels_above_one = scaling_level - 1
 
-        cap_increase = (
-            levels_above_one
-            * ASTEROID_CAP_INCREASE_PER_LEVEL
-        )
+        cap_increase = levels_above_one * ASTEROID_CAP_INCREASE_PER_LEVEL
 
         return ASTEROID_STARTING_MAX_COUNT + cap_increase

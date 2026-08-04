@@ -23,7 +23,9 @@ class HighScoreScreen:
         next_y = title_rect.bottom + 40
 
         for rank, entry in enumerate(entries, start=1):
-            entry_text = self.entry_font.render(f"{rank}. {entry['name']} | Score: {entry['score']}", True, "white")
+            entry_text = self.entry_font.render(
+                f"{rank}. {entry['name']} | Score: {entry['score']}", True, "white"
+            )
 
             entry_rect = entry_text.get_rect(center=(screen.get_width() // 2, next_y))
 
@@ -31,9 +33,13 @@ class HighScoreScreen:
             next_y = entry_rect.bottom + 15
 
         if not entries:
-            no_scores_text = self.entry_font.render("No high scores yet.", True, "white")
+            no_scores_text = self.entry_font.render(
+                "No high scores yet.", True, "white"
+            )
 
-            no_scores_rect = no_scores_text.get_rect(center=(screen.get_width() // 2, next_y))
+            no_scores_rect = no_scores_text.get_rect(
+                center=(screen.get_width() // 2, next_y)
+            )
 
             screen.blit(no_scores_text, no_scores_rect)
 
@@ -56,7 +62,6 @@ class HighScoreScreen:
         )
 
         screen.blit(back_text, self.back_rect)
-
 
     def handle_event(self, event, input_manager):
         menu_action = input_manager.get_menu_action(event)

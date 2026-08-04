@@ -8,8 +8,14 @@ class PauseMenu:
         self.selected_index = 0
         self.option_rects = []
 
-        self.options = ("Resume", "Restart", "High Scores", "Options", "Quit to Menu", "Quit Program")
-
+        self.options = (
+            "Resume",
+            "Restart",
+            "High Scores",
+            "Options",
+            "Quit to Menu",
+            "Quit Program",
+        )
 
     def draw(self, screen):
         overlay = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
@@ -37,7 +43,6 @@ class PauseMenu:
             screen.blit(option_text, option_rect)
 
             next_y = option_rect.bottom + 25
-
 
     def handle_event(self, event, input_manager):
         menu_action = input_manager.get_menu_action(event)
@@ -69,5 +74,4 @@ class PauseMenu:
                         self.selected_index = index
                         return self.options[index]
 
-        
         return None

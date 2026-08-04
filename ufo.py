@@ -14,11 +14,13 @@ from constants import (
     UFO_SHOOT_COOLDOWN_SECONDS,
     UFO_SHOOT_SPEED,
     SCREEN_WIDTH,
-    SCREEN_HEIGHT
+    SCREEN_HEIGHT,
 )
+
 
 class UFO(CircleShape):
     _layer = LAYER_UFO
+
     def __init__(self, x, y, player, sound_manager):
         super().__init__(x, y, UFO_RADIUS)
         self.target = player
@@ -46,7 +48,6 @@ class UFO(CircleShape):
 
         return points
 
-
     def draw(self, screen):
         points = self.world_vertices()
         pygame.draw.polygon(screen, UFO_COLOR, points, 0)
@@ -60,7 +61,6 @@ class UFO(CircleShape):
             LINE_WIDTH,
         )
 
-    
     def shoot(self):
         if self.shot_cooldown > 0:
             return
@@ -78,14 +78,12 @@ class UFO(CircleShape):
         bullet.velocity = bullet_vector
         self.sound_manager.play("ufo_shot")
 
-
     def update(self, dt):
         to_target = self.target.position - self.position
         distance_to_target = to_target.length()
         correcting_position = self.keep_on_screen(dt)
 
         if not correcting_position:
-
             if distance_to_target > UFO_MAX_DISTANCE:
                 self.move(dt, to_target)
 
@@ -93,14 +91,15 @@ class UFO(CircleShape):
                 self.move(dt, -to_target)
 
             else:
-                self.velocity.move_towards_ip(pygame.Vector2(0, 0), UFO_DECELERATION * dt)
+                self.velocity.move_towards_ip(
+                    pygame.Vector2(0, 0), UFO_DECELERATION * dt
+                )
 
             self.shoot()
-        
+
         self.position += self.velocity * dt
         self.shot_cooldown -= dt
 
-    
     def move(self, dt, to_target):
         if to_target.length_squared() == 0:
             return
@@ -112,7 +111,6 @@ class UFO(CircleShape):
         if self.velocity.length_squared() > 0:
             self.velocity.clamp_magnitude_ip(self.max_speed)
 
-    
     def keep_on_screen(self, dt):
         correcting_position = False
 
@@ -123,7 +121,7 @@ class UFO(CircleShape):
         if self.position.x > SCREEN_WIDTH - self.radius:
             self.move(dt, pygame.Vector2(-1, 0))
             correcting_position = True
-        
+
         if self.position.y < self.radius:
             self.move(dt, pygame.Vector2(0, 1))
             correcting_position = True
@@ -131,5 +129,5 @@ class UFO(CircleShape):
         if self.position.y > SCREEN_HEIGHT - self.radius:
             self.move(dt, pygame.Vector2(0, -1))
             correcting_position = True
-        
+
         return correcting_position

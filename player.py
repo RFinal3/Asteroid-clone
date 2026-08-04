@@ -3,14 +3,14 @@ from circleshape import CircleShape
 from shot import Shot
 from utils import wrap_position
 from constants import (
-    PLAYER_RADIUS, 
-    PLAYER_STARTING_LIVES, 
-    PLAYER_MAX_SPEED, 
-    LINE_WIDTH, 
-    PLAYER_TURN_SPEED, 
+    PLAYER_RADIUS,
+    PLAYER_STARTING_LIVES,
+    PLAYER_MAX_SPEED,
+    LINE_WIDTH,
+    PLAYER_TURN_SPEED,
     PLAYER_ACCELERATION,
-    PLAYER_DECELERATION, 
-    PLAYER_SHOOT_COOLDOWN_SECONDS, 
+    PLAYER_DECELERATION,
+    PLAYER_SHOOT_COOLDOWN_SECONDS,
     PLAYER_SHOOT_SPEED,
     LAYER_PLAYER,
     PLAYER_INVULNERABILITY_SECONDS,
@@ -21,13 +21,13 @@ from constants import (
     SHIP_ENGINE_MAX_VOLUME,
     SHIP_ENGINE_VOLUME_CHANGE_PER_SECOND,
     SHIP_ENGINE_STOP_FADE_MS,
-    CONTROLLER_DEADZONE
-    )
+    CONTROLLER_DEADZONE,
+)
+
 
 class Player(CircleShape):
     _layer = LAYER_PLAYER
 
-    
     def __init__(self, x, y, sound_manager, input_manager):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
@@ -58,10 +58,8 @@ class Player(CircleShape):
         pygame.draw.polygon(screen, "black", points, 0)
         pygame.draw.polygon(screen, "white", points, LINE_WIDTH)
 
-    
     def rotate(self, dt):
         self.rotation += self.turn_speed * dt
-
 
     def move(self, dt):
         unit_vector = pygame.Vector2(0, 1)
@@ -70,15 +68,13 @@ class Player(CircleShape):
         self.velocity += acceleration
         self.velocity.clamp_magnitude_ip(self.max_speed)
 
-
     def decelerate(self, dt):
         self.velocity.move_towards_ip(pygame.Vector2(0, 0), PLAYER_DECELERATION * dt)
-        
 
     def shoot(self):
         if self.shot_cooldown > 0:
             return
-            
+
         self.sound_manager.play("ship_shot")
 
         self.shot_cooldown = PLAYER_SHOOT_COOLDOWN_SECONDS
@@ -88,7 +84,6 @@ class Player(CircleShape):
         shot_vector = shot_vector.rotate(self.rotation)
         shot_vector = shot_vector * PLAYER_SHOOT_SPEED
         shot.velocity = shot_vector
-        
 
     def update(self, dt: float) -> None:
         if self.respawn_timer > 0:
@@ -108,13 +103,13 @@ class Player(CircleShape):
         controller_shoot = self.input_manager.is_shooting()
 
         engine_active = (
-            keys[pygame.K_w] 
-            or keys[pygame.K_s] 
-            or keys[pygame.K_a] 
-            or keys[pygame.K_d] 
+            keys[pygame.K_w]
+            or keys[pygame.K_s]
+            or keys[pygame.K_a]
+            or keys[pygame.K_d]
             or controller_turn != 0.0
             or controller_thrust != 0.0
-            )
+        )
 
         self.update_engine_sound(dt, engine_active)
 
@@ -127,7 +122,7 @@ class Player(CircleShape):
         self.rotation += controller_turn * self.turn_speed * dt
 
         if keys[pygame.K_w]:
-            self.move(dt) 
+            self.move(dt)
 
         if keys[pygame.K_s]:
             self.move(-dt)
@@ -138,11 +133,7 @@ class Player(CircleShape):
         if keys[pygame.K_SPACE] or controller_shoot:
             self.shoot()
 
-        if (
-            not keys[pygame.K_w] 
-            and not keys[pygame.K_s]
-            and controller_thrust == 0.0
-        ):
+        if not keys[pygame.K_w] and not keys[pygame.K_s] and controller_thrust == 0.0:
             self.decelerate(dt)
 
         self.position += self.velocity * dt
@@ -153,22 +144,19 @@ class Player(CircleShape):
 
         wrap_position(self.position, self.radius)
 
-
     def respawn(self):
         self.position.update(self.spawn_position)
         self.velocity.update(0, 0)
         self.invulnerability_timer = PLAYER_INVULNERABILITY_SECONDS
 
-    
     def take_damage(self):
         if (
-            self.lives <= 0 or 
-            self.invulnerability_timer > 0 or 
-            self.respawn_timer > 0 or 
-            self.debug_invulnerability
+            self.lives <= 0
+            or self.invulnerability_timer > 0
+            or self.respawn_timer > 0
+            or self.debug_invulnerability
         ):
-                return False
-        
+            return False
 
         if self.shield_count > 0:
             self.shield_count -= 1
@@ -185,25 +173,20 @@ class Player(CircleShape):
 
         return True
 
-
     def recalculate_speed_stats(self):
         active_multiplier = SPEED_BOOST_MULTIPLIER ** len(self.speed_boost_timers)
         self.acceleration = self.base_acceleration * active_multiplier
         self.max_speed = self.base_max_speed * active_multiplier
 
-
     def add_speed_boost(self):
         self.speed_boost_timers.append(SPEED_BOOST_DURATION_SECONDS)
         self.recalculate_speed_stats()
 
-
     def add_shield(self):
         self.shield_count += 1
 
-
     def add_bomb(self):
         self.bomb_count += 1
-
 
     def update_speed_boosts(self, dt):
         active_speed_boost_timers = []
@@ -212,17 +195,15 @@ class Player(CircleShape):
 
             if speed_boost > 0:
                 active_speed_boost_timers.append(speed_boost)
-        
+
         self.speed_boost_timers = active_speed_boost_timers
         self.recalculate_speed_stats()
-
 
     def consume_bomb(self):
         if self.bomb_count <= 0:
             return False
         self.bomb_count -= 1
         return True
-
 
     def triangle(self) -> list[pygame.Vector2]:
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -232,7 +213,6 @@ class Player(CircleShape):
         c = self.position - forward * self.radius + right
         return [a, b, c]
 
-
     def start_engine_sound(self):
         if self.engine_channel is None or not self.engine_channel.get_busy():
             self.engine_channel = self.sound_manager.play("ship_engine", loops=-1)
@@ -241,14 +221,12 @@ class Player(CircleShape):
                 self.engine_channel.set_volume(0.0)
                 self.engine_volume = 0.0
 
-
     def stop_engine_sound(self):
         if self.engine_channel is not None:
             self.engine_channel.fadeout(SHIP_ENGINE_STOP_FADE_MS)
 
         self.engine_channel = None
         self.engine_volume = 0.0
-
 
     def update_engine_sound(self, dt, engine_active):
         if engine_active:
@@ -262,7 +240,7 @@ class Player(CircleShape):
         else:
             target_volume = 0.0
 
-        volume_change = (SHIP_ENGINE_VOLUME_CHANGE_PER_SECOND * dt)
+        volume_change = SHIP_ENGINE_VOLUME_CHANGE_PER_SECOND * dt
 
         if self.engine_volume < target_volume:
             self.engine_volume = min(target_volume, self.engine_volume + volume_change)

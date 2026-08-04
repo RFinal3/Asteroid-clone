@@ -36,7 +36,6 @@ class InputManager:
             and event.button == button
         )
 
-        
     def _get_axis(self, axis):
         if self.controller is None:
             return 0.0
@@ -49,22 +48,17 @@ class InputManager:
 
         return normalized_value
 
-
     def get_turn_input(self):
         return self._get_axis(pygame.CONTROLLER_AXIS_LEFTX)
 
-
     def get_thrust_input(self):
         return -self._get_axis(pygame.CONTROLLER_AXIS_LEFTY)
-
 
     def is_shooting(self):
         if self.controller is None:
             return False
 
-        shooting = self.controller.get_button(
-            pygame.CONTROLLER_BUTTON_A
-        )
+        shooting = self.controller.get_button(pygame.CONTROLLER_BUTTON_A)
 
         if not shooting:
             self.shooting_suppressed = False
@@ -72,16 +66,11 @@ class InputManager:
 
         return not self.shooting_suppressed
 
-    
     def suppress_shooting_until_released(self):
         self.shooting_suppressed = True
 
-
     def is_bomb_pressed(self, event):
-        keyboard_requested = (
-            event.type == pygame.KEYDOWN
-            and event.key == pygame.K_b
-        )
+        keyboard_requested = event.type == pygame.KEYDOWN and event.key == pygame.K_b
 
         controller_requested = self._controller_button_pressed(
             event,
@@ -90,11 +79,9 @@ class InputManager:
 
         return keyboard_requested or controller_requested
 
-
     def is_pause_pressed(self, event):
         keyboard_requested = (
-            event.type == pygame.KEYDOWN
-            and event.key == pygame.K_ESCAPE
+            event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE
         )
 
         controller_requested = self._controller_button_pressed(
@@ -104,7 +91,6 @@ class InputManager:
 
         return keyboard_requested or controller_requested
 
-
     def get_menu_action(self, event):
         keyboard_actions = {
             pygame.K_UP: "up",
@@ -113,7 +99,7 @@ class InputManager:
             pygame.K_RIGHT: "right",
             pygame.K_RETURN: "select",
             pygame.K_KP_ENTER: "select",
-            pygame.K_ESCAPE: "back"
+            pygame.K_ESCAPE: "back",
         }
 
         controller_actions = {
@@ -174,24 +160,20 @@ class InputManager:
 
         return None
 
-
     def has_controller(self):
         return self.controller is not None
 
-    
     def is_name_character_pressed(self, event):
         return self._controller_button_pressed(
             event,
             pygame.CONTROLLER_BUTTON_A,
         )
 
-    
     def is_name_submit_pressed(self, event):
         return self._controller_button_pressed(
             event,
             pygame.CONTROLLER_BUTTON_START,
         )
-
 
     def is_name_delete_pressed(self, event):
         return self._controller_button_pressed(

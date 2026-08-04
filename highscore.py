@@ -4,15 +4,10 @@ import json
 
 class HighScoreManager:
     def __init__(self):
-        self.file_path = (
-            Path.home()
-            / ".modernsteroids"
-            / "high_scores.json"
-        )
+        self.file_path = Path.home() / ".modernsteroids" / "high_scores.json"
         self.entries = []
         self.load()
 
-    
     def load(self):
         if not self.file_path.exists():
             return
@@ -22,7 +17,6 @@ class HighScoreManager:
             self.entries = data.get("scores", [])
         except (OSError, json.JSONDecodeError):
             self.entries = []
-
 
     def save(self):
         try:
@@ -37,7 +31,6 @@ class HighScoreManager:
 
         return True
 
-
     def qualifies(self, score):
         if score <= 0:
             return False
@@ -46,7 +39,6 @@ class HighScoreManager:
             return True
 
         return score > self.entries[-1]["score"]
-
 
     def add_score(self, name, score):
         if not self.qualifies(score):
@@ -65,7 +57,6 @@ class HighScoreManager:
 
         self.save()
         return True
-
 
     def clear(self):
         self.entries = []

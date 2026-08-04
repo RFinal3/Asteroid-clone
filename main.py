@@ -34,15 +34,15 @@ from menustate import MenuState
 from soundmanager import SoundManager
 from inputmanager import InputManager
 from constants import (
-    SCREEN_WIDTH, 
-    SCREEN_HEIGHT, 
-    MIN_STAR_COUNT, 
+    SCREEN_WIDTH,
+    SCREEN_HEIGHT,
+    MIN_STAR_COUNT,
     MAX_STAR_COUNT,
     UFO_SCORE_VALUE,
     SCREEN_FLASH_DURATION_SECONDS,
     BOMB_SPAWN_PAUSE_SECONDS,
     PLAYER_TURN_SPEED_STEP,
-    GAME_OVER_SOUND_DELAY_SECONDS
+    GAME_OVER_SOUND_DELAY_SECONDS,
 )
 
 
@@ -110,19 +110,22 @@ def run_title_menu(screen, clock, high_scores, settings, sound_manager, input_ma
 
                 if (
                     options_screen.selected_index != previous_index
-                    or options_screen.confirmation_selected
-                    != previous_confirmation
+                    or options_screen.confirmation_selected != previous_confirmation
                 ):
                     sound_manager.play("menu_option_change")
 
-                if (isinstance(action, tuple) and action[0] == "Set Rotation"):
+                if isinstance(action, tuple) and action[0] == "Set Rotation":
                     settings.set_player_turn_speed(action[1])
 
                 elif action == "Decrease Rotation":
-                    settings.set_player_turn_speed(settings.player_turn_speed - PLAYER_TURN_SPEED_STEP)
+                    settings.set_player_turn_speed(
+                        settings.player_turn_speed - PLAYER_TURN_SPEED_STEP
+                    )
 
                 elif action == "Increase Rotation":
-                    settings.set_player_turn_speed(settings.player_turn_speed + PLAYER_TURN_SPEED_STEP)
+                    settings.set_player_turn_speed(
+                        settings.player_turn_speed + PLAYER_TURN_SPEED_STEP
+                    )
 
                 elif action == "Clear High Scores":
                     options_screen.open_clear_confirmation()
@@ -140,8 +143,6 @@ def run_title_menu(screen, clock, high_scores, settings, sound_manager, input_ma
                 if action == "Back":
                     sound_manager.play("menu_back")
                     current_state = MenuState.TITLE
-
-            
 
         starfield.update(dt)
 
@@ -173,7 +174,6 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
     bomb_targets = pygame.sprite.Group()
     ufos = pygame.sprite.Group()
     ufo_bullets = pygame.sprite.Group()
-    
 
     PickupSpawner.containers = (updatable,)
     Player.containers = (updatable, drawable)
@@ -205,7 +205,6 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
     triangle_points = player.triangle()
     starfield = StarField(SCREEN_WIDTH, SCREEN_HEIGHT, MIN_STAR_COUNT, MAX_STAR_COUNT)
     ufo_spawner = UFOSpawner(player, ufos, game, sound_manager)
-
 
     while True:
         log_state()
@@ -264,7 +263,6 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
 
                 continue
 
-
             if game.state == GameState.OPTIONS:
                 previous_index = options_screen.selected_index
                 previous_confirmation = options_screen.confirmation_selected
@@ -286,15 +284,13 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
 
                 elif options_action == "Decrease Rotation":
                     settings.set_player_turn_speed(
-                        settings.player_turn_speed
-                        - PLAYER_TURN_SPEED_STEP
+                        settings.player_turn_speed - PLAYER_TURN_SPEED_STEP
                     )
                     player.turn_speed = settings.player_turn_speed
 
                 elif options_action == "Increase Rotation":
                     settings.set_player_turn_speed(
-                        settings.player_turn_speed
-                        + PLAYER_TURN_SPEED_STEP
+                        settings.player_turn_speed + PLAYER_TURN_SPEED_STEP
                     )
                     player.turn_speed = settings.player_turn_speed
 
@@ -309,7 +305,6 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
                     game.close_options()
 
                 continue
-
 
             if game.state == GameState.GAME_OVER:
                 game_over_action = game_over_screen.handle_event(event, input_manager)
@@ -386,11 +381,9 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
                     ufo_spawner,
                 )
 
-        
         fps = clock.get_fps()
         screen.fill("black")
 
-        
         if game.state == GameState.PLAYING:
             game.update(dt)
             starfield.update(dt)
@@ -401,28 +394,29 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
 
         if game.state == GameState.PLAYING:
             for pickup in pickups:
-                if circle_collides_with_polygon(pickup.position, pickup.radius, player.triangle()):
+                if circle_collides_with_polygon(
+                    pickup.position, pickup.radius, player.triangle()
+                ):
                     pickup.collect(player)
 
-
             for ufo_bullet in ufo_bullets:
-                if circle_collides_with_polygon(ufo_bullet.position, ufo_bullet.radius, player.triangle()):
+                if circle_collides_with_polygon(
+                    ufo_bullet.position, ufo_bullet.radius, player.triangle()
+                ):
                     ufo_bullet.kill()
                     handle_player_hit(player, "ufo_hit_player")
 
-            
             for asteroid in asteroids:
                 if polygons_collide(player.triangle(), asteroid.world_vertices()):
                     handle_player_hit(player, "player_hit")
-                        
 
             if player.lives == 0:
                 game_over_sound_timer = GAME_OVER_SOUND_DELAY_SECONDS
                 print(f"Game over! Final score: {game.score}")
-                    
+
                 if game.score <= 10:
                     print("ROFL.")
-                    
+
                 elif game.score <= 25:
                     print("LOL.")
 
@@ -451,7 +445,9 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
                     print("Are you cheating bro?")
 
                 elif game.score <= 800:
-                    print("Someone check this dudes screen while he plays, I think he's cheating.")
+                    print(
+                        "Someone check this dudes screen while he plays, I think he's cheating."
+                    )
 
                 elif game.score <= 900:
                     print("So, you watched and it looks legit?")
@@ -468,17 +464,18 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
                 if game.state == GameState.NAME_ENTRY:
                     name_entry_screen.start()
 
-            
             for asteroid in asteroids:
                 for shot in shots:
-                    if circle_collides_with_polygon(shot.position, shot.radius, asteroid.world_vertices()):
+                    if circle_collides_with_polygon(
+                        shot.position, shot.radius, asteroid.world_vertices()
+                    ):
                         sound_manager.play("asteroid_death")
                         game.score += 1
                         log_event("asteroid_shot")
                         pickup_spawner.try_spawn(asteroid.position)
                         ufo_spawner.try_spawn()
                         particle_number = random.randint(6, 24)
-                        
+
                         for _ in range(particle_number):
                             ExplosionParticle(asteroid.position.x, asteroid.position.y)
 
@@ -487,10 +484,11 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
 
                         break
 
-            
             for ufo in ufos:
                 for shot in shots:
-                    if circle_collides_with_polygon(shot.position, shot.radius, ufo.world_vertices()):
+                    if circle_collides_with_polygon(
+                        shot.position, shot.radius, ufo.world_vertices()
+                    ):
                         sound_manager.play("ufo_death")
                         game.score += UFO_SCORE_VALUE
                         log_event("ufo_hit")
@@ -504,7 +502,6 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
 
                         break
 
-        
         if game_over_sound_timer is not None:
             game_over_sound_timer -= dt
 
@@ -512,13 +509,11 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
                 sound_manager.play("game_over")
                 game_over_sound_timer = None
 
-
         starfield.draw(screen)
-                    
 
         for obj in drawable:
             obj.draw(screen)
-        
+
         score_text = text_font.render(f"Score: {game.score}", True, "white")
         lives_text = text_font.render(f"Lives: {player.lives}", True, "white")
         shield_text = text_font.render(f"Shields: {player.shield_count}", True, "white")
@@ -541,7 +536,7 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
             "Difficulty": game.difficulty_level,
             "Asteroid spawn rate": f"{asteroid_field.get_current_spawn_rate():.2f}",
             "Asteroid cap": asteroid_field.get_current_cap(),
-            "UFO cap": ufo_spawner.get_current_cap()
+            "UFO cap": ufo_spawner.get_current_cap(),
         }
 
         debug_instance.draw(screen, fps, debug_counts)
@@ -563,9 +558,7 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
 
         pygame.display.flip()
 
-
         dt = clock.tick(60) / 1000
-
 
         pygame.display.set_caption(f"Modernsteroids!")
 
@@ -587,19 +580,16 @@ def main():
     print(f"Screen height: {SCREEN_HEIGHT}")
 
     while True:
-        title_action = run_title_menu(screen, clock, high_scores, settings, sound_manager, input_manager)
+        title_action = run_title_menu(
+            screen, clock, high_scores, settings, sound_manager, input_manager
+        )
 
         if title_action == "quit":
             break
 
         while True:
             session_action = run_game(
-                screen,
-                clock,
-                high_scores,
-                settings,
-                sound_manager,
-                input_manager
+                screen, clock, high_scores, settings, sound_manager, input_manager
             )
 
             if session_action == "restart":

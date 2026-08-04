@@ -3,7 +3,7 @@ import pygame
 from constants import (
     PLAYER_TURN_SPEED_MAX,
     PLAYER_TURN_SPEED_MIN,
-    PLAYER_TURN_SPEED_STEP
+    PLAYER_TURN_SPEED_STEP,
 )
 
 
@@ -19,7 +19,6 @@ class OptionsScreen:
         self.confirming_clear = False
         self.confirmation_selected = 0
         self.confirmation_rects = []
-
 
     def draw(self, screen, settings):
         overlay = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
@@ -37,7 +36,9 @@ class OptionsScreen:
 
         self.option_rects = []
 
-        rotation_text = self.option_font.render(f"Rotation Speed: {settings.player_turn_speed}", True, rotation_color)
+        rotation_text = self.option_font.render(
+            f"Rotation Speed: {settings.player_turn_speed}", True, rotation_color
+        )
         rotation_rect = rotation_text.get_rect(center=(screen.get_width() // 2, 230))
         self.option_rects.append(rotation_rect)
         screen.blit(rotation_text, rotation_rect)
@@ -47,11 +48,11 @@ class OptionsScreen:
 
         pygame.draw.rect(screen, "white", self.slider_rect)
 
-        speed_range = (PLAYER_TURN_SPEED_MAX - PLAYER_TURN_SPEED_MIN)
+        speed_range = PLAYER_TURN_SPEED_MAX - PLAYER_TURN_SPEED_MIN
 
         progress = (settings.player_turn_speed - PLAYER_TURN_SPEED_MIN) / speed_range
 
-        knob_x = (self.slider_rect.left + int(progress * self.slider_rect.width))
+        knob_x = self.slider_rect.left + int(progress * self.slider_rect.width)
 
         self.slider_knob_rect = pygame.Rect(0, 0, 20, 30)
         self.slider_knob_rect.center = (knob_x, self.slider_rect.centery)
@@ -73,7 +74,8 @@ class OptionsScreen:
             option_text = self.option_font.render(label, True, color)
 
             option_rect = option_text.get_rect(
-                center=(screen.get_width() // 2, y_position))
+                center=(screen.get_width() // 2, y_position)
+            )
 
             self.option_rects.append(option_rect)
             screen.blit(option_text, option_rect)
@@ -87,7 +89,10 @@ class OptionsScreen:
             prompt_rect = prompt.get_rect(center=(screen.get_width() // 2, 300))
             screen.blit(prompt, prompt_rect)
 
-            confirmation_options = (("No", screen.get_width() // 2 - 100), ("Yes", screen.get_width() // 2 + 100))
+            confirmation_options = (
+                ("No", screen.get_width() // 2 - 100),
+                ("Yes", screen.get_width() // 2 + 100),
+            )
 
             self.confirmation_rects = []
 
@@ -103,7 +108,6 @@ class OptionsScreen:
                 self.confirmation_rects.append(option_rect)
                 screen.blit(option_text, option_rect)
 
-    
     def handle_event(self, event, input_manager):
         menu_action = input_manager.get_menu_action(event)
 
@@ -140,7 +144,11 @@ class OptionsScreen:
                     self.selected_index = index
                     break
 
-            if (self.slider_rect is not None and event.buttons[0] and self.slider_rect.collidepoint(event.pos)):
+            if (
+                self.slider_rect is not None
+                and event.buttons[0]
+                and self.slider_rect.collidepoint(event.pos)
+            ):
                 return ("Set Rotation", self.get_slider_value(event.pos[0]))
 
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -161,23 +169,22 @@ class OptionsScreen:
 
         return None
 
-
     def get_slider_value(self, mouse_x):
         clamped_x = max(self.slider_rect.left, min(mouse_x, self.slider_rect.right))
 
         progress = (clamped_x - self.slider_rect.left) / self.slider_rect.width
 
-        raw_value = (PLAYER_TURN_SPEED_MIN + progress * (PLAYER_TURN_SPEED_MAX - PLAYER_TURN_SPEED_MIN))
+        raw_value = PLAYER_TURN_SPEED_MIN + progress * (
+            PLAYER_TURN_SPEED_MAX - PLAYER_TURN_SPEED_MIN
+        )
 
-        steps = round((raw_value - PLAYER_TURN_SPEED_MIN)/ PLAYER_TURN_SPEED_STEP)
+        steps = round((raw_value - PLAYER_TURN_SPEED_MIN) / PLAYER_TURN_SPEED_STEP)
 
-        return (PLAYER_TURN_SPEED_MIN + steps * PLAYER_TURN_SPEED_STEP)
-
+        return PLAYER_TURN_SPEED_MIN + steps * PLAYER_TURN_SPEED_STEP
 
     def open_clear_confirmation(self):
         self.confirming_clear = True
         self.confirmation_selected = 0
-
 
     def handle_confirmation_event(self, event, input_manager):
         menu_action = input_manager.get_menu_action(event)
@@ -215,7 +222,6 @@ class OptionsScreen:
                         return None
 
         return None
-
 
     def cancel_clear_confirmation(self):
         self.confirming_clear = False

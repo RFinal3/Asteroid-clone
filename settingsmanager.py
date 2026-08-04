@@ -10,11 +10,7 @@ from constants import (
 
 class SettingsManager:
     def __init__(self):
-        self.file_path = (
-            Path.home()
-            / ".modernsteroids"
-            / "settings.json"
-        )
+        self.file_path = Path.home() / ".modernsteroids" / "settings.json"
         self.player_turn_speed = PLAYER_TURN_SPEED
         self.load()
 
@@ -49,9 +45,7 @@ class SettingsManager:
                 "player_turn_speed": self.player_turn_speed,
             }
 
-            self.file_path.write_text(
-                json.dumps(data, indent=4)
-            )
+            self.file_path.write_text(json.dumps(data, indent=4))
 
         except OSError:
             return False

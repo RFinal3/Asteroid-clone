@@ -3,6 +3,7 @@ import pygame
 from star import Star
 from constants import STAR_SYMBOLS
 
+
 class StarField:
     def __init__(self, width, height, min_star_count, max_star_count):
         self.star_font = pygame.font.Font(None, 12)
@@ -20,13 +21,11 @@ class StarField:
             star_true_position = Star(position_x, position_y)
             self.stars.append(star_true_position)
 
-
     def draw(self, screen):
         for star in self.stars:
             star_surface = self.symbol_surfaces[star.symbol]
             star.draw(screen, star_surface)
 
-    
     def update(self, dt):
         for star in self.stars:
             star.update(dt)

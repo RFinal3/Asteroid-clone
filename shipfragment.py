@@ -1,17 +1,17 @@
 import pygame
 import random
-from constants import (LAYER_EFFECTS, 
-        LINE_WIDTH,
-        SHIP_FRAGMENT_SPEED,
-        SHIP_FRAGMENT_LIFETIME_SECONDS,
-        SHIP_FRAGMENT_ROTATION_SPEED
-        )
+from constants import (
+    LAYER_EFFECTS,
+    LINE_WIDTH,
+    SHIP_FRAGMENT_SPEED,
+    SHIP_FRAGMENT_LIFETIME_SECONDS,
+    SHIP_FRAGMENT_ROTATION_SPEED,
+)
 
 
 class ShipFragment(pygame.sprite.Sprite):
     containers: pygame.sprite.Group
     _layer = LAYER_EFFECTS
-
 
     def __init__(self, start, end, origin):
         pygame.sprite.Sprite.__init__(self, self.containers)
@@ -31,8 +31,6 @@ class ShipFragment(pygame.sprite.Sprite):
         self.lifetime = SHIP_FRAGMENT_LIFETIME_SECONDS
         self.rotation = 0.0
         self.rotation_speed = SHIP_FRAGMENT_ROTATION_SPEED * sign_choice
-        
-
 
     def draw(self, screen):
         rotated_start = self.local_start.rotate(self.rotation)
@@ -43,7 +41,6 @@ class ShipFragment(pygame.sprite.Sprite):
 
         pygame.draw.line(screen, "white", world_start, world_end, LINE_WIDTH)
 
-    
     def update(self, dt):
         self.position += self.velocity * dt
         self.lifetime -= dt

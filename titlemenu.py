@@ -9,7 +9,6 @@ class TitleMenu:
         self.selected_index = 0
         self.option_rect = []
 
-    
     def draw(self, screen):
         title = self.title_font.render("Modernstroids!", True, "white")
         title_rect = title.get_rect(center=(screen.get_width() // 2, 170))
@@ -31,10 +30,9 @@ class TitleMenu:
 
             next_y = option_rect.bottom + 25
 
-
     def handle_event(self, event, input_manager):
         menu_action = input_manager.get_menu_action(event)
-        
+
         if menu_action == "up":
             self.selected_index -= 1
         elif menu_action == "down":
@@ -57,6 +55,5 @@ class TitleMenu:
                     if option_rect.collidepoint(event.pos):
                         self.selected_index = index
                         return self.options[index]
-                        
 
         return None

@@ -5,11 +5,7 @@ import pygame
 
 class SoundManager:
     def __init__(self):
-        self.sound_directory = (
-            Path(__file__).resolve().parent
-            / "assets"
-            / "sounds"
-        )
+        self.sound_directory = Path(__file__).resolve().parent / "assets" / "sounds"
 
         self.sounds = {}
 
@@ -34,15 +30,12 @@ class SoundManager:
             "ufo_spawn": "ufo_spawn.wav",
         }
 
-
         for name, filename in sound_files.items():
             file_path = self.sound_directory / filename
             self.sounds[name] = pygame.mixer.Sound(str(file_path))
 
-
     def play(self, name, loops=0):
         return self.sounds[name].play(loops=loops)
-
 
     def stop(self, name):
         self.sounds[name].stop()
