@@ -58,12 +58,12 @@ class HighScoreScreen:
         screen.blit(back_text, self.back_rect)
 
 
-    def handle_event(self, event):
+    def handle_event(self, event, input_manager):
+        menu_action = input_manager.get_menu_action(event)
+
         if event.type == pygame.MOUSEMOTION:
             if self.back_rect is not None:
-                self.back_hovered = self.back_rect.collidepoint(
-                    event.pos
-                )
+                self.back_hovered = self.back_rect.collidepoint(event.pos)
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if (
@@ -72,5 +72,8 @@ class HighScoreScreen:
                 and self.back_rect.collidepoint(event.pos)
             ):
                 return "Back"
+
+        if menu_action in ("select", "back"):
+            return "Back"
 
         return None

@@ -100,7 +100,7 @@ def run_title_menu(screen, clock, high_scores, settings, sound_manager, input_ma
                     return "quit"
 
             elif current_state == MenuState.OPTIONS:
-                action = options_screen.handle_event(event)
+                action = options_screen.handle_event(event, input_manager)
 
                 if (isinstance(action, tuple) and action[0] == "Set Rotation"):
                     settings.set_player_turn_speed(action[1])
@@ -122,7 +122,7 @@ def run_title_menu(screen, clock, high_scores, settings, sound_manager, input_ma
                     current_state = MenuState.TITLE
 
             elif current_state == MenuState.HIGH_SCORES:
-                action = high_score_screen.handle_event(event)
+                action = high_score_screen.handle_event(event, input_manager)
 
                 if action == "Back":
                     sound_manager.play("menu_back")
@@ -238,7 +238,7 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
                 continue
 
             if game.state == GameState.HIGH_SCORES:
-                high_score_action = high_score_screen.handle_event(event)
+                high_score_action = high_score_screen.handle_event(event, input_manager)
 
                 if high_score_action == "Back":
                     sound_manager.play("menu_back")
@@ -248,7 +248,16 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
 
 
             if game.state == GameState.OPTIONS:
-                options_action = options_screen.handle_event(event)
+                previous_index = options_screen.selected_index
+                previous_confirmation = options_screen.confirmation_selected
+
+                options_action = options_screen.handle_event(event, input_manager)
+
+                if (
+                    options_screen.selected_index != previous_index
+                    or options_screen.confirmation_selected != previous_confirmation
+                ):
+                    sound_manager.play("menu_option_change")
 
                 if (
                     isinstance(options_action, tuple)
@@ -285,7 +294,7 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
 
 
             if game.state == GameState.GAME_OVER:
-                game_over_action = game_over_screen.handle_event(event)
+                game_over_action = game_over_screen.handle_event(event, input_manager)
 
                 if game_over_action == "Restart":
                     return "restart"

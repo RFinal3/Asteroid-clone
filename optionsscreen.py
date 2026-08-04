@@ -104,32 +104,35 @@ class OptionsScreen:
                 screen.blit(option_text, option_rect)
 
     
-    def handle_event(self, event):
+    def handle_event(self, event, input_manager):
+        menu_action = input_manager.get_menu_action(event)
+
         if self.confirming_clear:
-            return self.handle_confirmation_event(event)
+            return self.handle_confirmation_event(event, input_manager)
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                self.selected_index -= 1
-                self.selected_index %= 3
+        if menu_action == "up":
+            self.selected_index -= 1
+            self.selected_index %= 3
 
-            elif event.key == pygame.K_DOWN:
-                self.selected_index += 1
-                self.selected_index %= 3
+        elif menu_action == "down":
+            self.selected_index += 1
+            self.selected_index %= 3
 
-            elif self.selected_index == 0:
-                if event.key == pygame.K_LEFT:
-                    return "Decrease Rotation"
+        elif menu_action == "left" and self.selected_index == 0:
+            return "Decrease Rotation"
 
-                elif event.key == pygame.K_RIGHT:
-                    return "Increase Rotation"
+        elif menu_action == "right" and self.selected_index == 0:
+            return "Increase Rotation"
 
-            elif event.key in (pygame.K_RETURN, pygame.K_KP_ENTER):
-                if self.selected_index == 1:
-                    return "Clear High Scores"
+        elif menu_action == "select":
+            if self.selected_index == 1:
+                return "Clear High Scores"
 
-                if self.selected_index == 2:
-                    return "Back"
+            if self.selected_index == 2:
+                return "Back"
+
+        elif menu_action == "back":
+            return "Back"
 
         if event.type == pygame.MOUSEMOTION:
             for index, option_rect in enumerate(self.option_rects):
@@ -176,18 +179,23 @@ class OptionsScreen:
         self.confirmation_selected = 0
 
 
-    def handle_confirmation_event(self, event):
-        if event.type == pygame.KEYDOWN:
-            if event.key in (pygame.K_LEFT, pygame.K_RIGHT):
-                self.confirmation_selected = (1 - self.confirmation_selected)
+    def handle_confirmation_event(self, event, input_manager):
+        menu_action = input_manager.get_menu_action(event)
 
-            elif event.key in (pygame.K_RETURN, pygame.K_KP_ENTER):
-                if self.confirmation_selected == 1:
-                    self.confirming_clear = False
-                    return "Confirm Clear"
+        if menu_action in ("left", "right"):
+            self.confirmation_selected = 1 - self.confirmation_selected
 
+        elif menu_action == "select":
+            if self.confirmation_selected == 1:
                 self.confirming_clear = False
-                return None
+                return "Confirm Clear"
+
+            self.confirming_clear = False
+            return None
+
+        elif menu_action == "back":
+            self.cancel_clear_confirmation()
+            return None
 
         if event.type == pygame.MOUSEMOTION:
             for index, option_rect in enumerate(self.confirmation_rects):
