@@ -17,8 +17,6 @@ from constants import (
 from debugmanager import DebugManager
 from game import Game
 from gamestate import GameState
-from highscore import HighScoreManager
-from inputmanager import InputManager
 from logger import log_event, log_state
 from menustate import MenuState
 from modernstroids.background.starfield import StarField
@@ -38,9 +36,11 @@ from modernstroids.screens.optionsscreen import OptionsScreen
 from modernstroids.screens.pausemenu import PauseMenu
 from modernstroids.screens.titlemenu import TitleMenu
 from modernstroids.systems.asteroidfield import AsteroidField
+from modernstroids.systems.highscore import HighScoreManager
+from modernstroids.systems.inputmanager import InputManager
 from modernstroids.systems.pickup_spawner import PickupSpawner
+from modernstroids.systems.settingsmanager import SettingsManager
 from modernstroids.systems.ufospawner import UFOSpawner
-from settingsmanager import SettingsManager
 from soundmanager import SoundManager
 from utils import circle_collides_with_polygon, polygons_collide
 
