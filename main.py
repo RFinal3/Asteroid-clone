@@ -19,16 +19,17 @@ from constants import (
 from debugmanager import DebugManager
 from explosionparticle import ExplosionParticle
 from game import Game
-from gameoverscreen import GameOverScreen
 from gamestate import GameState
 from highscore import HighScoreManager
-from highscorescreen import HighScoreScreen
 from inputmanager import InputManager
 from logger import log_event, log_state
 from menustate import MenuState
-from nameentryscreen import NameEntryScreen
-from optionsscreen import OptionsScreen
-from pausemenu import PauseMenu
+from modernstroids.screens.gameoverscreen import GameOverScreen
+from modernstroids.screens.highscorescreen import HighScoreScreen
+from modernstroids.screens.nameentryscreen import NameEntryScreen
+from modernstroids.screens.optionsscreen import OptionsScreen
+from modernstroids.screens.pausemenu import PauseMenu
+from modernstroids.screens.titlemenu import TitleMenu
 from pickup import Pickup
 from pickup_spawner import PickupSpawner
 from player import Player
@@ -38,7 +39,6 @@ from shipfragment import ShipFragment
 from shot import Shot
 from soundmanager import SoundManager
 from starfield import StarField
-from titlemenu import TitleMenu
 from ufo import UFO
 from ufobullet import UFOBullet
 from ufospawner import UFOSpawner
