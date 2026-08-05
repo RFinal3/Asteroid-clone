@@ -2,7 +2,6 @@ import random
 
 import pygame
 
-from asteroidfield import AsteroidField
 from combat import handle_player_hit
 from constants import (
     BOMB_SPAWN_PAUSE_SECONDS,
@@ -38,10 +37,11 @@ from modernstroids.screens.nameentryscreen import NameEntryScreen
 from modernstroids.screens.optionsscreen import OptionsScreen
 from modernstroids.screens.pausemenu import PauseMenu
 from modernstroids.screens.titlemenu import TitleMenu
-from pickup_spawner import PickupSpawner
+from modernstroids.systems.asteroidfield import AsteroidField
+from modernstroids.systems.pickup_spawner import PickupSpawner
+from modernstroids.systems.ufospawner import UFOSpawner
 from settingsmanager import SettingsManager
 from soundmanager import SoundManager
-from ufospawner import UFOSpawner
 from utils import circle_collides_with_polygon, polygons_collide
 
 
