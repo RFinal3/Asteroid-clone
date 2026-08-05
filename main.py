@@ -17,13 +17,15 @@ from constants import (
     UFO_SCORE_VALUE,
 )
 from debugmanager import DebugManager
-from explosionparticle import ExplosionParticle
 from game import Game
 from gamestate import GameState
 from highscore import HighScoreManager
 from inputmanager import InputManager
 from logger import log_event, log_state
 from menustate import MenuState
+from modernstroids.effects.explosionparticle import ExplosionParticle
+from modernstroids.effects.screenflash import ScreenFlash
+from modernstroids.effects.shipfragment import ShipFragment
 from modernstroids.screens.gameoverscreen import GameOverScreen
 from modernstroids.screens.highscorescreen import HighScoreScreen
 from modernstroids.screens.nameentryscreen import NameEntryScreen
@@ -33,9 +35,7 @@ from modernstroids.screens.titlemenu import TitleMenu
 from pickup import Pickup
 from pickup_spawner import PickupSpawner
 from player import Player
-from screenflash import ScreenFlash
 from settingsmanager import SettingsManager
-from shipfragment import ShipFragment
 from shot import Shot
 from soundmanager import SoundManager
 from starfield import StarField

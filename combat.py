@@ -1,5 +1,5 @@
 from logger import log_event
-from shipfragment import spawn_ship_fragments
+from modernstroids.effects.shipfragment import spawn_ship_fragments
 
 
 def handle_player_hit(player, event_name):
