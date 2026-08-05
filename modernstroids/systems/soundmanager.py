@@ -1,11 +1,11 @@
-from pathlib import Path
-
 import pygame
+
+from modernstroids.resources import get_asset_path
 
 
 class SoundManager:
     def __init__(self):
-        self.sound_directory = Path(__file__).resolve().parent / "assets" / "sounds"
+        self.sound_directory = get_asset_path("sounds")
 
         self.sounds = {}
 

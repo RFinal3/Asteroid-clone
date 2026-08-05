@@ -40,8 +40,8 @@ from modernstroids.systems.highscore import HighScoreManager
 from modernstroids.systems.inputmanager import InputManager
 from modernstroids.systems.pickup_spawner import PickupSpawner
 from modernstroids.systems.settingsmanager import SettingsManager
+from modernstroids.systems.soundmanager import SoundManager
 from modernstroids.systems.ufospawner import UFOSpawner
-from soundmanager import SoundManager
 from utils import circle_collides_with_polygon, polygons_collide
 
 
