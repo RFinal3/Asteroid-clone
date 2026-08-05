@@ -1,6 +1,5 @@
 import pygame
 
-from circleshape import CircleShape
 from constants import (
     LAYER_PLAYER,
     LINE_WIDTH,
@@ -21,7 +20,8 @@ from constants import (
     SPEED_BOOST_DURATION_SECONDS,
     SPEED_BOOST_MULTIPLIER,
 )
-from shot import Shot
+from modernstroids.entities.circleshape import CircleShape
+from modernstroids.entities.shot import Shot
 from utils import wrap_position
 
 

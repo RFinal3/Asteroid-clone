@@ -4,7 +4,6 @@ from typing import ClassVar
 
 import pygame
 
-from asteroid import Asteroid
 from constants import (
     ASTEROID_CAP_INCREASE_PER_LEVEL,
     ASTEROID_KINDS,
@@ -17,6 +16,7 @@ from constants import (
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
 )
+from modernstroids.entities.asteroid import Asteroid
 
 Edge = tuple[pygame.Vector2, Callable[[float], pygame.Vector2]]
 

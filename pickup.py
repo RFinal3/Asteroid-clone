@@ -1,5 +1,5 @@
-from circleshape import CircleShape
 from constants import LAYER_PICKUPS, PICKUP_LIFETIME_SECONDS, PICKUP_RADIUS
+from modernstroids.entities.circleshape import CircleShape
 
 
 class Pickup(CircleShape):

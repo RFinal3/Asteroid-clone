@@ -1,6 +1,5 @@
 import pygame
 
-from circleshape import CircleShape
 from constants import (
     LAYER_UFO,
     LINE_WIDTH,
@@ -16,7 +15,8 @@ from constants import (
     UFO_SHOOT_COOLDOWN_SECONDS,
     UFO_SHOOT_SPEED,
 )
-from ufobullet import UFOBullet
+from modernstroids.entities.circleshape import CircleShape
+from modernstroids.entities.ufobullet import UFOBullet
 
 
 class UFO(CircleShape):

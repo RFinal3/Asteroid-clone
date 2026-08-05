@@ -2,9 +2,9 @@ import random
 
 import pygame
 
-from circleshape import CircleShape
 from constants import ASTEROID_MIN_RADIUS, LAYER_WORLD, LINE_WIDTH
 from logger import log_event
+from modernstroids.entities.circleshape import CircleShape
 from utils import wrap_position
 
 

@@ -2,7 +2,6 @@ import random
 
 import pygame
 
-from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from combat import handle_player_hit
 from constants import (
@@ -27,6 +26,11 @@ from modernstroids.background.starfield import StarField
 from modernstroids.effects.explosionparticle import ExplosionParticle
 from modernstroids.effects.screenflash import ScreenFlash
 from modernstroids.effects.shipfragment import ShipFragment
+from modernstroids.entities.asteroid import Asteroid
+from modernstroids.entities.player import Player
+from modernstroids.entities.shot import Shot
+from modernstroids.entities.ufo import UFO
+from modernstroids.entities.ufobullet import UFOBullet
 from modernstroids.screens.gameoverscreen import GameOverScreen
 from modernstroids.screens.highscorescreen import HighScoreScreen
 from modernstroids.screens.nameentryscreen import NameEntryScreen
@@ -35,12 +39,8 @@ from modernstroids.screens.pausemenu import PauseMenu
 from modernstroids.screens.titlemenu import TitleMenu
 from pickup import Pickup
 from pickup_spawner import PickupSpawner
-from player import Player
 from settingsmanager import SettingsManager
-from shot import Shot
 from soundmanager import SoundManager
-from ufo import UFO
-from ufobullet import UFOBullet
 from ufospawner import UFOSpawner
 from utils import circle_collides_with_polygon, polygons_collide
 

@@ -2,8 +2,8 @@ import random
 
 import pygame
 
-from circleshape import CircleShape
 from constants import EXPLOSION_RADIUS, EXPLOSION_TIMER, LAYER_EFFECTS, LINE_WIDTH
+from modernstroids.entities.circleshape import CircleShape
 
 
 class ExplosionParticle(CircleShape):

@@ -11,7 +11,7 @@ from constants import (
     UFO_RADIUS,
     UFO_SPAWN_CHANCE,
 )
-from ufo import UFO
+from modernstroids.entities.ufo import UFO
 
 
 class UFOSpawner:
