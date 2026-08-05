@@ -81,24 +81,24 @@ The internal Windows alpha was completed, packaged, tested, and tagged as `v1.0.
 
 Planned after Classic mode, likely following the transition to Unity.
 
-- Multiple levels
-- Level-specific backgrounds and artwork
-- Story or campaign progression
-- Increased alien activity
-- Boss encounters
-- Alien mothership encounter
-- Broader visual and audio presentation
+- [ ] Multiple levels
+- [ ] Level-specific backgrounds and artwork
+- [ ] Story or campaign progression
+- [ ] Increased alien activity
+- [ ] Boss encounters
+- [ ] Alien mothership encounter
+- [ ] Broader visual and audio presentation
 
 ## Asteroids Roguelike Milestone
 
-- Upgrade choices between levels
-- Randomized upgrade selections
-- Multiple weapons and firing patterns
-- Drones and other support systems
-- Build-focused gameplay
-- Meta-progression
-- Endless score rounds
-- Separate high-score tables for special modes
+- [ ] Upgrade choices between levels
+- [ ] Randomized upgrade selections
+- [ ] Multiple weapons and firing patterns
+- [ ] Drones and other support systems
+- [ ] Build-focused gameplay
+- [ ] Meta-progression
+- [ ] Endless score rounds
+- [ ] Separate high-score tables for special modes
 
 ### Public Testing and Release
 
@@ -110,9 +110,9 @@ Planned after Classic mode, likely following the transition to Unity.
 
 ## Deferred Until Unity
 
-- Player profiles
-- Profile-based progression and unlocks
-- Multiple progression save slots
-- Profile-linked high scores
-- Expanded accessibility and graphics settings
-- More advanced input configuration
+- [ ] Player profiles
+- [ ] Profile-based progression and unlocks
+- [ ] Multiple progression save slots
+- [ ] Profile-linked high scores
+- [ ] Expanded accessibility and graphics settings
+- [ ] More advanced input configuration
