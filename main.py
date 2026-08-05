@@ -129,6 +129,7 @@ def run_title_menu(screen, clock, high_scores, settings, sound_manager, input_ma
                     )
 
                 elif action == "Clear High Scores":
+                    sound_manager.play("menu_forward")
                     options_screen.open_clear_confirmation()
                     input_manager.reset_menu_axis_latches()
 
@@ -296,6 +297,7 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
                     player.turn_speed = settings.player_turn_speed
 
                 elif options_action == "Clear High Scores":
+                    sound_manager.play("menu_forward")
                     options_screen.open_clear_confirmation()
                     input_manager.reset_menu_axis_latches()
 

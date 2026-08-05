@@ -109,10 +109,10 @@ class OptionsScreen:
                 screen.blit(option_text, option_rect)
 
     def handle_event(self, event, input_manager):
-        menu_action = input_manager.get_menu_action(event)
-
         if self.confirming_clear:
             return self.handle_confirmation_event(event, input_manager)
+
+        menu_action = input_manager.get_menu_action(event)
 
         if menu_action == "up":
             self.selected_index -= 1
