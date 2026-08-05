@@ -134,7 +134,7 @@ def log_state() -> None:
 
     # New log file on each run
     mode = "w" if not _state_log_initialized else "a"
-    with _STATE_LOG_PATH.open(mode) as f:
+    with _STATE_LOG_PATH.open(mode, encoding="utf-8") as f:
         f.write(json.dumps(entry) + "\n")
 
     _state_log_initialized = True
@@ -154,7 +154,7 @@ def log_event(event_type: str, **details: object) -> None:
     }
 
     mode = "w" if not _event_log_initialized else "a"
-    with _EVENT_LOG_PATH.open(mode) as f:
+    with _EVENT_LOG_PATH.open(mode, encoding="utf-8") as f:
         f.write(json.dumps(event) + "\n")
 
     _event_log_initialized = True
