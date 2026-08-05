@@ -1,10 +1,11 @@
 import json
-from pathlib import Path
+
+from modernstroids.storage import USER_DATA_DIRECTORY
 
 
 class HighScoreManager:
     def __init__(self):
-        self.file_path = Path.home() / ".modernsteroids" / "high_scores.json"
+        self.file_path = USER_DATA_DIRECTORY / "high_scores.json"
         self.entries = []
         self.load()
 

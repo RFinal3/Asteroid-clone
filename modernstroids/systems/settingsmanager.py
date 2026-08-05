@@ -1,16 +1,16 @@
 import json
-from pathlib import Path
 
 from modernstroids.core.constants import (
     PLAYER_TURN_SPEED,
     PLAYER_TURN_SPEED_MAX,
     PLAYER_TURN_SPEED_MIN,
 )
+from modernstroids.storage import USER_DATA_DIRECTORY
 
 
 class SettingsManager:
     def __init__(self):
-        self.file_path = Path.home() / ".modernsteroids" / "settings.json"
+        self.file_path = USER_DATA_DIRECTORY / "settings.json"
         self.player_turn_speed = PLAYER_TURN_SPEED
         self.load()
 

@@ -4,6 +4,8 @@ import math
 from datetime import datetime
 from typing import NotRequired, TypedDict
 
+from modernstroids.storage import LOG_DIRECTORY
+
 
 class SpriteInfo(TypedDict):
     type: str
@@ -19,6 +21,11 @@ class GroupInfo(TypedDict):
 
 
 __all__ = ["log_event", "log_state"]
+
+LOG_DIRECTORY.mkdir(parents=True, exist_ok=True)
+
+_STATE_LOG_PATH = LOG_DIRECTORY / "game_state.jsonl"
+_EVENT_LOG_PATH = LOG_DIRECTORY / "game_events.jsonl"
 
 _FPS = 60
 _MAX_SECONDS = 16
@@ -127,7 +134,7 @@ def log_state() -> None:
 
     # New log file on each run
     mode = "w" if not _state_log_initialized else "a"
-    with open("game_state.jsonl", mode) as f:
+    with _STATE_LOG_PATH.open(mode) as f:
         f.write(json.dumps(entry) + "\n")
 
     _state_log_initialized = True
@@ -147,7 +154,7 @@ def log_event(event_type: str, **details: object) -> None:
     }
 
     mode = "w" if not _event_log_initialized else "a"
-    with open("game_events.jsonl", mode) as f:
+    with _EVENT_LOG_PATH.open(mode) as f:
         f.write(json.dumps(event) + "\n")
 
     _event_log_initialized = True
