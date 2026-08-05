@@ -1,4 +1,4 @@
-from constants import SCREEN_HEIGHT, SCREEN_WIDTH
+from modernstroids.core.constants import SCREEN_HEIGHT, SCREEN_WIDTH
 
 
 def wrap_position(position, radius):

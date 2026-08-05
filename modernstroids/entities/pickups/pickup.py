@@ -1,4 +1,8 @@
-from constants import LAYER_PICKUPS, PICKUP_LIFETIME_SECONDS, PICKUP_RADIUS
+from modernstroids.core.constants import (
+    LAYER_PICKUPS,
+    PICKUP_LIFETIME_SECONDS,
+    PICKUP_RADIUS,
+)
 from modernstroids.entities.circleshape import CircleShape
 
 

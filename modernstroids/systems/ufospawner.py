@@ -2,7 +2,7 @@ import random
 
 import pygame
 
-from constants import (
+from modernstroids.core.constants import (
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
     UFO_CAP_INCREASE_INTERVAL_SECONDS,

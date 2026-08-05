@@ -2,7 +2,12 @@ import random
 
 import pygame
 
-from constants import EXPLOSION_RADIUS, EXPLOSION_TIMER, LAYER_EFFECTS, LINE_WIDTH
+from modernstroids.core.constants import (
+    EXPLOSION_RADIUS,
+    EXPLOSION_TIMER,
+    LAYER_EFFECTS,
+    LINE_WIDTH,
+)
 from modernstroids.entities.circleshape import CircleShape
 
 

@@ -1,9 +1,9 @@
-from constants import (
+from modernstroids.core.constants import (
     ASTEROID_MAX_SCALING_LEVEL,
     DIFFICULTY_INCREASE_INTERVAL_SECONDS,
     STARTING_SCORE,
 )
-from gamestate import GameState
+from modernstroids.core.gamestate import GameState
 
 
 class Game:

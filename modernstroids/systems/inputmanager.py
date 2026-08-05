@@ -1,7 +1,10 @@
 import pygame
 from pygame._sdl2 import controller
 
-from constants import CONTROLLER_DEADZONE, CONTROLLER_MENU_AXIS_THRESHOLD
+from modernstroids.core.constants import (
+    CONTROLLER_DEADZONE,
+    CONTROLLER_MENU_AXIS_THRESHOLD,
+)
 
 
 class InputManager:

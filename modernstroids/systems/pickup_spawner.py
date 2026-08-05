@@ -2,7 +2,7 @@ import random
 
 import pygame
 
-from constants import PICKUP_DROP_CHANCE, PICKUP_SPAWN_DELAY_SECONDS
+from modernstroids.core.constants import PICKUP_DROP_CHANCE, PICKUP_SPAWN_DELAY_SECONDS
 from modernstroids.entities.pickups.bombpickup import BombPickup
 from modernstroids.entities.pickups.shieldpickup import ShieldPickup
 from modernstroids.entities.pickups.speedpickup import SpeedPickup

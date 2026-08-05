@@ -2,7 +2,7 @@ import random
 
 import pygame
 
-from constants import (
+from modernstroids.core.constants import (
     LAYER_EFFECTS,
     LINE_WIDTH,
     SHIP_FRAGMENT_LIFETIME_SECONDS,

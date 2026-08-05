@@ -1,6 +1,6 @@
 import pygame
 
-from constants import (
+from modernstroids.core.constants import (
     PLAYER_TURN_SPEED_MAX,
     PLAYER_TURN_SPEED_MIN,
     PLAYER_TURN_SPEED_STEP,

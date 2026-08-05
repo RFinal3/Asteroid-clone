@@ -1,6 +1,6 @@
 import pygame
 
-from constants import (
+from modernstroids.core.constants import (
     LAYER_UFO,
     LINE_WIDTH,
     SCREEN_HEIGHT,

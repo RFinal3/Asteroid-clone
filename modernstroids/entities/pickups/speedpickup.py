@@ -1,6 +1,6 @@
 import pygame
 
-from constants import LINE_WIDTH
+from modernstroids.core.constants import LINE_WIDTH
 from modernstroids.entities.pickups.pickup import Pickup
 
 

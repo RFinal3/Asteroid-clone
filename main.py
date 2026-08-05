@@ -2,8 +2,9 @@ import random
 
 import pygame
 
-from combat import handle_player_hit
-from constants import (
+from modernstroids.background.starfield import StarField
+from modernstroids.core.combat import handle_player_hit
+from modernstroids.core.constants import (
     BOMB_SPAWN_PAUSE_SECONDS,
     GAME_OVER_SOUND_DELAY_SECONDS,
     MAX_STAR_COUNT,
@@ -14,10 +15,10 @@ from constants import (
     SCREEN_WIDTH,
     UFO_SCORE_VALUE,
 )
-from game import Game
-from gamestate import GameState
-from menustate import MenuState
-from modernstroids.background.starfield import StarField
+from modernstroids.core.game import Game
+from modernstroids.core.gamestate import GameState
+from modernstroids.core.menustate import MenuState
+from modernstroids.core.utils import circle_collides_with_polygon, polygons_collide
 from modernstroids.development.debugmanager import DebugManager
 from modernstroids.development.logger import log_event, log_state
 from modernstroids.effects.explosionparticle import ExplosionParticle
@@ -42,7 +43,6 @@ from modernstroids.systems.pickup_spawner import PickupSpawner
 from modernstroids.systems.settingsmanager import SettingsManager
 from modernstroids.systems.soundmanager import SoundManager
 from modernstroids.systems.ufospawner import UFOSpawner
-from utils import circle_collides_with_polygon, polygons_collide
 
 
 def run_title_menu(screen, clock, high_scores, settings, sound_manager, input_manager):

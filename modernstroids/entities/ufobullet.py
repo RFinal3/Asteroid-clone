@@ -1,6 +1,6 @@
 import pygame
 
-from constants import LAYER_PROJECTILES, UFO_BULLET_RADIUS
+from modernstroids.core.constants import LAYER_PROJECTILES, UFO_BULLET_RADIUS
 from modernstroids.entities.shot import Shot
 
 

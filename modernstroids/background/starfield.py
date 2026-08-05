@@ -2,8 +2,8 @@ import random
 
 import pygame
 
-from constants import STAR_SYMBOLS
 from modernstroids.background.star import Star
+from modernstroids.core.constants import STAR_SYMBOLS
 
 
 class StarField:

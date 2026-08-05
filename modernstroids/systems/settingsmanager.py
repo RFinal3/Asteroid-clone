@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from constants import (
+from modernstroids.core.constants import (
     PLAYER_TURN_SPEED,
     PLAYER_TURN_SPEED_MAX,
     PLAYER_TURN_SPEED_MIN,

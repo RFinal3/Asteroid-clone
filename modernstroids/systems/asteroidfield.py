@@ -4,7 +4,7 @@ from typing import ClassVar
 
 import pygame
 
-from constants import (
+from modernstroids.core.constants import (
     ASTEROID_CAP_INCREASE_PER_LEVEL,
     ASTEROID_KINDS,
     ASTEROID_MAX_RADIUS,

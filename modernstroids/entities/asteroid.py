@@ -2,10 +2,10 @@ import random
 
 import pygame
 
-from constants import ASTEROID_MIN_RADIUS, LAYER_WORLD, LINE_WIDTH
+from modernstroids.core.constants import ASTEROID_MIN_RADIUS, LAYER_WORLD, LINE_WIDTH
+from modernstroids.core.utils import wrap_position
 from modernstroids.development.logger import log_event
 from modernstroids.entities.circleshape import CircleShape
-from utils import wrap_position
 
 
 class Asteroid(CircleShape):

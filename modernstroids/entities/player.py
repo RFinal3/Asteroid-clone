@@ -1,6 +1,6 @@
 import pygame
 
-from constants import (
+from modernstroids.core.constants import (
     LAYER_PLAYER,
     LINE_WIDTH,
     PLAYER_ACCELERATION,
@@ -20,9 +20,9 @@ from constants import (
     SPEED_BOOST_DURATION_SECONDS,
     SPEED_BOOST_MULTIPLIER,
 )
+from modernstroids.core.utils import wrap_position
 from modernstroids.entities.circleshape import CircleShape
 from modernstroids.entities.shot import Shot
-from utils import wrap_position
 
 
 class Player(CircleShape):

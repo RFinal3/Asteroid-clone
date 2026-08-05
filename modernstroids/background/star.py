@@ -2,7 +2,11 @@ import random
 
 import pygame
 
-from constants import MAX_TWINKLE_INTERVAL, MIN_TWINKLE_INTERVAL, STAR_SYMBOLS
+from modernstroids.core.constants import (
+    MAX_TWINKLE_INTERVAL,
+    MIN_TWINKLE_INTERVAL,
+    STAR_SYMBOLS,
+)
 
 
 class Star:
