@@ -23,6 +23,7 @@ from highscore import HighScoreManager
 from inputmanager import InputManager
 from logger import log_event, log_state
 from menustate import MenuState
+from modernstroids.background.starfield import StarField
 from modernstroids.effects.explosionparticle import ExplosionParticle
 from modernstroids.effects.screenflash import ScreenFlash
 from modernstroids.effects.shipfragment import ShipFragment
@@ -38,7 +39,6 @@ from player import Player
 from settingsmanager import SettingsManager
 from shot import Shot
 from soundmanager import SoundManager
-from starfield import StarField
 from ufo import UFO
 from ufobullet import UFOBullet
 from ufospawner import UFOSpawner
