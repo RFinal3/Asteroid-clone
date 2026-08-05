@@ -197,7 +197,11 @@ class OptionsScreen:
                 return "Confirm Clear"
 
             self.confirming_clear = False
-            return None
+            return "Cancel Clear"
+
+        elif menu_action == "back":
+            self.cancel_clear_confirmation()
+            return "Cancel Clear"
 
         elif menu_action == "back":
             self.cancel_clear_confirmation()
@@ -217,7 +221,7 @@ class OptionsScreen:
                     if index == 1:
                         return "Confirm Clear"
 
-                    return None
+                    return "Cancel Clear"
 
         return None
 

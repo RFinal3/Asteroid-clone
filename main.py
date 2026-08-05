@@ -134,7 +134,11 @@ def run_title_menu(screen, clock, high_scores, settings, sound_manager, input_ma
                     input_manager.reset_menu_axis_latches()
 
                 elif action == "Confirm Clear":
+                    sound_manager.play("menu_forward")
                     high_scores.clear()
+
+                elif action == "Cancel Clear":
+                    sound_manager.play("menu_back")
 
                 elif action == "Back":
                     sound_manager.play("menu_back")
@@ -302,7 +306,11 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
                     input_manager.reset_menu_axis_latches()
 
                 elif options_action == "Confirm Clear":
+                    sound_manager.play("menu_forward")
                     high_scores.clear()
+
+                elif options_action == "Cancel Clear":
+                    sound_manager.play("menu_back")
 
                 elif options_action == "Back":
                     sound_manager.play("menu_back")
