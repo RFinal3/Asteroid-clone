@@ -128,6 +128,16 @@ def run_title_menu(screen, clock, high_scores, settings, sound_manager, input_ma
                         settings.player_turn_speed + PLAYER_TURN_SPEED_STEP
                     )
 
+                elif action == "Toggle Controller Scheme":
+                    settings.toggle_controller_scheme()
+                    input_manager.set_controller_scheme(
+                        settings.controller_scheme
+                    )
+                    sound_manager.play("menu_option_change")
+
+                elif action == "Clear High Scores":
+                    options_screen.open_clear_confirmation()
+
                 elif action == "Clear High Scores":
                     sound_manager.play("menu_forward")
                     options_screen.open_clear_confirmation()
@@ -304,6 +314,13 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
                     sound_manager.play("menu_forward")
                     options_screen.open_clear_confirmation()
                     input_manager.reset_menu_axis_latches()
+
+                elif options_action == "Toggle Controller Scheme":
+                    settings.toggle_controller_scheme()
+                    input_manager.set_controller_scheme(
+                        settings.controller_scheme
+                    )
+                    sound_manager.play("menu_option_change")
 
                 elif options_action == "Confirm Clear":
                     sound_manager.play("menu_forward")
@@ -578,12 +595,12 @@ def main():
     pygame.mixer.pre_init(frequency=48000, size=-16, channels=2, buffer=256)
     pygame.init()
     pygame.mixer.set_num_channels(32)
-    input_manager = InputManager()
+    settings = SettingsManager()
+    input_manager = InputManager(settings.controller_scheme)
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     high_scores = HighScoreManager()
-    settings = SettingsManager()
     sound_manager = SoundManager()
 
     print(f"Starting Asteroids with pygame version {pygame.version.ver}")

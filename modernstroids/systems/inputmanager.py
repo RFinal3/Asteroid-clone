@@ -4,11 +4,15 @@ from pygame._sdl2 import controller
 from modernstroids.core.constants import (
     CONTROLLER_DEADZONE,
     CONTROLLER_MENU_AXIS_THRESHOLD,
+    CONTROLLER_SCHEME_CLASSIC,
+    CONTROLLER_SCHEME_MODERN,
+    CONTROLLER_SCHEMES,
+    CONTROLLER_TRIGGER_THRESHOLD,
 )
 
 
 class InputManager:
-    def __init__(self):
+    def __init__(self, controller_scheme=CONTROLLER_SCHEME_CLASSIC):
         self.controller = None
         self.controller_name = None
         self.controller_instance_id = None
@@ -17,6 +21,8 @@ class InputManager:
             pygame.CONTROLLER_AXIS_LEFTX: False,
             pygame.CONTROLLER_AXIS_LEFTY: False,
         }
+        self.controller_scheme = controller_scheme
+        self.set_controller_scheme(controller_scheme)
 
         controller.init()
 
@@ -52,6 +58,9 @@ class InputManager:
         return normalized_value
 
     def get_turn_input(self):
+        if self.controller_scheme == CONTROLLER_SCHEME_MODERN:
+            return self._get_axis(pygame.CONTROLLER_AXIS_RIGHTX)
+
         return self._get_axis(pygame.CONTROLLER_AXIS_LEFTX)
 
     def get_thrust_input(self):
@@ -61,7 +70,15 @@ class InputManager:
         if self.controller is None:
             return False
 
-        shooting = self.controller.get_button(pygame.CONTROLLER_BUTTON_A)
+        if self.controller_scheme == CONTROLLER_SCHEME_MODERN:
+            shooting = (
+                self._get_axis(pygame.CONTROLLER_AXIS_TRIGGERRIGHT)
+                > CONTROLLER_TRIGGER_THRESHOLD
+            )
+        else:
+            shooting = self.controller.get_button(
+                pygame.CONTROLLER_BUTTON_A
+            )
 
         if not shooting:
             self.shooting_suppressed = False
@@ -187,3 +204,10 @@ class InputManager:
     def reset_menu_axis_latches(self):
         for axis in self.menu_axis_latched:
             self.menu_axis_latched[axis] = False
+
+    def set_controller_scheme(self, value):
+        if value not in CONTROLLER_SCHEMES:
+            return False
+
+        self.controller_scheme = value
+        return True

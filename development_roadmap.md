@@ -47,6 +47,7 @@ The internal Windows alpha was completed, packaged, tested, and tagged as `v1.0.
 - [ ] Profile and optimize gameplay where useful
 - [ ] Resolve additional playtest feedback
 - [ ] Perform a final visual-polish pass
+- [ ] Unify menu input and option activation (https://github.com/RFinal3/Asteroid-clone/issues/1)
 
 ### Audio Polish
 

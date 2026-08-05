@@ -63,9 +63,28 @@ class OptionsScreen:
 
         pygame.draw.rect(screen, "yellow", self.slider_knob_rect)
 
-        menu_options = (("Clear High Scores", 400), ("Back", 475))
+        if self.selected_index == 1:
+            controller_color = "yellow"
+        else:
+            controller_color = "white"
 
-        for index, (label, y_position) in enumerate(menu_options, start=1):
+        controller_text = self.option_font.render(
+            f"Controller Scheme: {settings.controller_scheme.title()}",
+            True,
+            controller_color,
+        )
+        controller_rect = controller_text.get_rect(
+            center=(screen.get_width() // 2, 365)
+        )
+        self.option_rects.append(controller_rect)
+        screen.blit(controller_text, controller_rect)
+
+        menu_options = (
+            ("Clear High Scores", 440),
+            ("Back", 515),
+        )
+
+        for index, (label, y_position) in enumerate(menu_options, start=2):
             if index == self.selected_index:
                 color = "yellow"
             else:
@@ -116,11 +135,11 @@ class OptionsScreen:
 
         if menu_action == "up":
             self.selected_index -= 1
-            self.selected_index %= 3
+            self.selected_index %= 4
 
         elif menu_action == "down":
             self.selected_index += 1
-            self.selected_index %= 3
+            self.selected_index %= 4
 
         elif menu_action == "left" and self.selected_index == 0:
             return "Decrease Rotation"
@@ -128,11 +147,17 @@ class OptionsScreen:
         elif menu_action == "right" and self.selected_index == 0:
             return "Increase Rotation"
 
+        elif menu_action in ("left", "right") and self.selected_index == 1:
+            return "Toggle Controller Scheme"
+
         elif menu_action == "select":
             if self.selected_index == 1:
-                return "Clear High Scores"
+                return "Toggle Controller Scheme"
 
             if self.selected_index == 2:
+                return "Clear High Scores"
+
+            if self.selected_index == 3:
                 return "Back"
 
         elif menu_action == "back":
@@ -161,9 +186,12 @@ class OptionsScreen:
                     self.selected_index = index
 
                     if index == 1:
-                        return "Clear High Scores"
+                        return "Toggle Controller Scheme"
 
                     if index == 2:
+                        return "Clear High Scores"
+
+                    if index == 3:
                         return "Back"
 
         return None
