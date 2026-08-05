@@ -1,152 +1,118 @@
-# Development Roadmap
+# Modernstroids! Development Roadmap
 
-## v1.0 — Asteroids
+Modernstroids! began as the Boot.dev Asteroids project and is being developed into a larger original arcade game.
 
-### Core
+The current focus is completing and polishing Classic mode in Pygame. Future development is expected to transition to Unity after Classic mode is complete.
 
-- [x] Add a scoring system
-- [x] Implement multiple lives and respawning
-- [x] Display lives and score in the HUD
+## Current Status
 
-### Game Feel
+Development is currently on the `beta/v1.0` branch.
 
-- [x] Add asteroid explosion effects
-- [x] Add momentum-based player movement
-- [x] Add screen wrapping
-- [x] Add a maximum player speed
-- [x] Add momentum bleed-off
-- [x] Render asteroids as irregular polygons
-- [x] Give the ship a triangular hitbox
-- [x] Make asteroid hitboxes match their visible shapes
-- [x] Make the ship break apart when the player loses a life
+The internal Windows alpha was completed, packaged, tested, and tagged as `v1.0.0-alpha.1`.
 
-### Background System
+## Classic Mode
 
-- [x] Add a static starfield
-- [x] Add star twinkling
+### Completed Alpha Milestone
 
-### Architecture
+- [x] Complete arcade gameplay loop
+- [x] Lives, respawning, shields, speed boosts, and bombs
+- [x] Asteroids, UFOs, UFO bullets, and scaling difficulty
+- [x] Explosion particles, ship destruction, bomb flash, and spawn pause
+- [x] Persistent Top-10 high scores and keyboard name entry
+- [x] Title, pause, options, high-score, and game-over screens
+- [x] Persistent rotation-speed setting
+- [x] Debug overlay and gated developer controls
+- [x] Original gameplay and menu sound effects
+- [x] Windows PyInstaller packaging
+- [x] Internal family alpha playtest
 
-- [x] Separate starfield ownership from gameplay sprites
-- [x] Formalize rendering layers
-- [x] Centralize player damage handling
-- [x] Add reusable pickup handling
-- [x] Add bounded shot and pickup lifetimes
-- [x] Add an asteroid population cap
-- [x] Cache rendered star glyph surfaces
+### Completed Beta Work
 
-### Arcade Features
+- [x] Standardized controller detection and input handling
+- [x] Controller movement, shooting, bombs, and pause support
+- [x] Controller navigation across all menus
+- [x] D-pad and analog-stick menu navigation
+- [x] Ten-character controller high-score name entry
+- [x] Prevention of menu-button input bleeding into gameplay
+- [x] Improved title and in-game menu sounds
+- [x] Ruff formatting and linting
+- [x] Increased player deceleration for more precise control
+- [x] Speed boosts now improve deceleration
+- [x] Player shots now spawn from the ship muzzle
 
-- [x] Add a shield power-up
-- [x] Add a speed power-up
-- [x] Add bomb pickups, inventory, and basic activation
-- [x] Add pickup spawning
-- [x] Add UFOs
-- [x] Add scaling difficulty
-- [x] Add high-score tracking
-- [x] Add pause-menu and game-over options
-- [x] Add audio
+### Current Beta Work
 
-## Remaining Work for v1.0
+- [ ] Continue tuning ship acceleration and deceleration
+- [ ] Review architecture and remove unnecessary complexity
+- [ ] Profile and optimize gameplay where useful
+- [ ] Resolve additional playtest feedback
+- [ ] Perform a final visual-polish pass
 
-### 1. UFOs
+### Audio Polish
 
-- [x] Add UFO sprite and movement
-- [x] Add UFO spawning
-- [x] Add UFO shooting
-- [x] Add UFO bullets
-- [x] Add UFO collision, destruction, and scoring
-- [x] Make bombs destroy UFOs
+- [ ] Add master-volume control
+- [ ] Mix and balance overall sound-effect levels
+- [ ] Clean up the speed-pickup sound tail
+- [ ] Tune bomb-flash timing against the bomb sound
+- [ ] Add a positive Top-10 result cue
 
-### 2. Destruction Effects
+### Visual Identity and Art Polish
 
-- [x] Make the player ship break apart when the player loses a life
-- [x] Trigger destruction from asteroids and UFO bullets
+- [ ] Redesign the shield pickup with a blue shield icon and white outline
+- [ ] Redesign the bomb pickup with a circular bomb body, fuse, and spark
+- [ ] Redesign the speed pickup with grouped yellow speed arrows
+- [ ] Establish consistent colors and outlines for gameplay icons
+- [ ] Choose and package a distinctive game font
+- [ ] Apply the font consistently across the HUD and menus
+- [ ] Perform a final menu and interface layout pass
+- [ ] Decide whether Modernstroids! remains the final name
+- [ ] Establish basic title treatment and visual branding
 
-### 3. Bomb Polish
+### Classic Mode Completion
 
-- [x] Add explosion particles to bomb targets
-- [x] Add a screen flash and fade
-- [x] Briefly pause asteroid spawning after detonation
+- [ ] Complete the remaining gameplay, audio, and visual polish
+- [ ] Package a release-candidate Windows build
+- [ ] Run additional friends-and-family testing
+- [ ] Resolve significant feedback and bugs
+- [ ] Package a stable Classic mode showcase build
+- [ ] Document the completed Classic milestone
 
-### 4. Scaling Difficulty
+## Expanded Asteroids Milestone
 
-- [x] Scale asteroid spawn rate
-- [x] Scale asteroid population cap
-- [x] Scale UFO frequency and behavior
-- [x] Consider asteroid speed scaling
+Planned after Classic mode, likely following the transition to Unity.
 
-### 5. Game States and Menus
+- Multiple levels
+- Level-specific backgrounds and artwork
+- Story or campaign progression
+- Increased alien activity
+- Boss encounters
+- Alien mothership encounter
+- Broader visual and audio presentation
 
-- [x] Add debug mode and diagnostic overlay
-- [x] Add pause and resume
-- [x] Add restart and quit
-- [x] Add a game-over screen
-- [x] Replace immediate `sys.exit()` on game over
+## Asteroids Roguelike Milestone
 
-### 6. High Scores
+- Upgrade choices between levels
+- Randomized upgrade selections
+- Multiple weapons and firing patterns
+- Drones and other support systems
+- Build-focused gameplay
+- Meta-progression
+- Endless score rounds
+- Separate high-score tables for special modes
 
-- [x] Save and load high scores
-- [x] Display the high-score table
-- [x] Add completed runs to the table
+### Public Testing and Release
 
-### 7. Audio
+- [ ] Build a compelling repeatable roguelike gameplay loop
+- [ ] Prepare the first broadly playable public build
+- [ ] Run public playtesting
+- [ ] Gather balance, progression, and usability feedback
+- [ ] Continue toward the complete public release
 
-- [x] Add shooting, thrust, explosion, pickup, shield, bomb, UFO, and menu sounds
-- [x] Create original sound assets
-- [x] Wire current alpha sound effects into gameplay and menus
+## Deferred Until Unity
 
-### 8. Audio polish
-
-- [ ] Mix and balance overall effect levels
-- [ ] Revisit ship-shot timing on packaged Windows build
-- [ ] Clean up speed-boost-collected sound tail
-- [ ] Tune bomb flash duration against bomb-used sound
-- [ ] Create a positive Top 10 result sound
-- [ ] Consider idle/moving engine loops for 2.0
-- [ ] Complete audio wiring across all remaining menus and events
-- [ ] Add volume control to options
-
-### 9. Alpha, Public Beta, v1.0 Release
-
-- [ ] Run family high-score playtest
-- [ ] Gather balance and usability feedback
-- [ ] Fix alpha bugs and use feedback received from players
-- [ ] Remove or toggle development diagnostics
-- [ ] Release online for public beta, bring some attention to it to get more feedback
-- [ ] Release v1.0
-
-
-## v2.0 — Expanded Asteroids
-
-### Ideas under consideration:
-
-- [ ] Add multiple levels
-- [ ] Add level-specific backgrounds and artwork
-- [ ] Increase difficulty across levels
-- [ ] Add a story or campaign
-- [ ] Increase alien activity at higher levels
-- [ ] Add bosses, such as an alien mothership
-
-
-## v3.0 — Asteroids Roguelike
-
-### Ideas under consideration:
-
-- [ ] Add upgrade choices between levels
-- [ ] Offer three randomly selected upgrades after each level
-- [ ] Add weapon upgrades, such as:
-  - Double, triple, or quadruple shot
-  - Piercing rounds
-  - Increased damage
-  - Increased fire rate
-  - Attack drones
-- [ ] Add meta-progression upgrades, such as:
-  - Faster base fire rate
-  - Stronger shields and hull
-  - Faster acceleration
-  - Larger bombs
-  - Stronger pickups
-- [ ] Add a limited number of meta-upgrade build slots
-- [ ] Add periodic endless high-score rounds for comparing builds
-- [ ] Display the top ten scores for each high-score round
+- Player profiles
+- Profile-based progression and unlocks
+- Multiple progression save slots
+- Profile-linked high scores
+- Expanded accessibility and graphics settings
+- More advanced input configuration
