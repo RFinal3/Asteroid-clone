@@ -14,12 +14,12 @@ from constants import (
     SCREEN_WIDTH,
     UFO_SCORE_VALUE,
 )
-from debugmanager import DebugManager
 from game import Game
 from gamestate import GameState
-from logger import log_event, log_state
 from menustate import MenuState
 from modernstroids.background.starfield import StarField
+from modernstroids.development.debugmanager import DebugManager
+from modernstroids.development.logger import log_event, log_state
 from modernstroids.effects.explosionparticle import ExplosionParticle
 from modernstroids.effects.screenflash import ScreenFlash
 from modernstroids.effects.shipfragment import ShipFragment

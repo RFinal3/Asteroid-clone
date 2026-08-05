@@ -1,4 +1,4 @@
-from logger import log_event
+from modernstroids.development.logger import log_event
 from modernstroids.effects.shipfragment import spawn_ship_fragments
 
 

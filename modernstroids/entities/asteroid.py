@@ -3,7 +3,7 @@ import random
 import pygame
 
 from constants import ASTEROID_MIN_RADIUS, LAYER_WORLD, LINE_WIDTH
-from logger import log_event
+from modernstroids.development.logger import log_event
 from modernstroids.entities.circleshape import CircleShape
 from utils import wrap_position
 
