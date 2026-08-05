@@ -17,6 +17,7 @@ from constants import (
     SHIP_ENGINE_MAX_VOLUME,
     SHIP_ENGINE_STOP_FADE_MS,
     SHIP_ENGINE_VOLUME_CHANGE_PER_SECOND,
+    SHOT_RADIUS,
     SPEED_BOOST_DURATION_SECONDS,
     SPEED_BOOST_MULTIPLIER,
 )
@@ -38,8 +39,10 @@ class Player(CircleShape):
         self.bomb_count = 0
         self.velocity = pygame.Vector2(0, 0)
         self.base_acceleration = PLAYER_ACCELERATION
+        self.base_deceleration = PLAYER_DECELERATION
         self.base_max_speed = PLAYER_MAX_SPEED
         self.acceleration = self.base_acceleration
+        self.deceleration = self.base_deceleration
         self.max_speed = self.base_max_speed
         self.speed_boost_timers = []
         self.respawn_timer = 0.0
@@ -68,7 +71,7 @@ class Player(CircleShape):
         self.velocity.clamp_magnitude_ip(self.max_speed)
 
     def decelerate(self, dt):
-        self.velocity.move_towards_ip(pygame.Vector2(0, 0), PLAYER_DECELERATION * dt)
+        self.velocity.move_towards_ip(pygame.Vector2(0, 0), self.deceleration * dt)
 
     def shoot(self):
         if self.shot_cooldown > 0:
@@ -78,11 +81,12 @@ class Player(CircleShape):
 
         self.shot_cooldown = PLAYER_SHOOT_COOLDOWN_SECONDS
 
-        shot = Shot(self.position.x, self.position.y)
-        shot_vector = pygame.Vector2(0, 1)
-        shot_vector = shot_vector.rotate(self.rotation)
-        shot_vector = shot_vector * PLAYER_SHOOT_SPEED
-        shot.velocity = shot_vector
+        shot_direction = pygame.Vector2(0, 1).rotate(self.rotation)
+
+        muzzle_position = self.position + shot_direction * (self.radius + SHOT_RADIUS)
+
+        shot = Shot(muzzle_position.x, muzzle_position.y)
+        shot.velocity = shot_direction * PLAYER_SHOOT_SPEED
 
     def update(self, dt: float) -> None:
         if self.respawn_timer > 0:
@@ -175,6 +179,7 @@ class Player(CircleShape):
     def recalculate_speed_stats(self):
         active_multiplier = SPEED_BOOST_MULTIPLIER ** len(self.speed_boost_timers)
         self.acceleration = self.base_acceleration * active_multiplier
+        self.deceleration = self.base_deceleration * active_multiplier
         self.max_speed = self.base_max_speed * active_multiplier
 
     def add_speed_boost(self):

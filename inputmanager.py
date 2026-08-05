@@ -1,7 +1,7 @@
 import pygame
 from pygame._sdl2 import controller
 
-from constants import CONTROLLER_DEADZONE
+from constants import CONTROLLER_DEADZONE, CONTROLLER_MENU_AXIS_THRESHOLD
 
 
 class InputManager:
@@ -137,7 +137,7 @@ class InputManager:
                 min(1.0, normalized_value),
             )
 
-            if abs(normalized_value) <= 0.5:
+            if abs(normalized_value) <= CONTROLLER_MENU_AXIS_THRESHOLD:
                 self.menu_axis_latched[axis] = False
                 return None
 
