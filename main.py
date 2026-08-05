@@ -27,6 +27,7 @@ from modernstroids.effects.explosionparticle import ExplosionParticle
 from modernstroids.effects.screenflash import ScreenFlash
 from modernstroids.effects.shipfragment import ShipFragment
 from modernstroids.entities.asteroid import Asteroid
+from modernstroids.entities.pickups.pickup import Pickup
 from modernstroids.entities.player import Player
 from modernstroids.entities.shot import Shot
 from modernstroids.entities.ufo import UFO
@@ -37,7 +38,6 @@ from modernstroids.screens.nameentryscreen import NameEntryScreen
 from modernstroids.screens.optionsscreen import OptionsScreen
 from modernstroids.screens.pausemenu import PauseMenu
 from modernstroids.screens.titlemenu import TitleMenu
-from pickup import Pickup
 from pickup_spawner import PickupSpawner
 from settingsmanager import SettingsManager
 from soundmanager import SoundManager

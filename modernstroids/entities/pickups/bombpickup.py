@@ -1,7 +1,7 @@
 import pygame
 
 from constants import LINE_WIDTH
-from pickup import Pickup
+from modernstroids.entities.pickups.pickup import Pickup
 
 
 class BombPickup(Pickup):

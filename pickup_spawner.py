@@ -2,10 +2,10 @@ import random
 
 import pygame
 
-from bombpickup import BombPickup
 from constants import PICKUP_DROP_CHANCE, PICKUP_SPAWN_DELAY_SECONDS
-from shieldpickup import ShieldPickup
-from speedpickup import SpeedPickup
+from modernstroids.entities.pickups.bombpickup import BombPickup
+from modernstroids.entities.pickups.shieldpickup import ShieldPickup
+from modernstroids.entities.pickups.speedpickup import SpeedPickup
 
 
 class PickupSpawner(pygame.sprite.Sprite):
