@@ -130,6 +130,7 @@ def run_title_menu(screen, clock, high_scores, settings, sound_manager, input_ma
 
                 elif action == "Clear High Scores":
                     options_screen.open_clear_confirmation()
+                    input_manager.reset_menu_axis_latches()
 
                 elif action == "Confirm Clear":
                     high_scores.clear()
@@ -296,6 +297,7 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
 
                 elif options_action == "Clear High Scores":
                     options_screen.open_clear_confirmation()
+                    input_manager.reset_menu_axis_latches()
 
                 elif options_action == "Confirm Clear":
                     high_scores.clear()

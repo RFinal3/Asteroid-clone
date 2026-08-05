@@ -183,3 +183,7 @@ class InputManager:
             event,
             pygame.CONTROLLER_BUTTON_B,
         )
+
+    def reset_menu_axis_latches(self):
+        for axis in self.menu_axis_latched:
+            self.menu_axis_latched[axis] = False
