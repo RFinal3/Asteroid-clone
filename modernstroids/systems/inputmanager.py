@@ -76,9 +76,7 @@ class InputManager:
                 > CONTROLLER_TRIGGER_THRESHOLD
             )
         else:
-            shooting = self.controller.get_button(
-                pygame.CONTROLLER_BUTTON_A
-            )
+            shooting = self.controller.get_button(pygame.CONTROLLER_BUTTON_A)
 
         if not shooting:
             self.shooting_suppressed = False

@@ -130,9 +130,7 @@ def run_title_menu(screen, clock, high_scores, settings, sound_manager, input_ma
 
                 elif action == "Toggle Controller Scheme":
                     settings.toggle_controller_scheme()
-                    input_manager.set_controller_scheme(
-                        settings.controller_scheme
-                    )
+                    input_manager.set_controller_scheme(settings.controller_scheme)
                     sound_manager.play("menu_option_change")
 
                 elif action == "Clear High Scores":
@@ -317,9 +315,7 @@ def run_game(screen, clock, high_scores, settings, sound_manager, input_manager)
 
                 elif options_action == "Toggle Controller Scheme":
                     settings.toggle_controller_scheme()
-                    input_manager.set_controller_scheme(
-                        settings.controller_scheme
-                    )
+                    input_manager.set_controller_scheme(settings.controller_scheme)
                     sound_manager.play("menu_option_change")
 
                 elif options_action == "Confirm Clear":

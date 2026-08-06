@@ -8,7 +8,7 @@ from modernstroids.core.constants import (
 
 
 class OptionsScreen:
-    def __init__(self):
+    def __init__(self) -> None:
         self.title_font = pygame.font.Font(None, 72)
         self.option_font = pygame.font.Font(None, 40)
         self.info_font = pygame.font.Font(None, 28)
@@ -19,6 +19,18 @@ class OptionsScreen:
         self.confirming_clear = False
         self.confirmation_selected = 0
         self.confirmation_rects = []
+
+    def activate_selected_option(self):
+        if self.selected_index == 1:
+            return "Toggle Controller Scheme"
+
+        if self.selected_index == 2:
+            return "Clear High Scores"
+
+        if self.selected_index == 3:
+            return "Back"
+
+        return None
 
     def draw(self, screen, settings):
         overlay = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
@@ -151,14 +163,7 @@ class OptionsScreen:
             return "Toggle Controller Scheme"
 
         elif menu_action == "select":
-            if self.selected_index == 1:
-                return "Toggle Controller Scheme"
-
-            if self.selected_index == 2:
-                return "Clear High Scores"
-
-            if self.selected_index == 3:
-                return "Back"
+            return self.activate_selected_option()
 
         elif menu_action == "back":
             return "Back"
@@ -184,6 +189,7 @@ class OptionsScreen:
             for index, option_rect in enumerate(self.option_rects):
                 if option_rect.collidepoint(event.pos):
                     self.selected_index = index
+                    return self._activate_selected_option()
 
                     if index == 1:
                         return "Toggle Controller Scheme"
@@ -213,27 +219,31 @@ class OptionsScreen:
         self.confirming_clear = True
         self.confirmation_selected = 0
 
-    def handle_confirmation_event(self, event, input_manager):
+    def _activate_confirmation_option(self) -> str:
+        """Close the confirmation dialog and return its selected action."""
+        self.confirming_clear = False
+
+        if self.confirmation_selected == 1:
+            return "Confirm Clear"
+
+        return "Cancel Clear"
+
+    def handle_confirmation_event(
+        self,
+        event,
+        input_manager,
+    ) -> str | None:
         menu_action = input_manager.get_menu_action(event)
 
         if menu_action in ("left", "right"):
             self.confirmation_selected = 1 - self.confirmation_selected
 
         elif menu_action == "select":
-            if self.confirmation_selected == 1:
-                self.confirming_clear = False
-                return "Confirm Clear"
-
-            self.confirming_clear = False
-            return "Cancel Clear"
+            return self._activate_confirmation_option()
 
         elif menu_action == "back":
             self.cancel_clear_confirmation()
             return "Cancel Clear"
-
-        elif menu_action == "back":
-            self.cancel_clear_confirmation()
-            return None
 
         if event.type == pygame.MOUSEMOTION:
             for index, option_rect in enumerate(self.confirmation_rects):
@@ -244,15 +254,24 @@ class OptionsScreen:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             for index, option_rect in enumerate(self.confirmation_rects):
                 if option_rect.collidepoint(event.pos):
-                    self.confirming_clear = False
-
-                    if index == 1:
-                        return "Confirm Clear"
-
-                    return "Cancel Clear"
+                    self.confirmation_selected = index
+                    return self._activate_confirmation_option()
 
         return None
 
     def cancel_clear_confirmation(self):
         self.confirming_clear = False
         self.confirmation_selected = 0
+
+    def _activate_selected_option(self) -> str | None:
+        """Return the action associated with the currently selected option."""
+        if self.selected_index == 1:
+            return "Toggle Controller Scheme"
+
+        if self.selected_index == 2:
+            return "Clear High Scores"
+
+        if self.selected_index == 3:
+            return "Back"
+
+        return None
