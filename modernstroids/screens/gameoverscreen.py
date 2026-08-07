@@ -1,16 +1,15 @@
 import pygame
 
+from modernstroids.screens.selectablemenu import SelectableMenu
 
-class GameOverScreen:
-    def __init__(self):
+
+class GameOverScreen(SelectableMenu):
+    def __init__(self) -> None:
+        super().__init__(("Restart", "High Scores", "Quit"))
         self.title_font = pygame.font.Font(None, 72)
         self.option_font = pygame.font.Font(None, 40)
-        self.selected_index = 0
-        self.option_rects = []
 
-        self.options = ("Restart", "High Scores", "Quit")
-
-    def draw(self, screen, score, score_qualified):
+    def draw(self, screen, score, score_qualified) -> None:
         overlay = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 180))
         screen.blit(overlay, (0, 0))
@@ -62,30 +61,3 @@ class GameOverScreen:
             screen.blit(option_text, option_rect)
 
             next_y = option_rect.bottom + 25
-
-    def handle_event(self, event, input_manager):
-        menu_action = input_manager.get_menu_action(event)
-
-        if menu_action == "up":
-            self.selected_index -= 1
-        elif menu_action == "down":
-            self.selected_index += 1
-
-        self.selected_index %= len(self.options)
-
-        if event.type == pygame.MOUSEMOTION:
-            for index, option_rect in enumerate(self.option_rects):
-                if option_rect.collidepoint(event.pos):
-                    self.selected_index = index
-                    break
-
-        if menu_action == "select":
-            return self.options[self.selected_index]
-
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            for index, option_rect in enumerate(self.option_rects):
-                if option_rect.collidepoint(event.pos):
-                    self.selected_index = index
-                    return self.options[index]
-
-        return None

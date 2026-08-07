@@ -2,14 +2,14 @@ import pygame
 
 
 class HighScoreScreen:
-    def __init__(self):
+    def __init__(self) -> None:
         self.title_font = pygame.font.Font(None, 72)
         self.entry_font = pygame.font.Font(None, 36)
         self.info_font = pygame.font.Font(None, 28)
-        self.back_rect = None
+        self.back_rect: pygame.Rect | None = None
         self.back_hovered = False
 
-    def draw(self, screen, entries):
+    def draw(self, screen, entries) -> None:
         overlay = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 220))
         screen.blit(overlay, (0, 0))
@@ -63,20 +63,20 @@ class HighScoreScreen:
 
         screen.blit(back_text, self.back_rect)
 
-    def handle_event(self, event, input_manager):
+    def handle_event(self, event, input_manager) -> str | None:
         menu_action = input_manager.get_menu_action(event)
 
         if event.type == pygame.MOUSEMOTION and self.back_rect is not None:
             self.back_hovered = self.back_rect.collidepoint(event.pos)
 
-        if event.type == pygame.MOUSEBUTTONDOWN and (
-            event.button == 1
+        mouse_back_requested = (
+            event.type == pygame.MOUSEBUTTONDOWN
+            and event.button == 1
             and self.back_rect is not None
             and self.back_rect.collidepoint(event.pos)
-        ):
-            return "Back"
+        )
 
-        if menu_action in ("select", "back"):
+        if mouse_back_requested or menu_action in ("select", "back"):
             return "Back"
 
         return None
