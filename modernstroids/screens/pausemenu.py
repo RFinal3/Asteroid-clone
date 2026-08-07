@@ -13,7 +13,8 @@ class PauseMenu(SelectableMenu):
                 "Options",
                 "Quit to Menu",
                 "Quit Program",
-            )
+            ),
+            back_action="Resume",
         )
         self.title_font = pygame.font.Font(None, 72)
         self.option_font = pygame.font.Font(None, 40)
